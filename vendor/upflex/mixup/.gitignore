@@ -1,0 +1,11 @@
+# IDE
+.idea/
+
+# Folders
+node_modules/
+vendor/
+
+# Files
+composer.lock
+package-lock.json
+.phpunit.result.cache

@@ -1,0 +1,14 @@
+delimiter //
+
+CREATE FUNCTION autoInc( send_product_id INT )
+    RETURNS INT DETERMINISTIC
+    BEGIN DECLARE getCount INT;
+        SET getCount = (
+           SELECT COUNT(generated_number)
+           FROM wp_woo_raffles_numbers
+           WHERE product_id = send_product_id
+        ) + 1;
+        RETURN getCount;
+    END;
+
+delimiter ;

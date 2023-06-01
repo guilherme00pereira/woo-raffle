@@ -1,0 +1,24 @@
+{
+  "author": "Agência UPFlex",
+  "dependencies": {
+    "bootstrap": "^5.1.1",
+    "gulp-uglify": "^3.0.2"
+  },
+  "description": "",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^7.0.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-minify": "^3.1.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-terser": "^1.2.0"
+  },
+  "keywords": [],
+  "license": "ISC",
+  "name": "woo-raffles",
+  "scripts": {
+    "start": "gulp watch"
+  },
+  "version": "1.0.0"
+}

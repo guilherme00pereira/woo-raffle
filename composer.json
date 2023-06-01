@@ -1,0 +1,22 @@
+{
+  "authors": [
+    {
+      "name": "Agência UPFlex",
+      "email": "agencia.upflex@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "WooRaffles\\": "src/"
+    }
+  },
+  "description": "Plugin criado para sorteios no Woocommerce",
+  "name": "upflex/woo-raffles",
+  "require": {
+    "upflex/mixup": ">=0.0.5",
+    "php": ">=7.4",
+    "shuchkin/simplexlsxgen": "^1.3",
+    "mattiasgeniar/php-percentages": "^1.3"
+  },
+  "type": "wordpress-plugin"
+}

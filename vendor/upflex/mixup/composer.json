@@ -1,0 +1,22 @@
+{
+  "name": "upflex/mixup",
+  "description": "Estrutura base para plugin WordPress",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Agência UPFlex",
+      "email": "wesley@upflex.com.br"
+    }
+  ],
+  "minimum-stability": "stable",
+  "autoload": {
+    "psr-4": {
+      "UPFlex\\MixUp\\": "src/"
+    }
+  },
+  "require-dev": {
+    "pestphp/pest": "^1.21",
+    "10up/wp_mock": "0.4.2"
+  }
+}

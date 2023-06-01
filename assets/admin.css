@@ -1,0 +1,51 @@
+.mb-0 {
+    margin-bottom: 0;
+}
+
+.orders-raffles-numbers {
+    align-items: center;
+    background-color: #ec038b;
+    background-image: -webkit-linear-gradient(86deg, #ec038b 0%, #fb6468 44%, #fbb936 100%);
+    border-radius: 50%;
+    color: #fff;
+    display: flex;
+    font-weight: 500;
+    font-size: 15px;
+    height: 80px;
+    justify-content: center;
+    margin-bottom: 10px;
+    max-width: 100px;
+    width: 100%;
+}
+
+#woo_raffle_options h2,
+#woo_raffle_options h3 {
+    margin-bottom: 0.5em;
+}
+
+#woo_raffle_options hr {
+    background-color: #dcdcde;
+    border: 0;
+    height: 1px;
+    width: 100%;
+}
+
+#woo_raffle_options p:not(.notice) {
+    padding-left: 0;
+}
+
+#woo_raffle_options p.form-field {
+    padding-left: 150px !important;
+}
+
+.bootstrap table#woo_raffle_error_numbers_table tbody > tr > td[data-type="numbers"] {
+    word-break: break-word;
+}
+
+#woocommerce-product-data ul.wc-tabs li.woo_raffle_options a::before {
+    content: "\f486";
+}
+
+#woocommerce-product-data ul.wc-tabs li.woo_raffle_progressive_discount_options a::before {
+    content: "\f18e";
+}
