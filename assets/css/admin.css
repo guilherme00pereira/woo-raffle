@@ -49,3 +49,8 @@
 #woocommerce-product-data ul.wc-tabs li.woo_raffle_progressive_discount_options a::before {
     content: "\f18e";
 }
+
+.page-admin-content {
+    background-color: white;
+    padding: 20px;
+}

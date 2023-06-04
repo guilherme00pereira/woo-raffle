@@ -6,7 +6,7 @@
 <?php $numbers_open = get_post_meta($product_id, '_woo_raffles_numbers_open', true); ?>
 <?php if ($numbers_open !== 'yes') return; ?>
 
-<div class="grid">
+<div class="cotas-disponiveis grid">
     <div class="col-1-1">
         <div id="woo_raffles_notice">
             <p class="hidden"></p>
