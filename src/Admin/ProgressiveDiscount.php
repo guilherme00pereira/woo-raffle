@@ -365,7 +365,7 @@ class ProgressiveDiscount extends Base
         }
 
         echo json_encode(['error' => $error, 'msg' => $msg, 'redirect' => $redirect]);
-        exit;
+        wp_die();
     }
 
     protected static function removeItemInCart($product_id, $cart): bool

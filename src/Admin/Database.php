@@ -103,9 +103,9 @@ class Database extends Base
         return self::$table_exist;
     }
 
-    public static function get_orders_ids_by_product_id(
+    public static function getOrdersIdsByProductId(
         $product_id,
-        $order_status = array( 'wc-completed', 'wc-processing', 'wc-on-hold', 'wc-pending', 'wc-rifa-presencial' )
+        $order_status = array( 'wc-completed', 'wc-processing', 'wc-on-hold', 'wc-pending' )
     ): array
     {
 

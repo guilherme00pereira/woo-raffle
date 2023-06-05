@@ -62,7 +62,7 @@ class AddToCart extends Base
         exit;
     }
 
-    public function changeQuantity($product_quantity, $cart_item_key, $cart_item)
+    public function changeQuantity($product_quantity, $cart_item_key, $cart_item): int
     {
         $numbers = $cart_item['woo_raffles_numbers'] ?? [];
 

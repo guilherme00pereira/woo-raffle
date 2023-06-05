@@ -18,7 +18,7 @@ class QuotesOpenShortcode extends Template
 
         add_shortcode('woo-raffles-cotas_abertas', [$this, 'content_v2']);
         add_action('wp_ajax_ajaxApiRifaInfos', [$this, 'ajaxApiRifaInfos']);
-        add_action('wp_ajax_no´priv_ajaxApiRifaInfos', [$this, 'ajaxApiRifaInfos']);
+        add_action('wp_ajax_nopriv_ajaxApiRifaInfos', [$this, 'ajaxApiRifaInfos']);
         add_action('wp_ajax_addToCart', [$this, 'addToCart']);
         add_action( 'wp_ajax_nopriv_addToCart', [$this, 'addToCart'] );
     }
@@ -288,7 +288,7 @@ class QuotesOpenShortcode extends Template
     public function ajaxApiRifaInfos($request): array
     {
         try {
-            $rifa = $_GET["rifa"];
+            $rifa = sanitize_text_field($_GET["rifa"] ?? "");
 
             if ($rifa == ""):
                 $queryParams = $request->get_query_params();
@@ -386,7 +386,12 @@ class QuotesOpenShortcode extends Template
 
     public function addToCart()
     {
+        try {
 
+        } catch (Exception $e) {
+            echo json_encode( ['sucesso' => "500", 'erro' => $e->getMessage()] );
+        }
+        wp_die();
     }
 
     /**

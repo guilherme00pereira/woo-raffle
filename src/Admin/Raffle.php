@@ -58,7 +58,7 @@ class Raffle extends Base
 
     public static function cotas_livres_ou_reservadas($produto_id, $globos): array
     {
-        $pedidos = Database::get_orders_ids_by_product_id($produto_id);
+        $pedidos = Database::getOrdersIdsByProductId($produto_id);
         $cotas = [];
         $participantes = [];
         $a = 0;

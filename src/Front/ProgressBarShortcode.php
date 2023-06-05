@@ -31,7 +31,7 @@ class ProgressBarShortcode extends Template
 
         $cotas = get_field("numero_de_cotas", $rifa);
 
-        $pedidos = Database::get_orders_ids_by_product_id($rifa);
+        $pedidos = Database::getOrdersIdsByProductId($rifa);
 
         $a = 0;
         $b = 0;

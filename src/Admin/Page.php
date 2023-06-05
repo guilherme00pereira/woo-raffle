@@ -9,6 +9,7 @@ class Page extends Template
     {
         parent::__construct();
         add_action('admin_menu', [$this, 'addMenu']);
+        add_action('wp_ajax_ajaxGetWinner', [$this, 'ajaxGetWinner']);
     }
 
     public function addMenu()
@@ -26,6 +27,8 @@ class Page extends Template
 
     public function render()
     {
+        $this->enqueueScript();
+
         ob_start();
 
         self::getPart('page', 'index', []);
@@ -35,4 +38,25 @@ class Page extends Template
 
         echo $content;
     }
+
+    public function enqueueScript()
+    {
+        wp_enqueue_script('woo-raffle-admin-page', WOORAFFLES_URL . 'assets/js/admin-page.js', ['jquery-core'], false, true);
+        wp_localize_script('woo-raffle-admin-page', 'ajaxobj', [
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('woo-raffle-admin-page'),
+            'action_ajaxGetWinner' => 'ajaxGetWinner',
+        ]);
+    }
+
+    public function ajaxGetWinner()
+    {
+        try {
+            wp_send_json_success('success');
+        } catch (\Exception $e) {
+            wp_send_json_error($e->getMessage());
+        }
+        wp_die();
+    }
+
 }

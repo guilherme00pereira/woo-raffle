@@ -17,36 +17,6 @@
         selecionarCotaRifa(this.value)
     })
 
-    function selecionarCotaRifa(numeroCota) {
-        if ($(`#cota${numeroCota}:checked`).length > 0) {
-            $(`#cotaClone${numeroCota}`).prop('checked', true);
-        } else {
-            $(`#cotaClone${numeroCota}`).prop('checked', false);
-        }
-        cotasSelecionadas.push(numeroCota);
-        let idDoProduto = document.getElementById("idDoProdutoInput").value;
-        salvarCarrinho(idDoProduto, cotasSelecionadas.length);
-    }
-
-    function removerSelecaoCota(cotaValue){
-        let cota = document.getElementById("cotaSpan"+cotaValue);
-        cota.remove();
-        document.getElementById("cota"+cotaValue).checked = false;
-        setTimeout(function(){ document.getElementById("cotaClone"+cotaValue).checked = false; }, 1500);
-    }
-
-    function salvarCarrinho(idProduto, quantidade) {
-        const params = { 
-            action: ajaxobj.action_ajaxAddtoCart,
-            nonce: ajaxobj.raffle_nonce,
-            produto: idProduto,
-            quantidade: quantidade
-        }
-        $.get(ajaxobj.ajax_url, params, function (res) {
-                console.log(res);
-        });
-    }
-
     function imprimirNumeros() {
 
         let h = 1;
@@ -345,6 +315,36 @@
 
     function coloque_zero(input0, globos) {
         return input0.toString().padStart(globos, "0");
+    }
+
+    function selecionarCotaRifa(numeroCota) {
+        if ($(`#cota${numeroCota}:checked`).length > 0) {
+            $(`#cotaClone${numeroCota}`).prop('checked', true);
+        } else {
+            $(`#cotaClone${numeroCota}`).prop('checked', false);
+        }
+        cotasSelecionadas.push(numeroCota);
+        let idDoProduto = document.getElementById("idDoProdutoInput").value;
+        salvarCarrinho(idDoProduto, cotasSelecionadas.length);
+    }
+
+    function removerSelecaoCota(cotaValue){
+        let cota = document.getElementById("cotaSpan"+cotaValue);
+        cota.remove();
+        document.getElementById("cota"+cotaValue).checked = false;
+        setTimeout(function(){ document.getElementById("cotaClone"+cotaValue).checked = false; }, 1500);
+    }
+
+    function salvarCarrinho(idProduto, quantidade) {
+        const params = {
+            action: ajaxobj.action_ajaxAddtoCart,
+            nonce: ajaxobj.raffle_nonce,
+            produto: idProduto,
+            quantidade: quantidade
+        }
+        $.get(ajaxobj.ajax_url, params, function (res) {
+            console.log(res);
+        });
     }
 
 }(jQuery))

@@ -28,5 +28,6 @@ class Asset extends Base
         wp_enqueue_script('woo_raffles', WOORAFFLES_URL . 'assets/admin.js', ['jquery-core', 'jquery-repeater']);
 
         wp_register_script('woo-raffle-quotes-open', WOORAFFLES_URL . 'assets/js/quotes-open.js', ['jquery-core']);
+        wp_register_script('woo-raffle-admin-page', WOORAFFLES_URL . 'assets/js/admin-page.js', ['jquery-core']);
     }
 }
