@@ -87,4 +87,100 @@ class AddToCart extends Base
 
         return false;
     }
+
+    public function addToCart() {
+  
+        $produto_id = intval( $_POST['id'] );
+        $quantidade = intval( $_POST['qtd'] );
+        
+        global $woocommerce;
+        
+        $num_max_cotas_por_cliente = get_field("num_maximo_reservas",$produto_id);
+        $num_mix_cotas_por_cliente = get_field("num_minimo_reservas",$produto_id);
+  
+        $msg_num_maximo_reservas = get_field("msg_num_maximo_reservas",$produto_id);
+        $msg_num_minimo_reservas = get_field("msg_num_minimo_reservas",$produto_id);
+  
+        $msg_explicativa_num_maximo = get_field("msg_explicativa_num_maximo",$produto_id);
+        $msg_explicativa_num_minimo = get_field("msg_explicativa_num_minimo",$produto_id);
+        
+        $texto_btn_finalizar_compra = get_field("texto_btn_finalizar_compra",$produto_id);
+        $currency = get_woocommerce_currency_symbol();
+  
+  
+        $aprovacao = "0";
+        $erros     = "0";
+  
+        if($quantidade <= $num_max_cotas_por_cliente || 
+           $num_max_cotas_por_cliente == 0 || 
+           $num_max_cotas_por_cliente == NULL):
+  
+          $aprovacao = "1";
+  
+        else:
+  
+          $erros = "XXX";
+  
+        endif;
+  
+        if($quantidade >= $num_mix_cotas_por_cliente || 
+           $num_mix_cotas_por_cliente == 0 || 
+           $num_mix_cotas_por_cliente == NULL):
+  
+          $aprovacao = "1";
+  
+        else:
+  
+          $erros = "YYY";
+  
+        endif;
+  
+        $limpar_carrinho = get_field("limpar_carrinho",$produto_id);
+  
+              if($limpar_carrinho=="Sim"):
+                global $woocommerce;
+                $woocommerce->cart->empty_cart(); 
+              endif;
+  
+        if($aprovacao=="1" && $erros == "0"):
+  
+            // PRIMEIRO LIMPAMOS O CARRINHO
+            //$woocommerce->cart->empty_cart();
+  
+            // DEPOIS ADICIONADOS O PRODUTO E A QUANTIDADE NO CARRINHO
+            //$woocommerce->cart->add_to_cart($produto_id,$quantidade);
+  
+            // RECUPERAR ALGUMAS INFORMAÇOES SOBRE O PRODUTO
+            $product = wc_get_product( $produto_id );
+            $valor_produto = $product->get_regular_price();
+            $promocao_produto = $product->get_sale_price();
+  
+            if($promocao_produto):
+              $valor_produto = $promocao_produto;
+            endif;
+                            
+            // DEPOIS RETORNAMOS O TOTAL DO CARRINHO
+            $data = array('sucesso' => "200",
+                          'valor' => $valor_produto, 
+                          'valor_no_carrinho' => WC()->cart->total, 
+                          'texto_btn_finalizar_compra' => $texto_btn_finalizar_compra, 
+                          'currency' => $currency);
+  
+            $json_string = json_encode($data, JSON_PRETTY_PRINT);
+       
+            echo $json_string; 
+            
+        else:
+  
+          $data = array('sucesso' => "400", 'erros' => $erros, 'texto_btn_finalizar_compra' => $texto_btn_finalizar_compra, 'currency' => $currency, 'msg_num_maximo_reservas' => $msg_num_maximo_reservas, 'msg_num_minimo_reservas' => $msg_num_minimo_reservas, 'msg_explicativa_num_maximo' => $msg_explicativa_num_maximo, 'msg_explicativa_num_minimo' => $msg_explicativa_num_minimo);
+  
+          $json_string = json_encode($data, JSON_PRETTY_PRINT);
+       
+          echo $json_string;
+  
+        endif;
+  
+        wp_die();
+  
+    }
 }

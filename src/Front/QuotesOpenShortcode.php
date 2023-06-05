@@ -18,6 +18,9 @@ class QuotesOpenShortcode extends Template
 
         add_shortcode('woo-raffles-cotas_abertas', [$this, 'content_v2']);
         add_action('wp_ajax_ajaxApiRifaInfos', [$this, 'ajaxApiRifaInfos']);
+        add_action('wp_ajax_no´priv_ajaxApiRifaInfos', [$this, 'ajaxApiRifaInfos']);
+        add_action('wp_ajax_addToCart', [$this, 'addToCart']);
+        add_action( 'wp_ajax_nopriv_addToCart', [$this, 'addToCart'] );
     }
 
     public function content($attrs)
@@ -381,6 +384,11 @@ class QuotesOpenShortcode extends Template
         wp_die();
     }
 
+    public function addToCart()
+    {
+
+    }
+
     /**
      * @return void
      */
@@ -394,6 +402,7 @@ class QuotesOpenShortcode extends Template
             'raffle_nonce' => wp_create_nonce('woo-raffle-quotes-open'),
             'productId' => $product_id,
             'action_ajaxApiRifaInfos' => 'ajaxApiRifaInfos',
+            'action_ajaxAddToCart' => 'addToCart'
         ]);
     }
 }

@@ -3,19 +3,49 @@
     let cotasModelo = {};
     let impressosPagina = 1;
     let livresImpressos = 0;
+    let cotasSelecionadas = [];
 
     $(document).ready(function () {
         retornaCotas()
     })
 
     $('.btn-carregar-mais-numeros').click(function (e) {
-
+        imprimirNumeros();
     })
 
-    $('.form-check-input').on('change', 'form-check', function (e) {
+    $('body').on('change', 'input[name="cotas"]', function (e) {
         selecionarCotaRifa(this.value)
-        //$('#cota${cotasModelo.livres[n]}').trigger('click');
     })
+
+    function selecionarCotaRifa(numeroCota) {
+        if ($(`#cota${numeroCota}:checked`).length > 0) {
+            $(`#cotaClone${numeroCota}`).prop('checked', true);
+        } else {
+            $(`#cotaClone${numeroCota}`).prop('checked', false);
+        }
+        cotasSelecionadas.push(numeroCota);
+        let idDoProduto = document.getElementById("idDoProdutoInput").value;
+        salvarCarrinho(idDoProduto, cotasSelecionadas.length);
+    }
+
+    function removerSelecaoCota(cotaValue){
+        let cota = document.getElementById("cotaSpan"+cotaValue);
+        cota.remove();
+        document.getElementById("cota"+cotaValue).checked = false;
+        setTimeout(function(){ document.getElementById("cotaClone"+cotaValue).checked = false; }, 1500);
+    }
+
+    function salvarCarrinho(idProduto, quantidade) {
+        const params = { 
+            action: ajaxobj.action_ajaxAddtoCart,
+            nonce: ajaxobj.raffle_nonce,
+            produto: idProduto,
+            quantidade: quantidade
+        }
+        $.get(ajaxobj.ajax_url, params, function (res) {
+                console.log(res);
+        });
+    }
 
     function imprimirNumeros() {
 
@@ -45,7 +75,8 @@
                 // TAB 1 (TODAS))
                 $("#iteneRifaAba0").append(`
                     <div class="form-check conteme1" data-cota="${coloque_zero(i, cotasModelo.globos)}" id="fcTodos${coloque_zero(i, cotasModelo.globos)}">
-                          <input class="form-check-input" type="checkbox" name="cotas" value="${coloque_zero(i, cotasModelo.globos)}" id="cota${coloque_zero(i, cotasModelo.globos)}">
+                          <input class="form-check-input" type="checkbox" name="cotas"
+                            value="${coloque_zero(i, cotasModelo.globos)}" id="cota${coloque_zero(i, cotasModelo.globos)}">
                           <label class="form-check-label label-um" for="cota${coloque_zero(i, cotasModelo.globos)}">
                             ${coloque_zero(i, cotasModelo.globos)}
                           </label>
@@ -95,8 +126,6 @@
 
 
         while (n < cotasModelo.livres.length) {
-
-            //console.log(cotasModelo.livres[n]);
 
             $(`#fcr${cotasModelo.livres[n]}`).remove();
             $(`#fcc${cotasModelo.livres[n]}`).remove();
@@ -316,190 +345,6 @@
 
     function coloque_zero(input0, globos) {
         return input0.toString().padStart(globos, "0");
-    }
-
-
-    function selecionarCotaRifa(numeroCota) {
-
-        // MOSTRAR A JANELA DE CARREGANDO
-        //document.getElementById("colunaDois").innerHTML = `<img src="${homeUrlRifa}/wp-content/plugins/plugin-rifa-drope/assets/images/loading.gif" style="width:32px;height:auto;" />`;
-
-        console.log("COTA SELECIONADA: " + numeroCota);
-
-        if ($(`#cota${numeroCota}:checked`).length > 0) {
-            $(`#cotaClone${numeroCota}`).prop('checked', true);
-        } else {
-            $(`#cotaClone${numeroCota}`).prop('checked', false);
-        }
-
-
-        document.getElementById("modalRifa").style.bottom = "0px";
-
-        let html = "";
-        let dadosCheckout = "";
-
-        let checkboxes = document.getElementsByName("cotas");
-        let checkboxesChecked = [];
-        let totalCheched = 0;
-        // loop over them all
-        for (let i = 0; i < checkboxes.length; i++) {
-            // And stick the checked ones onto an array...
-            if (checkboxes[i].checked) {
-                totalCheched++;
-                checkboxesChecked.push(checkboxes[i]);
-                html = html + `<span id="cotaSpan${checkboxes[i].value}" onclick="removerSelecaoCota('${checkboxes[i].value}'); selecionarCotaRifa('${checkboxes[i].value}');">${checkboxes[i].value}</span>`;
-                //dadosCheckout = dadosCheckout+checkboxes[i].value+",";
-                dadosCheckout = dadosCheckout.concat(checkboxes[i].value + ",");
-            }
-        }
-
-
-        //console.log(html);
-        document.getElementById("colunaUm").innerHTML = html;
-
-        localStorage.setItem("dadosCheckout", dadosCheckout);
-
-        let idDoProduto = document.getElementById("idDoProdutoInput").value;
-
-        // ADICIONAR AO CARRINHO APÓS O PROCESSAMENTO
-        salvarCarrinho(idDoProduto, totalCheched);
-
-        $(".widget-rifa-modelo-2.aposta").addClass("open");
-
-    }
-
-    function removerSelecaoCota(cotaValue){
-
-        console.log("REMOVENDO COTA DO USUARIO: "+cotaValue);
-
-        let cota = document.getElementById("cotaSpan"+cotaValue);
-        cota.remove();
-
-        document.getElementById("cota"+cotaValue).checked = false;
-
-
-        setTimeout(function(){ document.getElementById("cotaClone"+cotaValue).checked = false; }, 1500);
-
-    }
-
-    function salvarCarrinho(idProduto, quantidade) {
-
-        //console.log("ID DO PRODUTO: "+idProduto);
-        //console.log("QUANTIDADE: "+quantidade);
-
-        let ajaxurl = homeUrlRifa + "/wp-admin/admin-ajax.php";
-
-        let xhr = new XMLHttpRequest();
-
-        xhr.open('POST', ajaxurl, true);
-        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-
-        let params = 'action=salvar_carrinho&id=' + idProduto + "&qtd=" + quantidade;
-
-        // INICIO AJAX VANILLA
-        xhr.onreadystatechange = () => {
-
-            if (xhr.readyState === 4) {
-
-                if (xhr.status === 200) {
-
-                    //console.log(xhr.responseText);
-                    //console.log(JSON.parse(xhr.responseText));
-
-                    var dados = JSON.parse(xhr.responseText);
-
-                    if (dados.sucesso === 200) {
-
-                        if (quantidade > 0) {
-
-                            if (dados.texto_btn_finalizar_compra == null || dados.texto_btn_finalizar_compra == "") {
-                                dados.texto_btn_finalizar_compra = "FINALIZAR COMPRA";
-                            }
-
-                            var valorFinal = quantidade * parseFloat(dados.valor);
-
-                            document.getElementById("colunaDois").innerHTML = `
-
-                                           <h3> <!-- ${checkoutUrlPR} -->
-                                               <form id="formComprarRifa" action="${domSiteRifa}/?add-to-cart=${idProduto}&quantity=${quantidade}" method="post">
-                                                  <input type="hidden" id="quantidadeCotasEscolhidasInput" name="quantidade_cotas_escolhidas_input" value="${quantidade}">
-                                                  <input type="hidden" id="cotasEscolhidasInput" name="cotas_escolhidas_input" value="${localStorage.getItem("dadosCheckout")}">
-                                                  Total das ${quantidade} cotas: <b>${dados.currency} ${valorFinal.toFixed(2)}</b> <a onclick="jQuery('#formComprarRifa').submit();" href="javascript:void(0)" class="btn btn-success" title="${dados.texto_btn_finalizar_compra}">${dados.texto_btn_finalizar_compra}</a>
-                                                </form>
-                                           </h3>
-
-                                      `;
-
-                            // PREENCHER O INPUT DAS COTAS
-                            jQuery("#cotasEscolhidasInput").val(localStorage.getItem("dadosCheckout"));
-
-                            // CASO O USUÁROO TENHA DESMARCADO TODAS AS OPÇÕES DA RIFA
-                        }
-
-                    } else {
-
-                        // PROBLEMAS COM O NÚMERO MÁXIMO DE COTAS
-                        if (dados.erros === "XXX") {
-
-                            if (dados.msg_num_maximo_reservas === null || dados.msg_num_maximo_reservas === "") {
-                                dados.msg_num_maximo_reservas = "Você já selecionou o número máximo de cotas disponíveis para compra por usuário. Remova algumas das cotas selecionadas para concluir a compra.";
-                            }
-                            if (dados.msg_explicativa_num_maximo === null) {
-                                dados.msg_explicativa_num_maximo = "Remova algumas das cotas selecionadas para concluir a compra.";
-                            }
-
-
-                            //alert(dados.msg_num_maximo_reservas);
-
-                            document.getElementById("colunaDois").innerHTML = `
-
-                                             <h3>
-                                                 ${dados.msg_explicativa_num_maximo}
-                                             </h3>
-
-                                        `;
-                        }
-
-                        // PROBLEMAS COM O NÚMERO MINIMO DE COTAS
-                        if (dados.erros === "YYY") {
-
-                            if (dados.msg_num_minimo_reservas == null || dados.msg_num_minimo_reservas === "") {
-                                dados.msg_num_minimo_reservas = "Você não selecinou o número mínimo de cotas obrigatórias por compra. Adicione mais cotas antes de concluir sua compra.";
-                            }
-                            if (dados.msg_explicativa_num_minimo == null || dados.msg_explicativa_num_minimo === "") {
-                                dados.msg_explicativa_num_minimo = esc_html__('Adicione mais cotas antes de concluir a compra.', 'plugin-rifa-drope');
-                            }
-
-
-                            //alert(dados.msg_num_minimo_reservas);
-
-                            document.getElementById("colunaDois").innerHTML = `
-
-                                             <h3>
-                                                 ${dados.msg_explicativa_num_minimo}
-                                             </h3>
-
-                                        `;
-                        }
-                    }
-
-
-                } else {
-
-                    console.log("SEM SUCESSO CALL AJAX ADD TO CART()");
-                    console.log(xhr.responseText);
-
-                }
-
-            }
-        }; // FINAL AJAX VANILLA
-
-        /* EXECUTA */
-        xhr.send(params);
-
-        if (quantidade === 0) {
-            document.getElementById("modalRifa").style.bottom = "-520px";
-        }
     }
 
 }(jQuery))
