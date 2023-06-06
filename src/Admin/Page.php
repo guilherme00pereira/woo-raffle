@@ -9,7 +9,7 @@ class Page extends Template
     {
         parent::__construct();
         add_action('admin_menu', [$this, 'addMenu']);
-        add_action('wp_ajax_ajaxGetWinner', [$this, 'ajaxGetWinner']);
+        add_action('wp_ajax_ajaxGetRaffleData', [$this, 'ajaxGetRaffleData']);
     }
 
     public function addMenu()
@@ -30,7 +30,6 @@ class Page extends Template
         $this->enqueueScript();
 
         ob_start();
-
         self::getPart('page', 'index', []);
 
         $content = ob_get_contents();
@@ -45,13 +44,16 @@ class Page extends Template
         wp_localize_script('woo-raffle-admin-page', 'ajaxobj', [
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('woo-raffle-admin-page'),
-            'action_ajaxGetWinner' => 'ajaxGetWinner',
+            'action_ajaxGetRaffleData' => 'ajaxGetRaffleData',
         ]);
     }
 
-    public function ajaxGetWinner()
+    public function ajaxGetRaffleData()
     {
         try {
+            $product_id = $_POST['product_id'];
+            $quota_number = $_POST['quota_number'];
+            $raffleData = Database::getRaffleData($product_id, $quota_number);
             wp_send_json_success('success');
         } catch (\Exception $e) {
             wp_send_json_error($e->getMessage());

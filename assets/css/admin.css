@@ -51,3 +51,9 @@
 }
 
 
+/* ------------------ ADMIN PAGE ----------------------------*/
+
+.select-raffle-cell {
+    display: flex;
+    align-items: start;
+}

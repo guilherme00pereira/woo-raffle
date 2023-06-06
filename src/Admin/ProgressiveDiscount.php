@@ -282,7 +282,7 @@ class ProgressiveDiscount extends Base
                     ),
                 ),
             ),
-            'menu_order' => 0,
+            'menu_order' => 2,
             'position' => 'normal',
             'style' => 'default',
             'label_placement' => 'top',

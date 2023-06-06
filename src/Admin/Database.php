@@ -125,4 +125,14 @@ class Database extends Base
 
         return $results;
     }
+
+    public static function getRaffleData($product_id, $quota_number = "") {
+        global $wpdb;
+
+        $sql = "SELECT * FROM {$wpdb->base_prefix}{self::table_name} WHERE product_id = %d";
+
+        $results = $wpdb->get_results($wpdb->prepare($sql, $product_id));
+
+        return $results;
+    }
 }
