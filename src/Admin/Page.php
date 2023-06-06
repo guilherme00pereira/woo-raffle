@@ -51,10 +51,35 @@ class Page extends Template
     public function ajaxGetRaffleData()
     {
         try {
-            $product_id = $_POST['product_id'];
-            $quota_number = $_POST['quota_number'];
-            $raffleData = Database::getRaffleData($product_id, $quota_number);
-            wp_send_json_success('success');
+            $product_id = $_GET['pid'];
+            $quota = $_GET['cota'];
+            $raffleData = Database::getRaffleQuotaInfo($product_id, $quota);
+            $html = "
+                <div class='raffle-customer-data'>
+                    <h4>Dados do cliente:</h4>
+                    <div class='raffle-customer-data__item'>
+                        <span class='raffle-customer-data__item__label'>Nome:</span>
+                        <span class='raffle-customer-data__item__value'>{$raffleData['_billing_first_name']} {$raffleData['_billing_last_name']} </span>
+                    </div>
+                    <div class='raffle-customer-data__item'>
+                        <span class='raffle-customer-data__item__label'>E-mail:</span>
+                        <span class='raffle-customer-data__item__value'>{$raffleData['_billing_email']}</span>
+                    </div>
+                    <div class='raffle-customer-data__item'>
+                        <span class='raffle-customer-data__item__label'>Telefone:</span>
+                        <span class='raffle-customer-data__item__value'>{$raffleData['_billing_phone']}</span>
+                    </div>
+                    <div class='raffle-customer-data__item'>
+                        <span class='raffle-customer-data__item__label'>Número:</span>
+                        <span class='raffle-customer-data__item__value'>{$raffleData['_billing_cpf']}</span>
+                    </div>
+                </div>
+            ";
+            $response = [
+                'raffled'       => true,
+                'customerData'  => $html
+            ];
+            wp_send_json_success($response);
         } catch (\Exception $e) {
             wp_send_json_error($e->getMessage());
         }

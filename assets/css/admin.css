@@ -57,3 +57,27 @@
     display: flex;
     align-items: start;
 }
+
+#raffle-tabs-content {
+    background-color: #fff;
+}
+
+#raffle-tabs-content div {
+    padding: 20px;
+}
+
+#raffle-tabs-content div:not(:first-child) {
+    display: none;
+}
+
+#raffle-tabs .nav-tab-active {
+    background-color: #fff;
+    color: #2271B1;
+    margin-bottom: -3px;
+}
+
+#raffle-data {
+    padding: 20px;
+    font-size: 18px;
+    line-height: 26px;
+}

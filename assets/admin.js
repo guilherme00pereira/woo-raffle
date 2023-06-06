@@ -96,13 +96,4 @@ jQuery(document).ready(function ($) {
             .removeClass('notice-success')
             .removeClass('notice-warning');
     }
-
-    $('.wp-tab-bar a').click(function(event){
-        event.preventDefault();
-        const context = $(this).closest('.wp-tab-bar').parent();
-        $('.wp-tab-bar li', context).removeClass('wp-tab-active');
-        $(this).closest('li').addClass('wp-tab-active');
-        $('.wp-tab-panel', context).hide();
-        $( $(this).attr('href'), context ).show();
-    });
 });
