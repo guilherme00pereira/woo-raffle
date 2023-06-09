@@ -23,6 +23,10 @@ class ComposerStaticInit01be1f29d05948a519d277d8bfec7a9a
         array (
             'Mattiasgeniar\\Percentage\\' => 25,
         ),
+        'F' => 
+        array (
+            'Fpdf\\' => 5,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -37,6 +41,10 @@ class ComposerStaticInit01be1f29d05948a519d277d8bfec7a9a
         'Mattiasgeniar\\Percentage\\' => 
         array (
             0 => __DIR__ . '/..' . '/mattiasgeniar/php-percentages/src',
+        ),
+        'Fpdf\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/fpdf/fpdf/src/Fpdf',
         ),
     );
 

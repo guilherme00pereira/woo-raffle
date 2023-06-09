@@ -9,4 +9,5 @@ return array(
     'WooRaffles\\' => array($baseDir . '/src'),
     'UPFlex\\MixUp\\' => array($vendorDir . '/upflex/mixup/src'),
     'Mattiasgeniar\\Percentage\\' => array($vendorDir . '/mattiasgeniar/php-percentages/src'),
+    'Fpdf\\' => array($vendorDir . '/fpdf/fpdf/src/Fpdf'),
 );

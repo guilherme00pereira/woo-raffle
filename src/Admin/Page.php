@@ -10,6 +10,7 @@ class Page extends Template
         parent::__construct();
         add_action('admin_menu', [$this, 'addMenu']);
         add_action('wp_ajax_ajaxGetRaffleData', [$this, 'ajaxGetRaffleData']);
+        add_action('wp_ajax_ajaxSaveThumbLogo', [$this, 'ajaxSaveThumbLogo']);
     }
 
     public function addMenu()
@@ -45,7 +46,10 @@ class Page extends Template
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('woo-raffle-admin-page'),
             'action_ajaxGetRaffleData' => 'ajaxGetRaffleData',
+            'action_ajaxSaveThumbLogo' => 'ajaxSaveThumbLogo',
+            'logo_export_attachment_post_id' => get_option('raffle_logo_export_attachment_id', 0),
         ]);
+        wp_enqueue_media();
     }
 
     public function ajaxGetRaffleData()
@@ -80,6 +84,18 @@ class Page extends Template
                 'customerData'  => $html
             ];
             wp_send_json_success($response);
+        } catch (\Exception $e) {
+            wp_send_json_error($e->getMessage());
+        }
+        wp_die();
+    }
+
+    public function ajaxSaveThumbLogo()
+    {
+        try {
+            $attachment_id = $_POST['attachment_id'];
+            update_option('raffle_logo_export_attachment_id', $attachment_id);
+            wp_send_json_success('Logo salvo com sucesso!');
         } catch (\Exception $e) {
             wp_send_json_error($e->getMessage());
         }

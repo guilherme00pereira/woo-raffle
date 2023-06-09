@@ -6,7 +6,7 @@ Export data to Excel XLSX file. PHP XLSX generator. No external tools and librar
 - XLS reader [here](https://github.com/shuchkin/simplexls)
 - CSV reader/writer [here](https://github.com/shuchkin/simplecsv)
 
-**Sergey Shuchkin** <sergey.shuchkin@gmail.com> 2020-2022<br/>
+**Sergey Shuchkin** <sergey.shuchkin@gmail.com> 2020-2023<br/>
 
 *Hey, bro, please ★ the package for my motivation :) and [donate](https://opencollective.com/simplexlsx) for more motivation!* 
 
@@ -33,6 +33,7 @@ $ composer require shuchkin/simplexlsxgen
 or download class [here](https://github.com/shuchkin/simplexlsxgen/blob/master/src/SimpleXLSXGen.php)
 
 ## Examples
+Use UTF-8 encoded strings.
 ### Data types
 ```php
 $data = [
@@ -47,7 +48,7 @@ $data = [
     ['Date', '2020-05-20'],
     ['Time', '02:38:00'],
     ['Datetime PHP', new DateTime('2021-02-06 21:07:00')],
-    ['String', 'Long UTF-8 String in autoresized column'],
+    ['String', 'Very long UTF-8 string in autoresized column'],
     ['Formula', '<f v="135.35">SUM(B1:B2)</f>'],
     ['Hyperlink', 'https://github.com/shuchkin/simplexlsxgen'],
     ['Hyperlink + Anchor', '<a href="https://github.com/shuchkin/simplexlsxgen">SimpleXLSXGen</a>'],
@@ -71,6 +72,7 @@ $data = [
     ['Italic + Hyperlink + Anchor', '<i><a href="https://github.com/shuchkin/simplexlsxgen">SimpleXLSXGen</a></i>'],
     ['Green', '<style color="#00FF00">12345.67</style>'],
     ['Bold Red Text', '<b><style color="#FF0000">12345.67</style></b>'],
+    ['Size 32 Font', '<style font-size="32">Big Text</style>'],
     ['Blue Text and Yellow Fill', '<style bgcolor="#FFFF00" color="#0000FF">12345.67</style>'],
     ['Border color', '<style border="#000000">Black Thin Border</style>'],
     ['<top>Border style</top>','<style border="medium"><wraptext>none, thin, medium, dashed, dotted, thick, double, hair, mediumDashed, dashDot,mediumDashDot, dashDotDot, mediumDashDotDot, slantDashDot</wraptext></style>'],
@@ -84,7 +86,7 @@ $data = [
     ['Middle + Center', '<style height="50"><middle><center>Middle + Center</center></middle></style>'],
     ['Bottom + Right', '<style height="50"><bottom><right>Bottom + Right</right></bottom></style>'],
     ['<center>MERGE CELLS MERGE CELLS MERGE CELLS MERGE CELLS MERGE CELLS</center>', null],
-    ['<top>Word wrap</top>', "<wraptext>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</wraptext>"]
+    ['<top>Word wrap</top>', "<wraptext>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</wraptext>"],
 ];
 SimpleXLSXGen::fromArray($data)
     ->setDefaultFont('Courier New')
@@ -94,6 +96,21 @@ SimpleXLSXGen::fromArray($data)
     ->saveAs('styles_and_tags.xlsx');
 ```
 ![XLSX screenshot](styles.png)
+
+### RAW Strings
+Prefix #0 cell value (use double quotes).
+```php
+$PushkinDOB = '1799-07-06';
+$data = [
+    ['Datetime as raw string', "\0".'2023-01-09 11:16:34'],
+    ['Date as raw string', "\0".$PushkinDOB],
+    ['Disable type detection', "\0".'+12345'],
+    ['Insert greater/less them simbols', "\0".'20- short term: <6 month'],
+
+];
+SimpleXLSXGen::fromArray($data)
+    ->saveAs('test_rawstrings.xlsx');
+```
 
 ### More examples
 ```php
@@ -117,6 +134,26 @@ exit();
 // Autofilter
 $xlsx->autoFilter('A1:B10');
 
+// Freeze rows and columns from top-left corner up to, but not including,
+// the row and column of the indicated cell
+$xlsx->freezePanes('C3');
+
+// RTL mode
+// Column A is on the far right, Column B is one column left of Column A, and so on. Also, information in cells is displayed in the Right to Left format.
+$xlsx->rightToLeft();
+
+// Set Meta Data Files
+// this data in propertis Files and Info file in Office 
+$xlsx->setAuthor('Sergey Shuchkin <sergey.shuchkin@gmail.com>')
+    ->setCompany('Microsoft <info@microsoft.com>')
+    ->setManager('Bill Gates <bill.gates@microsoft.com>')
+    ->setLastModifiedBy("Sergey Shuchkin <sergey.shuchkin@gmail.com>")
+    ->setTitle('This is Title')
+    ->setSubject('This is Subject')
+    ->setKeywords('Keywords1, Keywords2, Keywords3, KeywordsN')
+    ->setDescription('This is Description')
+    ->setCategory('This is Сategory')
+    ->setApplication('Shuchkin\SimpleXLSXGen')
 ```
 ### JS array to Excel (AJAX)
 ```php

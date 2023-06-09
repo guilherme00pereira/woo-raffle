@@ -4,6 +4,7 @@ namespace WooRaffles\Admin;
 
 use Shuchkin\SimpleXLSXGen;
 use UPFlex\MixUp\Core\Base;
+use WooRaffles\Admin\PDF;
 use WooRaffles\Woocommerce\GenerateNumbers;
 
 if (!defined('ABSPATH')) {
@@ -19,12 +20,25 @@ class ExportExcel extends Base
 
     public static function createFile($product_id, $file_type)
     {
-        if ($product_id > 0 && $file_type === 'csv') {
+        if ($product_id > 0) {
             $numbers = GenerateNumbers::getNumbersByProductId($product_id, false);
             $rows = self::generateRows($numbers);
-            $xlsx = SimpleXLSXGen::fromArray($rows);
-
-            $xlsx->downloadAs('woo-raffles-v1.xlsx');
+            if($file_type === 'csv') {
+                $xlsx = SimpleXLSXGen::fromArray($rows);
+                $xlsx->downloadAs('woo-raffles-v1.xlsx');
+            }
+            if($file_type === 'pdf') {
+                ob_end_clean();
+                $pdf = new PDF();
+                $pdf->AddPage();
+                $pdf->SetFont('Arial','',10);
+                foreach($rows as $row) {
+                    $pdf->Cell(100,10,$row['nome']);
+                    $pdf->Cell(40,10,$row['cotas_escolhidas']);
+                    $pdf->Ln();
+                }
+                $pdf->Output('D', 'woo-raffles-v1.pdf', true);
+            }
         }
     }
 
@@ -32,11 +46,8 @@ class ExportExcel extends Base
     {
         $rows = [];
         $rows[0] = [
-            __('PEDIDO', 'woo-raffles'),
             __('NOME COMPRADOR', 'woo-raffles'),
-            __('E-MAIL DO COMPRADOR', 'woo-raffles'),
             __('NÚMEROS RESERVADO', 'woo-raffles'),
-            __('PRODUTO', 'woo-raffles'),
         ];
 
         if ($numbers) {
@@ -44,12 +55,8 @@ class ExportExcel extends Base
 
             foreach ($numbers as $item) {
                 $key_list = "{$item->order_id}__$y";
-                $rows[$key_list]['id'] = $item->order_id ?? '';
                 $rows[$key_list]['nome'] = $item->user_name ?? '';
-                $rows[$key_list]['email'] = $item->user_email ?? '';
                 $rows[$key_list]['cotas_escolhidas'] = $item->quotes ?? '';
-                $rows[$key_list]['produto'] = $item->product_name ?? '';
-
                 $y++;
             }
         }
