@@ -4,7 +4,7 @@
         event.preventDefault();
         $('#raffle-tabs a').removeClass('nav-tab-active');
         $(this).addClass('nav-tab-active');
-        $('.tabs-content div').hide();
+        $('.tabs-content>div').hide();
         $('#' + $(this).data('tab') ).show();
     });
 
@@ -19,7 +19,7 @@
             cota: $('#quotaNumber').val()
         };
         $.get(ajaxobj.ajax_url, params, function (res) {
-
+            console.log(res.data)
             if(res.data.raffled) {
                 $('#raffle-data').html(res.data.customerData);
             } else {

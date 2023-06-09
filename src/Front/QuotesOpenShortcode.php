@@ -83,13 +83,9 @@ class QuotesOpenShortcode extends Template
     {
         $product_id = $attrs['id'];
 
-        $this->enqueueStyleAndScript($product_id);
+        $allow_duplicate = get_field("cotas_duplicadas",$product_id);
 
-        $total_total = 0; // TOTAL TOTAL
-            $total_d = 0; // DISPONIVEIS
-            $total_r = 0; // RESERVADAS
-            $total_c = 0; // COMPRAPAS
-            $total_p = 0; // PARTICIPANTES
+        $this->enqueueStyleAndScript($product_id);
 
             $quantidade_cotas = get_field("numero_de_cotas",$product_id);
 
@@ -197,7 +193,6 @@ class QuotesOpenShortcode extends Template
 
             endif;
 
-
             return '
 
          <input type="hidden" id="idDoProdutoInput" value="'.$product_id.'" />
@@ -239,15 +234,17 @@ class QuotesOpenShortcode extends Template
 
                           <input type="radio" name="pcss3t" checked id="tabTodos" class="tab-content-first">
                           <label class="label-aba-todas" for="tabTodos">'. esc_html__( 'TODAS', 'plugin-rifa-drope') .' (<span id="totalTodos">0</span>)</label>
-
+                            
                           <input type="radio" name="pcss3t" id="tab1" class="tab-content-1">
                           <label class="label-aba-livres" for="tab1">'. esc_html__( 'LIVRES', 'plugin-rifa-drope') .' (<span id="totalL">0</span>)</label>
+                            
 
                           <input type="radio" name="pcss3t" id="tab2" class="tab-content-2">
                           <label class="label-aba-reservadas" for="tab2">'. esc_html__( 'RESERVADAS', 'plugin-rifa-drope') .' (<span id="totalR">0</span>)</label>
 
                           <input type="radio" name="pcss3t" id="tab3" class="tab-content-3">
                           <label class="label-aba-pagas" for="tab3">'. esc_html__( 'PAGAS', 'plugin-rifa-drope') .' (<span id="totalC">0</span>)</label>
+                      
 
                         <ul style="padding-left:0px;margin-left:0px;">
 
@@ -255,7 +252,7 @@ class QuotesOpenShortcode extends Template
                           <li class="tab-content aba-modelo4 aba-modelo4-0 tab-content-first" style="padding-left:0px !important;padding-right:0px !important;" id="iteneRifaAba0">
                           </li>
                           <!-- ABA ZERO -->
-
+                            
                           <!-- ABA UM -->
                           <li class="tab-content aba-modelo4 aba-modelo4-1 tab-content-1" style="padding-left:0px !important;padding-right:0px !important;" id="iteneRifaAba1">
                           </li>
@@ -278,7 +275,6 @@ class QuotesOpenShortcode extends Template
                             '. esc_html__( 'Carregar mais números', 'plugin-rifa-drope') .'
                             </a>
                         </p>
-
                    </div>
                  </div>
                  <!-- ABAS -->
