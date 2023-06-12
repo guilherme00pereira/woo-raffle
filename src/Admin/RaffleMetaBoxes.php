@@ -2,17 +2,19 @@
 
 namespace WooRaffles\Admin;
 
-use UPFlex\MixUp\Core\Base;
+use WooRaffles\Admin\Template;
 
 if (!defined('ABSPATH')) {
     exit;
 }
 
-class RaffleMetaBoxes extends Base
+class RaffleMetaBoxes extends Template
 {
     public function __construct()
     {
+        parent::__construct();
         add_action('acf/init', [$this, 'addFieldGroups']);
+        add_action('add_meta_boxes', [$this, 'addStatisticsMetaBox']);
     }
 
     public function addFieldGroups()
@@ -22,7 +24,7 @@ class RaffleMetaBoxes extends Base
             acf_add_local_field_group(
                 array(
                     'key' => 'group_raffle_settings',
-                    'title' => 'Configurações do Sorteio',
+                    'title' => 'Configurações para Sorteio Aberto',
                     'fields' => array(
                         array(
                             'key' => 'field_5fd7d156c1766',
@@ -102,31 +104,6 @@ class RaffleMetaBoxes extends Base
                             'ajax' => 0,
                             'placeholder' => '',
                         ),
-                        array(
-                            'key' => 'field_6100c462f0fac',
-                            'label' => 'Tipo de cota',
-                            'name' => 'tipo_de_cota',
-                            'type' => 'select',
-                            'instructions' => 'Selecione o tipo de cota (estilo) que sua rifa terá. Funcional apenas no modelo 4 ou inferior',
-                            'required' => 0,
-                            'conditional_logic' => 0,
-                            'wrapper' => array(
-                                'width' => '25',
-                                'class' => '',
-                                'id' => '',
-                            ),
-                            'choices' => array(
-                                'Cota quadrada' => 'Cota quadrada',
-                                'Cota redonda' => 'Cota redonda',
-                            ),
-                            'default_value' => false,
-                            'allow_null' => 0,
-                            'multiple' => 0,
-                            'ui' => 0,
-                            'return_format' => 'value',
-                            'ajax' => 0,
-                            'placeholder' => '',
-                        ),
                     ),
                     'location' => array(
                         array(
@@ -193,8 +170,8 @@ class RaffleMetaBoxes extends Base
                         ),
                         array(
                             'key' => 'field_5fd7d126c1769',
-                            'label' => 'Cor de fundo botão finalizar compra',
-                            'name' => 'cor_de_fundo_btn_finalizar_compra',
+                            'label' => 'Cor de fundo botão Participar',
+                            'name' => 'cor_de_fundo_btn_participar',
                             'type' => 'color_picker',
                             'instructions' => '',
                             'required' => 0,
@@ -212,8 +189,8 @@ class RaffleMetaBoxes extends Base
                         ),
                         array(
                             'key' => 'field_5fd7d126c1770',
-                            'label' => 'Cor do texto botão finalizar compra',
-                            'name' => 'cor_do_texto_btn_finalizar_compra',
+                            'label' => 'Cor do texto do botão Participar',
+                            'name' => 'cor_do_texto_btn_participar',
                             'type' => 'color_picker',
                             'instructions' => '',
                             'required' => 0,
@@ -383,7 +360,7 @@ class RaffleMetaBoxes extends Base
                         ),
                         array(
                             'key' => 'field_61185ed590977',
-                            'label' => 'Cores Modelos TODAS (Modelo 4)',
+                            'label' => 'Cores Modelos TODAS',
                             'name' => 'cores_modelos_todas',
                             'type' => 'group',
                             'instructions' => '',
@@ -430,7 +407,7 @@ class RaffleMetaBoxes extends Base
                         ),
                         array(
                             'key' => 'field_611868bd2ca2c',
-                            'label' => 'Cores Modelos LIVRES  (Modelo 4)',
+                            'label' => 'Cores Modelos LIVRES ',
                             'name' => 'cores_modelos_livres',
                             'type' => 'group',
                             'instructions' => '',
@@ -477,7 +454,7 @@ class RaffleMetaBoxes extends Base
                         ),
                         array(
                             'key' => 'field_611868c02ca35',
-                            'label' => 'Cores Modelos RESERVADAS  (Modelo 4)',
+                            'label' => 'Cores Modelos RESERVADAS ',
                             'name' => 'cores_modelos_reservadas',
                             'type' => 'group',
                             'instructions' => '',
@@ -524,7 +501,7 @@ class RaffleMetaBoxes extends Base
                         ),
                         array(
                             'key' => 'field_611868c22ca3e',
-                            'label' => 'Cores Modelos PAGAS  (Modelo 4)',
+                            'label' => 'Cores Modelos PAGAS ',
                             'name' => 'cores_modelos_pagas',
                             'type' => 'group',
                             'instructions' => '',
@@ -591,5 +568,39 @@ class RaffleMetaBoxes extends Base
             );
 
         endif;
+    }
+
+    public function addStatisticsMetaBox()
+    {
+        add_meta_box(
+            'raffle_statistics',
+            'Sorteio',
+            array($this, 'renderStatisticsMetaBox'),
+            'product',
+            'normal',
+            'high'
+        );
+    }
+
+    public function renderStatisticsMetaBox($post)
+    {
+        ob_start();
+
+        $cotas = Database::getSoldQuotes($post->ID);
+        $pedidos = 0;
+
+        self::getPart(
+            'page-raffle',
+            'metabox',
+            [
+                'cotas' => $cotas,
+                'pedidos' => $pedidos
+            ]
+            );
+
+        $content = ob_get_contents();
+        ob_end_clean();
+
+        echo $content;
     }
 }

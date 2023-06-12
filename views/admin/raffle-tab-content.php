@@ -9,25 +9,7 @@
                         'wrapper_class' => 'show_if_woo_raffle',
                         'label' => __('Números Aleatórios', 'woo-raffles'),
                         'description' => __('Permitir que os números sejam gerados de forma aleatória', 'woo-raffles'),
-                        'default' => '0',
-                        'desc_tip' => false,
-                    ]);
-
-                    woocommerce_wp_checkbox([
-                        'id' => '_woo_raffles_numbers_open',
-                        'wrapper_class' => 'show_if_woo_raffle',
-                        'label' => __('Números Abertos', 'woo-raffles'),
-                        'description' => __('Permitir que o cliente selecione os números desejados', 'woo-raffles'),
-                        'default' => '0',
-                        'desc_tip' => false,
-                    ]);
-
-                    woocommerce_wp_checkbox([
-                        'id' => '_woo_raffles_numbers_duplicate',
-                        'wrapper_class' => 'show_if_woo_raffle',
-                        'label' => __('Números Abertos Duplicados', 'woo-raffles'),
-                        'description' => __('Permitir que o cliente selecione os números desejados. Permite números duplicados', 'woo-raffles'),
-                        'default' => '0',
+                        'default' => 'yes',
                         'desc_tip' => false,
                     ]);
 

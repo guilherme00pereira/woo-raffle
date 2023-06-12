@@ -21,10 +21,8 @@ class AddToCart extends Base
     public static function getNumbers()
     {
         $error = true;
-        $key = '';
         $key_meta_data = 'woo_raffles_numbers';
         $msg = __('O produto não possui estoque suficiente.', 'woo-raffles');
-        $redirect = null;
 
         $product_id = sanitize_text_field($_POST['product_id'] ?? '');
         $numbers = sanitize_text_field($_POST['numbers'] ?? '');
@@ -45,21 +43,25 @@ class AddToCart extends Base
                     [],
                     [$key_meta_data => $numbers_selected]
                 );
+                if ($key) {
+                    $msg = $is_removed
+                        ? _n('Número atualizado com sucesso.', 'Números atualizados com sucesso.', $qty, 'woo-raffles')
+                        : _n('Número adicionado com sucesso.', 'Números adicionados com sucesso.', $qty, 'woo-raffles');
+                    wp_send_json_error([
+                        'redirect' => true,
+                        'msg' => $msg,
+                        'route' => wc_get_checkout_url(),
+                    ], 200);
+                }
             } catch (\Exception $e) {
                 error_log($e->getMessage());
-            }
-
-            if ($key) {
-                $msg = $is_removed
-                    ? _n('Número atualizado com sucesso.', 'Números atualizados com sucesso.', $qty, 'woo-raffles')
-                    : _n('Número adicionado com sucesso.', 'Números adicionados com sucesso.', $qty, 'woo-raffles');
-                $error = false;
-                $redirect = wc_get_checkout_url();
+                wp_send_json_error([
+                    'redirect' => false,
+                    'msg' => $e->getMessage(),
+                ], 500);
             }
         }
-
-        echo json_encode(['error' => $error, 'msg' => $msg, 'redirect' => $redirect]);
-        exit;
+        wp_die();
     }
 
     public function changeQuantity($product_quantity, $cart_item_key, $cart_item): int

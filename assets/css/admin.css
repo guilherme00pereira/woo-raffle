@@ -81,3 +81,21 @@
     font-size: 18px;
     line-height: 26px;
 }
+
+.raffle-customer-data-label {
+    font-weight: bold;
+}
+
+.raffle-meta-box {
+    display: flex;
+    flex-direction: row;
+}
+
+.raffle-meta-box>div {
+    margin-right: 20px;
+    text-align: center;
+}
+.raffle-meta-box p {
+    font-size: 1.5rem;
+    color: #2271B1;
+}

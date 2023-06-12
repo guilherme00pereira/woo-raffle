@@ -128,7 +128,7 @@ class Database extends Base
 
     public static function getRaffleQuotaInfo($product_id, $quota) {
         global $wpdb;
-
+        $data = [];
         $sql = "select pm.meta_key, pm.meta_value FROM {$wpdb->base_prefix}postmeta pm 
                 inner join {$wpdb->base_prefix}woo_raffles_numbers rn on rn.order_id = pm.post_id
                 where rn.generated_number = %s
@@ -141,9 +141,17 @@ class Database extends Base
                 or pm.meta_key = '_billing_phone')";
         $result = $wpdb->get_results($wpdb->prepare($sql, $quota, $product_id), ARRAY_A);
         foreach ($result as $key => $value) {
-            $result[$value['meta_key']] = $value['meta_value'];
-            unset($result[$key]);
+            $data[$value['meta_key']] = $value['meta_value'];
         }
-        return $result;
+        $sql = "SELECT post_status FROM {$wpdb->base_prefix}posts WHERE ID = %s";
+        $data['status'] = $wpdb->get_var($wpdb->prepare($sql, $quota));
+        return $data;
+    }
+
+    public static function getSoldQuotes($product_id): ?string
+    {
+        global $wpdb;
+        $sql = "SELECT count(*) as total FROM {$wpdb->base_prefix}woo_raffles_numbers WHERE product_id = %s";
+        return $wpdb->get_var($wpdb->prepare($sql, $product_id));
     }
 }

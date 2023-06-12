@@ -9,7 +9,7 @@
         retornaCotas()
     })
 
-    $('.btn-carregar-mais-numeros').click(function (e) {
+    $('#load-more-numbers').click(function (e) {
         imprimirNumeros();
     })
 
@@ -17,9 +17,52 @@
         selecionarCotaRifa(this.value)
     })
 
+    $('#btn-participate-quotes-open').click(function (e) {
+        if(cotasSelecionadas.length === 0) {
+            alert('Selecione ao menos uma cota para participar.')
+            return false;
+        }
+        $(this).attr('disabled', 'disabled');
+        $(this).html('Aguarde...');
+
+        const msg = $('#woo_raffles_notice p');
+
+        removeClassNotices(msg);
+
+        let idProduto = document.getElementById("idDoProdutoInput").value;
+
+        if (cotasSelecionadas.length > 0 && parseInt(idProduto) > 0) {
+            $.ajax({
+                type: 'POST',
+                url: '/wp-admin/admin-ajax.php',
+                dataType: 'json',
+                data: {
+                    action: 'woo_numbers_selected',
+                    product_id: idProduto,
+                    numbers: cotasSelecionadas.join(','),
+                },
+                success: function (response) {
+                    if (response.data.error) {
+                        msg.addClass('woocommerce-error');
+                        msg.removeClass('hidden').html(response.data.msg);
+                        $(this).removeAttr('disabled');
+                    } else {
+                        window.location.href = response.data.route;
+                    }
+                },
+                error: function (err) {
+                    console.error(err);
+                    $(this).removeAttr('disabled');
+                }
+            });
+        }
+
+        return false;
+    });
+
     function imprimirNumeros() {
 
-        let h = 1;
+        let h = 0;
         let i = 0;
         const j = impressosPagina;
 
@@ -33,16 +76,15 @@
             max_por_pagina = 100;
         }
 
-        const porPagina = max_por_pagina;
-
-        if (j >= cotasModelo.cotas) {
+        if ((parseInt(j) + parseInt(max_por_pagina)) >= cotasModelo.cotas) {
             $(".btn-carregar-mais-numeros").hide();
         }
 
-        while (h <= porPagina) {
+        while (h < max_por_pagina) {
             i = impressosPagina;
             if (j < cotasModelo.cotas) {
                 // TAB 1 (TODAS))
+
                 $("#iteneRifaAba0").append(`
                     <div class="form-check conteme1" data-cota="${coloque_zero(i, cotasModelo.globos)}" id="fcTodos${coloque_zero(i, cotasModelo.globos)}">
                           <input class="form-check-input" type="checkbox" name="cotas"
@@ -91,7 +133,7 @@
         // REMOVER DAS ABAS RESERVADAS E PAGAS,
         // OS NUMEROS QUE ESTAO LIVRES
         // IMPRIMIR OS NUMEROS QUE ESTAO LIVRES
-        let n = 0;
+        let n = 1;
         let m = 0;
 
 
@@ -100,7 +142,7 @@
             $(`#fcr${cotasModelo.livres[n]}`).remove();
             $(`#fcc${cotasModelo.livres[n]}`).remove();
 
-            if (m <= porPagina) {
+            if (m <= max_por_pagina) {
                 if (n >= livresImpressos) {
 
 
@@ -253,12 +295,12 @@
         const totalC = $("#totalC");
 
         const params = {
-            action: ajaxobj.action_ajaxApiRifaInfos,
+            action: ajaxobj.ajaxApiRifaInfos,
             nonce: ajaxobj.raffle_nonce,
-            rifa: ajaxobj.productId
+            rifa: $('#idDoProdutoInput').val()
         }
         $.get(ajaxobj.ajax_url, params, function (res) {
-            cotasModelo = res;
+            cotasModelo = res.data;
             let totalPagas = 0;
             let totalReservas = 0;
 
@@ -324,8 +366,6 @@
             $(`#cotaClone${numeroCota}`).prop('checked', false);
         }
         cotasSelecionadas.push(numeroCota);
-        let idDoProduto = document.getElementById("idDoProdutoInput").value;
-        salvarCarrinho(idDoProduto, cotasSelecionadas.length);
     }
 
     function removerSelecaoCota(cotaValue){
@@ -335,16 +375,11 @@
         setTimeout(function(){ document.getElementById("cotaClone"+cotaValue).checked = false; }, 1500);
     }
 
-    function salvarCarrinho(idProduto, quantidade) {
-        const params = {
-            action: ajaxobj.action_ajaxAddtoCart,
-            nonce: ajaxobj.raffle_nonce,
-            produto: idProduto,
-            quantidade: quantidade
-        }
-        $.get(ajaxobj.ajax_url, params, function (res) {
-            console.log(res);
-        });
+    function removeClassNotices($msg) {
+        $msg
+            .addClass('hidden')
+            .removeClass('woocommerce-error')
+            .removeClass('woocommerce-message');
     }
 
 }(jQuery))

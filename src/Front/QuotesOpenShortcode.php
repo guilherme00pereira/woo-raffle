@@ -19,95 +19,37 @@ class QuotesOpenShortcode extends Template
         add_shortcode('woo-raffles-cotas_abertas', [$this, 'content_v2']);
         add_action('wp_ajax_ajaxApiRifaInfos', [$this, 'ajaxApiRifaInfos']);
         add_action('wp_ajax_nopriv_ajaxApiRifaInfos', [$this, 'ajaxApiRifaInfos']);
-        add_action('wp_ajax_addToCart', [$this, 'addToCart']);
-        add_action( 'wp_ajax_nopriv_addToCart', [$this, 'addToCart'] );
-    }
-
-    public function content($attrs)
-    {
-        extract(shortcode_atts(array(
-            'id' => 0,
-        ), $attrs));
-
-        ob_start();
-
-        $product_id = $attrs['id'] ?? '';
-
-        $product = wc_get_product($product_id);
-
-        $qty = $product->get_stock_quantity() + $product->get_total_sales();
-
-        $numbers_disabled = self::getNumbersByProductId($product_id);
-        $numbers_selected = [];
-
-        $cart = \WC()->cart;
-        if ($cart) {
-            foreach ($cart->get_cart() as $cart_item) {
-                if ((int)$product_id === $cart_item['product_id']) {
-                    $numbers_selected = $cart_item['woo_raffles_numbers'] ?? [];
-                }
-            }
-        }
-
-        self::getPart('quotes', 'open', [
-                'numbers_disabled' => $numbers_disabled,
-                'numbers_selected' => $numbers_selected,
-                'product_id' => $product_id,
-                'qty' => $qty,
-            ]
-        );
-
-        $content = ob_get_contents();
-        ob_end_clean();
-
-        return $content;
-    }
-
-    public static function getNumbersByProductId($product_id): array
-    {
-        global $wpdb;
-
-        $table_name = Database::$table_name;
-
-        return $wpdb->get_col(
-            $wpdb->prepare(
-                "SELECT wrf.generated_number
-                        FROM {$wpdb->prefix}{$table_name} wrf
-                        WHERE wrf.product_id = %d;",
-                $product_id,
-            )
-        );
     }
 
     public function content_v2($attrs): string
     {
         $product_id = $attrs['id'];
 
-        $allow_duplicate = get_field("cotas_duplicadas",$product_id);
+        $allow_duplicate = get_field("cotas_duplicadas", $product_id);
 
         $this->enqueueStyleAndScript($product_id);
 
-            $quantidade_cotas = get_field("numero_de_cotas",$product_id);
+        $quantidade_cotas = get_field("numero_de_cotas", $product_id);
 
-            if($quantidade_cotas == ""): $quantidade_cotas = 0; endif;
+        if ($quantidade_cotas == ""): $quantidade_cotas = 0; endif;
 
-            $cores_modelos_todas = get_field("cores_modelos_todas",$product_id);
-            $cor_de_fundo_aba_todas = $cores_modelos_todas["cor_de_fundo_aba_todas"];
-            $cor_do_texto_e_borda_aba_todas = $cores_modelos_todas["cor_do_texto_e_borda_aba_todas"];
+        $cores_modelos_todas = get_field("cores_modelos_todas", $product_id);
+        $cor_de_fundo_aba_todas = $cores_modelos_todas["cor_de_fundo_aba_todas"];
+        $cor_do_texto_e_borda_aba_todas = $cores_modelos_todas["cor_do_texto_e_borda_aba_todas"];
 
-            $cores_modelos_livres = get_field("cores_modelos_livres",$product_id);
-            $cor_de_fundo_aba_livres = $cores_modelos_livres["cor_de_fundo_aba_livres"];
-            $cor_do_texto_e_borda_aba_livres = $cores_modelos_livres["cor_do_texto_e_borda_aba_livres"];
+        $cores_modelos_livres = get_field("cores_modelos_livres", $product_id);
+        $cor_de_fundo_aba_livres = $cores_modelos_livres["cor_de_fundo_aba_livres"];
+        $cor_do_texto_e_borda_aba_livres = $cores_modelos_livres["cor_do_texto_e_borda_aba_livres"];
 
-            $cores_modelos_reservadas = get_field("cores_modelos_reservadas",$product_id);
-            $cor_de_fundo_aba_reservadas = $cores_modelos_reservadas["cor_de_fundo_aba_reservadas"];
-            $cor_do_texto_e_borda_aba_reservadas = $cores_modelos_reservadas["cor_do_texto_e_borda_aba_reservadas"];
+        $cores_modelos_reservadas = get_field("cores_modelos_reservadas", $product_id);
+        $cor_de_fundo_aba_reservadas = $cores_modelos_reservadas["cor_de_fundo_aba_reservadas"];
+        $cor_do_texto_e_borda_aba_reservadas = $cores_modelos_reservadas["cor_do_texto_e_borda_aba_reservadas"];
 
-            $cores_modelos_pagas = get_field("cores_modelos_pagas",$product_id);
-            $cor_de_fundo_aba_pagas = $cores_modelos_pagas["cor_de_fundo_aba_pagas"];
-            $cor_do_texto_e_borda_aba_pagas = $cores_modelos_pagas["cor_do_texto_e_borda_aba_pagas"];
+        $cores_modelos_pagas = get_field("cores_modelos_pagas", $product_id);
+        $cor_de_fundo_aba_pagas = $cores_modelos_pagas["cor_de_fundo_aba_pagas"];
+        $cor_do_texto_e_borda_aba_pagas = $cores_modelos_pagas["cor_do_texto_e_borda_aba_pagas"];
 
-            $estilo_modelo4 = "
+        $estilo_modelo4 = "
 
      /* CSS MODELO 6 */
      
@@ -171,31 +113,12 @@ class QuotesOpenShortcode extends Template
      }
 
   ";
+        $more_tabs = $allow_duplicate ? "" : $this->moreTabs();
+        $more_tab_contents = $allow_duplicate ? "" : $this->moreTabContents();
 
+        return '
 
-            $estilo_cota = "";
-
-            if(get_field("tipo_de_cota",$product_id)=="Cota redonda"):
-
-                $estilo_cota = '
-
-       .form-check-label {
-           margin-bottom: 0;
-           border-radius: 100% !important;
-           height: 53px !important;
-       }
-       .cotas-disponiveis .form-check {
-           border-radius: 100% !important;
-       }
-
-
-   ';
-
-            endif;
-
-            return '
-
-         <input type="hidden" id="idDoProdutoInput" value="'.$product_id.'" />
+         <input type="hidden" id="idDoProdutoInput" value="' . $product_id . '" />
 
          <style>
 
@@ -218,12 +141,19 @@ class QuotesOpenShortcode extends Template
            }
 
              /*.pcss3t > input:checked + label{
-                 border-bottom: 2px solid ' . get_field("cor_do_borda_abas_livres_reservadas",$product_id) . ' !important;
+                 border-bottom: 2px solid ' . get_field("cor_do_borda_abas_livres_reservadas", $product_id) . ' !important;
            }*/
 
-           '.$estilo_cota.'
+            .form-check-label {
+           margin-bottom: 0;
+           border-radius: 100% !important;
+           height: 36px !important;
+       }
+       .cotas-disponiveis .form-check {
+           border-radius: 100% !important;
+       }
 
-           '.$estilo_modelo4.'
+        ' . $estilo_modelo4 . '           
 
           </style>
 
@@ -233,19 +163,10 @@ class QuotesOpenShortcode extends Template
                    <div class="pcss3t pcss3t-height-auto">
 
                           <input type="radio" name="pcss3t" checked id="tabTodos" class="tab-content-first">
-                          <label class="label-aba-todas" for="tabTodos">'. esc_html__( 'TODAS', 'plugin-rifa-drope') .' (<span id="totalTodos">0</span>)</label>
+                          <label class="label-aba-todas" for="tabTodos">' . esc_html__('TODAS', 'plugin-rifa-drope') . ' (<span id="totalTodos">0</span>)</label>
                             
-                          <input type="radio" name="pcss3t" id="tab1" class="tab-content-1">
-                          <label class="label-aba-livres" for="tab1">'. esc_html__( 'LIVRES', 'plugin-rifa-drope') .' (<span id="totalL">0</span>)</label>
+                            ' . $more_tabs . '
                             
-
-                          <input type="radio" name="pcss3t" id="tab2" class="tab-content-2">
-                          <label class="label-aba-reservadas" for="tab2">'. esc_html__( 'RESERVADAS', 'plugin-rifa-drope') .' (<span id="totalR">0</span>)</label>
-
-                          <input type="radio" name="pcss3t" id="tab3" class="tab-content-3">
-                          <label class="label-aba-pagas" for="tab3">'. esc_html__( 'PAGAS', 'plugin-rifa-drope') .' (<span id="totalC">0</span>)</label>
-                      
-
                         <ul style="padding-left:0px;margin-left:0px;">
 
                           <!-- ABA ZERO -->
@@ -253,32 +174,29 @@ class QuotesOpenShortcode extends Template
                           </li>
                           <!-- ABA ZERO -->
                             
-                          <!-- ABA UM -->
-                          <li class="tab-content aba-modelo4 aba-modelo4-1 tab-content-1" style="padding-left:0px !important;padding-right:0px !important;" id="iteneRifaAba1">
-                          </li>
-                          <!-- ABA UM -->
-
-                          <!-- ABA DOIS -->
-                          <li class="tab-content aba-modelo4 aba-modelo4-2 tab-content-2" style="padding-left:0px !important;padding-right:0px !important;" id="iteneRifaAba2">
-                          </li>
-                          <!-- ABA DOIS -->
-
-                          <!-- ABA TRES -->
-                          <li class="tab-content aba-modelo4 aba-modelo4-3 tab-content-3" style="padding-left:0px !important;padding-right:0px !important;"  id="iteneRifaAba3">
-                          </li>
-                          <!-- ABA TRES -->
+                         '. $more_tab_contents .'
 
                         </ul>
 
                         <p style="text-align:center;display:block;">
-                            <a href="javascript:void(0)" class="btn-carregar-mais-numeros">
-                            '. esc_html__( 'Carregar mais números', 'plugin-rifa-drope') .'
+                            <a href="javascript:void(0)" id="load-more-numbers" class="btn-carregar-mais-numeros">
+                            ' . esc_html__('Carregar mais números', 'plugin-rifa-drope') . '
+                            </a>
+                        </p>
+                        
+                        <p style="text-align:center;display:block;">
+                            <a href="javascript:void(0)" id="btn-participate-quotes-open" class="btn-carregar-mais-numeros">
+                            ' . esc_html__('Participar', 'plugin-rifa-drope') . '
                             </a>
                         </p>
                    </div>
                  </div>
                  <!-- ABAS -->
-           </div>';
+           </div>
+           <div id="woo_raffles_notice">
+                <p class="hidden"></p>
+            </div>
+        ';
     }
 
     public function ajaxApiRifaInfos($request): array
@@ -358,7 +276,7 @@ class QuotesOpenShortcode extends Template
             endif;
 
 
-            echo json_encode( ['sucesso' => "200",
+            wp_send_json_success([
                 'rifa' => $rifa,
                 'cotas' => $numeros,
                 'globos' => get_field("numero_globos", $rifa),
@@ -372,20 +290,11 @@ class QuotesOpenShortcode extends Template
                 'url_checkout' => $url_pagamento,
                 'livres' => $novo_numeros_livres,
                 'reservas' => $reservas,
-                'participantes' => $participantes
-            ] );
+                'participantes' => $participantes,
+                'cotas_duplicadas' => get_field("cotas_duplicadas", $rifa),
+            ], 200);
         } catch (Exception $e) {
-            echo json_encode( ['sucesso' => "500", 'erro' => $e->getMessage()] );
-        }
-        wp_die();
-    }
-
-    public function addToCart()
-    {
-        try {
-
-        } catch (Exception $e) {
-            echo json_encode( ['sucesso' => "500", 'erro' => $e->getMessage()] );
+            echo json_encode(['sucesso' => "500", 'erro' => $e->getMessage()]);
         }
         wp_die();
     }
@@ -393,7 +302,7 @@ class QuotesOpenShortcode extends Template
     /**
      * @return void
      */
-    public function enqueueStyleAndScript( $product_id): void
+    public function enqueueStyleAndScript($product_id): void
     {
         wp_enqueue_style('woo-raffle-quotes-open', WOORAFFLES_URL . 'assets/css/quotes-open.css');
         wp_enqueue_script('woo-raffle-quotes-open', WOORAFFLES_URL . 'assets/js/quotes-open.js', ['jquery-core'], false, true);
@@ -401,9 +310,37 @@ class QuotesOpenShortcode extends Template
         wp_localize_script('woo-raffle-quotes-open', 'ajaxobj', [
             'ajax_url' => admin_url('admin-ajax.php'),
             'raffle_nonce' => wp_create_nonce('woo-raffle-quotes-open'),
-            'productId' => $product_id,
-            'action_ajaxApiRifaInfos' => 'ajaxApiRifaInfos',
-            'action_ajaxAddToCart' => 'addToCart'
+            'ajaxApiRifaInfos' => 'ajaxApiRifaInfos',
         ]);
+    }
+
+    private function moreTabs(): string
+    {
+        return '<input type="radio" name="pcss3t" id="tab1" class="tab-content-1">
+              <label class="label-aba-livres" for="tab1">' . esc_html__('LIVRES', 'plugin-rifa-drope') . ' (<span id="totalL">0</span>)</label>
+              <input type="radio" name="pcss3t" id="tab2" class="tab-content-2">
+              <label class="label-aba-reservadas" for="tab2">' . esc_html__('RESERVADAS', 'plugin-rifa-drope') . ' (<span id="totalR">0</span>)</label>
+              <input type="radio" name="pcss3t" id="tab3" class="tab-content-3">
+              <label class="label-aba-pagas" for="tab3">' . esc_html__('PAGAS', 'plugin-rifa-drope') . ' (<span id="totalC">0</span>)</label>';
+    }
+
+    private function moreTabContents() : string
+    {
+        return '
+             <!-- ABA UM -->
+              <li class="tab-content aba-modelo4 aba-modelo4-1 tab-content-1" style="padding-left:0px !important;padding-right:0px !important;" id="iteneRifaAba1">
+              </li>
+              <!-- ABA UM -->
+
+              <!-- ABA DOIS -->
+              <li class="tab-content aba-modelo4 aba-modelo4-2 tab-content-2" style="padding-left:0px !important;padding-right:0px !important;" id="iteneRifaAba2">
+              </li>
+              <!-- ABA DOIS -->
+
+              <!-- ABA TRES -->
+              <li class="tab-content aba-modelo4 aba-modelo4-3 tab-content-3" style="padding-left:0px !important;padding-right:0px !important;"  id="iteneRifaAba3">
+              </li>
+              <!-- ABA TRES -->
+        ';
     }
 }

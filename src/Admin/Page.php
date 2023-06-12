@@ -58,34 +58,43 @@ class Page extends Template
             $product_id = $_GET['pid'];
             $quota = $_GET['cota'];
             $raffleData = Database::getRaffleQuotaInfo($product_id, $quota);
-            $html = "
+            if ($raffleData['status'] == null) {
+                $html = "<p>Cota não encontrada.</p>";
+            } else {
+                $status = $this->highlightStatus($raffleData['status']);
+                $html = "
                 <div class='raffle-customer-data'>
                     <h4>Dados do cliente:</h4>
-                    <div class='raffle-customer-data__item'>
-                        <span class='raffle-customer-data__item__label'>Nome:</span>
-                        <span class='raffle-customer-data__item__value'>{$raffleData['_billing_first_name']} {$raffleData['_billing_last_name']} </span>
+                    <div>
+                        <span class='raffle-customer-data-label'>Status Pedido:</span>
+                        " . $status . "
                     </div>
-                    <div class='raffle-customer-data__item'>
-                        <span class='raffle-customer-data__item__label'>E-mail:</span>
-                        <span class='raffle-customer-data__item__value'>{$raffleData['_billing_email']}</span>
+                    <div>
+                        <span class='raffle-customer-data-label'>Nome:</span>
+                        <span>{$raffleData['_billing_first_name']} {$raffleData['_billing_last_name']} </span>
                     </div>
-                    <div class='raffle-customer-data__item'>
-                        <span class='raffle-customer-data__item__label'>Telefone:</span>
-                        <span class='raffle-customer-data__item__value'>{$raffleData['_billing_phone']}</span>
+                    <div>
+                        <span class='raffle-customer-data-label'>E-mail:</span>
+                        <span>{$raffleData['_billing_email']}</span>
                     </div>
-                    <div class='raffle-customer-data__item'>
-                        <span class='raffle-customer-data__item__label'>Número:</span>
-                        <span class='raffle-customer-data__item__value'>{$raffleData['_billing_cpf']}</span>
+                    <div>
+                        <span class='raffle-customer-data-label'>Telefone:</span>
+                        <span>{$raffleData['_billing_phone']}</span>
+                    </div>
+                    <div>
+                        <span class='raffle-customer-data-label'>CPF:</span>
+                        <span>{$raffleData['_billing_cpf']}</span>
                     </div>
                 </div>
             ";
+            }
             $response = [
                 'raffled'       => true,
                 'customerData'  => $html
             ];
-            wp_send_json_success($response);
+            wp_send_json_success($response, 200);
         } catch (\Exception $e) {
-            wp_send_json_error($e->getMessage());
+            wp_send_json_error($e->getMessage(), 500);
         }
         wp_die();
     }
@@ -95,11 +104,39 @@ class Page extends Template
         try {
             $attachment_id = $_POST['attachment_id'];
             update_option('raffle_logo_export_attachment_id', $attachment_id);
-            wp_send_json_success('Logo salvo com sucesso!');
+            wp_send_json_success('Logo salvo com sucesso!', 200);
         } catch (\Exception $e) {
-            wp_send_json_error($e->getMessage());
+            wp_send_json_error($e->getMessage(), 500);
         }
         wp_die();
+    }
+
+    private function highlightStatus($status): string
+    {
+        if(!empty($status)) {
+            $color = '#ff0000';
+            if ($status === 'wc-processing') {
+                $color = '#00a100';
+                $status = 'Processando';
+            } else if ($status === 'wc-completed') {
+                $color = '#0071a1';
+                $status = 'Concluído';
+            } else if ($status === 'wc-cancelled') {
+                $status = 'Cancelado';
+            } else if ($status === 'wc-refunded') {
+                $status = 'Reembolsado';
+            } else if ($status === 'wc-failed') {
+                $status = 'Falhou';
+            } else if ($status === 'wc-on-hold') {
+                $color = '#ffa200';
+                $status = 'Aguardando';
+            } else {
+                $color = '#ffa200';
+                $status = 'Pendente';
+            }
+            return "<span style='color: {$color}'>{$status}</span>";
+        }
+        return '';
     }
 
 }

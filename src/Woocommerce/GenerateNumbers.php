@@ -14,8 +14,9 @@ class GenerateNumbers extends Base
 {
     public function __construct()
     {
-        add_action('woocommerce_order_status_canceling', [self::class, 'delete']);
+        add_action('woocommerce_order_status_cancelled', [self::class, 'delete']);
         add_action('woocommerce_order_status_on-hold', [self::class, 'delete']);
+        add_action('woocommerce_order_status_refunded', [self::class, 'delete']);
         add_action('woocommerce_order_status_processing', [self::class, 'insert']);
     }
 
@@ -81,11 +82,8 @@ class GenerateNumbers extends Base
             $wpdb->prepare(
                 "SELECT wrf.order_id, wprdct.post_title AS product_name,
                             $query AS quotes,
-                            CONCAT(
-                                (SELECT meta_value FROM {$wpdb->prefix}postmeta WHERE meta_key = '_billing_first_name' AND post_id = wrf.order_id), 
-                                ' ', 
-                                (SELECT meta_value FROM {$wpdb->prefix}postmeta WHERE meta_key = '_billing_last_name' AND post_id = wrf.order_id)
-                            ) AS user_name,
+                            (SELECT meta_value FROM {$wpdb->prefix}postmeta WHERE meta_key = '_billing_first_name' AND post_id = wrf.order_id) as first_name, 
+                            (SELECT meta_value FROM {$wpdb->prefix}postmeta WHERE meta_key = '_billing_last_name' AND post_id = wrf.order_id) as last_name,
                             (SELECT meta_value 
                                 FROM {$wpdb->prefix}postmeta 
                                 WHERE meta_key = '_billing_email' AND post_id = wrf.order_id

@@ -68,8 +68,8 @@ $products = wc_get_products([
                     </div>
                     <div style="display: flex; flex-direction: column; margin-left: 40px;">
                         <h3>Exportar</h3>
-                        <div>
-                            <h4>Selecione o sorteio</h4>
+                        <div style="padding: 0;display: flex;flex-direction: column;">
+                            <label for="selectProductforExport">Selecione o sorteio</label>
                             <select name="selectProductforExport" id="selectProductforExport">
                                 <option value="0">Selecione</option>
                                 <?php foreach ($products as $product): ?>
