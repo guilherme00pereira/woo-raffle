@@ -47,7 +47,7 @@ class AddToCart extends Base
                     $msg = $is_removed
                         ? _n('Número atualizado com sucesso.', 'Números atualizados com sucesso.', $qty, 'woo-raffles')
                         : _n('Número adicionado com sucesso.', 'Números adicionados com sucesso.', $qty, 'woo-raffles');
-                    wp_send_json_error([
+                    wp_send_json_success([
                         'redirect' => true,
                         'msg' => $msg,
                         'route' => wc_get_checkout_url(),
@@ -64,7 +64,7 @@ class AddToCart extends Base
         wp_die();
     }
 
-    public function changeQuantity($product_quantity, $cart_item_key, $cart_item): int
+    public function changeQuantity($product_quantity, $cart_item_key, $cart_item)
     {
         $numbers = $cart_item['woo_raffles_numbers'] ?? [];
 

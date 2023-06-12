@@ -15,6 +15,7 @@ class RaffleMetaBoxes extends Template
         parent::__construct();
         add_action('acf/init', [$this, 'addFieldGroups']);
         add_action('add_meta_boxes', [$this, 'addStatisticsMetaBox']);
+        add_action('wp_ajax_turnQuotesOpen', [$this, 'turnQuotesOpen']);
     }
 
     public function addFieldGroups()
@@ -587,14 +588,15 @@ class RaffleMetaBoxes extends Template
         ob_start();
 
         $cotas = Database::getSoldQuotes($post->ID);
-        $pedidos = 0;
+        $estoque = 0;
+        $cotas_abertas = get_post_meta($post->ID, '_woo_raffles_numbers_random', true);
 
         self::getPart(
             'page-raffle',
             'metabox',
             [
                 'cotas' => $cotas,
-                'pedidos' => $pedidos
+                'cotas_abertas' => !$cotas_abertas,
             ]
             );
 
@@ -602,5 +604,16 @@ class RaffleMetaBoxes extends Template
         ob_end_clean();
 
         echo $content;
+    }
+
+    public function turnQuotesOpen()
+    {
+        try {
+            $raffle_id = $_POST['product_id'];
+            update_post_meta($raffle_id, '_woo_raffles_numbers_random', 'no');
+            wp_send_json_success('', 200);
+        } catch (\Throwable $th) {
+            wp_send_json_error($th->getMessage());
+        }
     }
 }

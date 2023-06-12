@@ -89,13 +89,15 @@
 .raffle-meta-box {
     display: flex;
     flex-direction: row;
+    justify-content: space-evenly;
+    align-items: flex-start;
 }
 
-.raffle-meta-box>div {
-    margin-right: 20px;
-    text-align: center;
-}
 .raffle-meta-box p {
     font-size: 1.5rem;
     color: #2271B1;
+}
+
+#shortcodeQuotesOpen {
+    border: none;
 }

@@ -96,4 +96,25 @@ jQuery(document).ready(function ($) {
             .removeClass('notice-success')
             .removeClass('notice-warning');
     }
+
+    $('#turnQuotesOpen').on('click', function (e) {
+        $.post('/wp-admin/admin-ajax.php', {
+            action: 'turnQuotesOpen',
+            product_id: $('input#post_ID').val()
+        }, function (response) {
+            if (response.success) {
+                $('.quotes-open-status').show();
+                $('#quotesOpenStatus').html('<span class="quotes-open-message">Este sorteio é por cotas abertas</span>');
+            }
+        }
+        );
+    });
+
+    /* $('#shortcodeQuotesOpen').on('click', function (e) {
+       const shortcode = document.getElementById('cotas-abertas-shortcode');
+        shortcode.select();
+        navigator.clipboard.writeText(shortcode.value);
+        alert('Shortcode copiado para a área de transferência');
+    }); */
+
 });
