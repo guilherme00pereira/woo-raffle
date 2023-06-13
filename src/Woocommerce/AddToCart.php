@@ -20,9 +20,7 @@ class AddToCart extends Base
 
     public static function getNumbers()
     {
-        $error = true;
         $key_meta_data = 'woo_raffles_numbers';
-        $msg = __('O produto não possui estoque suficiente.', 'woo-raffles');
 
         $product_id = sanitize_text_field($_POST['product_id'] ?? '');
         $numbers = sanitize_text_field($_POST['numbers'] ?? '');
@@ -54,7 +52,7 @@ class AddToCart extends Base
                     ], 200);
                 }
             } catch (\Exception $e) {
-                error_log($e->getMessage());
+                //error_log($e->getMessage());
                 wp_send_json_error([
                     'redirect' => false,
                     'msg' => $e->getMessage(),

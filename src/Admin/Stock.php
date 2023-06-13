@@ -19,10 +19,12 @@ class Stock extends Base
     {
         $max_stock = get_post_meta($product->get_id(), '_woo_raffles_max_stock', true);
 
-        $qty = $product->get_stock_quantity() + $product->get_total_sales();
+        //$qty = $product->get_stock_quantity() + $product->get_total_sales();
+        $total_sales = Database::getSoldQuotes($product->get_id());
+        $qty = $product->get_stock_quantity() + $total_sales;
 
         if ($qty > intval($max_stock) && intval($max_stock) > 0) {
-            $product->set_stock_quantity($max_stock - $product->get_total_sales());
+            $product->set_stock_quantity($max_stock - $total_sales);
             $product->save();
         }
     }

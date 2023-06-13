@@ -50,7 +50,8 @@
                         window.location.href = response.data.route;
                     }
                 },
-                error: function (err) {
+                error: function (xhr, status, err) {
+                    console.error(status);
                     console.error(err);
                     $(this).removeAttr('disabled');
                 }

@@ -1,3 +1,9 @@
+<?php
+$sold_numbers = \WooRaffles\Admin\Database::getSoldQuotes(get_the_ID());
+
+?>
+
+
 <div id="woo_raffle_options" class="panel woocommerce_options_panel">
     <div class="bootstrap grid-pad">
         <div class="container pt-3 pb-5">
@@ -37,13 +43,13 @@
                     <div class="mt-5">
                         <span>
                             <strong><?php esc_html_e('Qtd. números vendidos:', 'woo-raffles'); ?></strong>
-                            <?php echo esc_html($product->get_total_sales('') ?? 0); ?>
+                            <?php echo esc_html($sold_numbers); ?>
                         </span>
                     </div>
                     <div class="mt-2">
                         <span>
                             <strong><?php esc_html_e('Qtd. números vendidos + estoque:', 'woo-raffles'); ?></strong>
-                            <?php echo esc_html(($product->get_stock_quantity('') + $product->get_total_sales('')) ?? 0); ?>
+                            <?php echo esc_html(($product->get_stock_quantity('') + $sold_numbers) ?? 0); ?>
                         </span>
                     </div>
                 </div>
