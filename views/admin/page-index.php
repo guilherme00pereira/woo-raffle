@@ -5,6 +5,7 @@ $products = wc_get_products([
     'orderby' => 'title',
     'order' => 'ASC',
 ]);
+$logo = wp_get_attachment_url(get_option('raffle_logo_export_attachment_id'))
 ?>
 
 <div class="wrap">
@@ -23,8 +24,7 @@ $products = wc_get_products([
                     <tr>
                         <th scope="row"><label for="selectProduct">Selecione o sorteio</label></th>
                         <td class="select-raffle-cell">
-                            <select name="selectProductforFilter" id="selectProductforFilter">
-                                <option value="0">Selecione</option>
+                            <select name="selectProductforFilter" id="selectProductforFilter" multiple="multiple">
                                 <?php foreach ($products as $product): ?>
                                     <option value="<?php echo $product->get_id(); ?>"><?php echo $product->get_name(); ?></option>
                                 <?php endforeach; ?>
@@ -64,19 +64,21 @@ $products = wc_get_products([
                 <div style="display: flex;">
                     <div style="border-right: 1px solid #ccc;">
                         <h3>Logo</h3>
-                        <h4>Imagem atual:</h4>
-                        <form method='post'>
-                            <div class='image-preview-wrapper'>
-                                <img id='image-preview'
-                                     src='<?php echo wp_get_attachment_url(get_option('raffle_logo_export_attachment_id')); ?>'
-                                     width='200'>
-                            </div>
-                            <input id="upload_image_button" type="button" class="button"
-                                   value="<?php _e('Upload image'); ?>"/>
-                            <input type='hidden' name='image_attachment_id' id='image_attachment_id'
-                                   value='<?php echo get_option('raffle_logo_export_attachment_id'); ?>'>
-                            <input type="button" id="submit_logo_exporter" value="Salvar" class="button-primary">
-                        </form>
+                        <div class='image-preview-wrapper'>
+                            <img id='image-preview'
+                                    src='<?= $logo; ?>'
+                                    width='200'>
+                        </div>
+                        <input id="upload_image_button" type="button" class="button"
+                                value="<?php _e('Upload image'); ?>"/>
+                        <input type='hidden' name='image_attachment_id' id='image_attachment_id'
+                                value='<?php echo get_option('raffle_logo_export_attachment_id'); ?>'>
+                        <button type="button" id="submit_logo_exporter" class="button-primary">Salvar</button>
+                        <?php if ($logo): ?>
+                            <button type="button" id="remove_logo_exporter" class="button-danger">
+                                <span class="dashicons dashicons-trash"></span>
+                            </button>
+                        <?php endif; ?> 
                         <div id="logo-return"></div>
                     </div>
                     <div style="display: flex; flex-direction: column; margin-left: 40px;">

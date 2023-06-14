@@ -22,12 +22,14 @@ class Asset extends Base
         wp_enqueue_style('woo_raffles', WOORAFFLES_URL . 'assets/css/admin.css');
 
         wp_register_style('woo-raffle-progress-bar', WOORAFFLES_URL . 'assets/css/progress-bar.css');
-        wp_register_style('woo-raffle-progress-bar', WOORAFFLES_URL . 'assets/css/quotes-open.css');
+        wp_register_style('woo-raffle-quotes-open', WOORAFFLES_URL . 'assets/css/quotes-open.css');
+        wp_register_style('woo-raffle-multi-dropdown-style', WOORAFFLES_URL . 'assets/js/jquery.sumoselect/sumoselect.min.css');
 
         wp_enqueue_script('jquery-repeater', WOORAFFLES_URL . 'assets/jquery.repeater.min.js', ['jquery-core']);
         wp_enqueue_script('woo_raffles', WOORAFFLES_URL . 'assets/js/admin.js', ['jquery-core', 'jquery-repeater']);
 
         wp_register_script('woo-raffle-quotes-open', WOORAFFLES_URL . 'assets/js/quotes-open.js', ['jquery-core']);
         wp_register_script('woo-raffle-admin-page', WOORAFFLES_URL . 'assets/js/admin-page.js', ['jquery-core']);
+        wp_register_script('woo-raffle-multi-dropdown', WOORAFFLES_URL . 'assets/js/jquery.sumoselect/jquery.sumoselect.min.js', ['jquery-core']);
     }
 }

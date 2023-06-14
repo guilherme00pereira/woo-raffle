@@ -11,6 +11,7 @@ class Page extends Template
         add_action('admin_menu', [$this, 'addMenu']);
         add_action('wp_ajax_ajaxGetRaffleData', [$this, 'ajaxGetRaffleData']);
         add_action('wp_ajax_ajaxSaveThumbLogo', [$this, 'ajaxSaveThumbLogo']);
+        add_action('wp_ajax_ajaxRemoveThumbLogo', [$this, 'ajaxRemoveThumbLogo']);
     }
 
     public function addMenu()
@@ -41,12 +42,16 @@ class Page extends Template
 
     public function enqueueScript()
     {
+        wp_enqueue_style('woo-raffle-multi-dropdown-style', WOORAFFLES_URL . 'assets/js/jquery.sumoselect/sumoselect.min.css');
         wp_enqueue_script('woo-raffle-admin-page', WOORAFFLES_URL . 'assets/js/admin-page.js', ['jquery-core'], false, true);
+        wp_enqueue_script('woo-raffle-multi-dropdown', WOORAFFLES_URL . 'assets/js/jquery.sumoselect/jquery.sumoselect.min.js', ['jquery-core'], false, true);
+
         wp_localize_script('woo-raffle-admin-page', 'ajaxobj', [
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('woo-raffle-admin-page'),
             'action_ajaxGetRaffleData' => 'ajaxGetRaffleData',
             'action_ajaxSaveThumbLogo' => 'ajaxSaveThumbLogo',
+            'action_ajaxRemoveThumbLogo' => 'ajaxRemoveThumbLogo',
             'logo_export_attachment_post_id' => get_option('raffle_logo_export_attachment_id', 0),
         ]);
         wp_enqueue_media();
@@ -55,11 +60,11 @@ class Page extends Template
     public function ajaxGetRaffleData()
     {
         try {
-            $product_id = $_GET['pid'];
+            $product_ids = $_GET['pid'];
             $quota1= $_GET['cota1'];
             $quota2= $_GET['cota2'];
             $quota3= $_GET['cota3'];
-            $raffleData = Database::getRaffleQuotaInfo($product_id, [$quota1, $quota2, $quota3]);
+            $raffleData = Database::getRaffleQuotaInfo($product_ids, [$quota1, $quota2, $quota3]);
             if ($raffleData['status'] == null) {
                 $html = "<p>Cota não encontrada.</p>";
             } else {
@@ -102,6 +107,21 @@ class Page extends Template
             $attachment_id = $_POST['attachment_id'];
             update_option('raffle_logo_export_attachment_id', $attachment_id);
             wp_send_json_success('Logo salvo com sucesso!', 200);
+        } catch (\Exception $e) {
+            wp_send_json_error($e->getMessage(), 500);
+        }
+        wp_die();
+    }
+
+    public function ajaxRemoveThumbLogo()
+    {
+        try {
+            $delete = delete_option('raffle_logo_export_attachment_id');
+            if($delete) {
+                wp_send_json_success('Logo removido com sucesso!', 200);
+            } else {
+                wp_send_json_error('Não foi possível remove a logo', 500);    
+            }
         } catch (\Exception $e) {
             wp_send_json_error($e->getMessage(), 500);
         }

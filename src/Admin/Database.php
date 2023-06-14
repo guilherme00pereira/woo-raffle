@@ -126,7 +126,7 @@ class Database extends Base
         return $results;
     }
 
-    public static function getRaffleQuotaInfo($product_id, $quotas) {
+    public static function getRaffleQuotaInfo($product_ids, $quotas) {
         global $wpdb;
         $data = [];
         $orderId = "";
@@ -134,11 +134,11 @@ class Database extends Base
                 inner join {$wpdb->base_prefix}woo_raffles_numbers rn on rn.order_id = pm.post_id
                 where rn.generated_number in (%s)
                 and pm.post_id = rn.order_id
-                and rn.product_id = %s
+                and rn.product_id in (%s)
                 and (pm.meta_key = '_billing_first_name'
                 or pm.meta_key = '_billing_last_name'
                 or pm.meta_key = '_billing_phone')";
-        $result = $wpdb->get_results($wpdb->prepare($sql, implode($quotas, ','), $product_id), ARRAY_A);
+        $result = $wpdb->get_results($wpdb->prepare($sql, implode($quotas, ','), implode($product_ids, ',')), ARRAY_A);
         foreach ($result as $value) {
             $orderId = $value['order_id'];
             $data[$value['meta_key']] = $value['meta_value'];

@@ -1,4 +1,13 @@
 (function ($) {
+    $(document).ready(function () {
+        $('#selectProductforFilter').SumoSelect({
+            placeholder:'Selecione',
+            selectAll:true,
+            locale: ['OK', 'Cancelar', 'Todos'],
+            captionFormatAllSelected: 'Todos {0} selecionados!'
+        });
+    });
+
     $('#raffle-tabs a').click(function(event){
         event.preventDefault();
         $('#raffle-tabs a').removeClass('nav-tab-active');
@@ -62,6 +71,17 @@
             action: ajaxobj.action_ajaxSaveThumbLogo,
             nonce: ajaxobj.nonce,
             attachment_id: $('#image_attachment_id').val()
+        };
+        $.post(ajaxobj.ajax_url, params, function (res) {
+            console.log(res.data)
+            $('#logo-return').html(res.data);
+        });
+    })
+    $('#remove_logo_exporter').on('click', function (e) {
+        e.preventDefault();
+        const params = {
+            action: ajaxobj.action_ajaxSaveThumbLogo,
+            nonce: ajaxobj.nonce,
         };
         $.post(ajaxobj.ajax_url, params, function (res) {
             console.log(res.data)

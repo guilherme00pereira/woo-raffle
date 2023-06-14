@@ -62,7 +62,7 @@
     background-color: #fff;
 }
 
-#raffle-tabs-content div {
+#raffle-tabs-content>div {
     padding: 20px;
 }
 
@@ -100,4 +100,22 @@
 
 #shortcodeQuotesOpen {
     border: none;
+}
+
+.button-danger {
+    background-color: #dc3232;
+    border: 1px solid #dc3232;
+    color: #fff;
+    text-decoration: none;
+    text-shadow: none;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 13px;
+    padding: 0 10px;
+    line-height: 28px;
+    border-radius: 3px;
+}
+
+.button-danger>span {
+    vertical-align: sub;
 }
