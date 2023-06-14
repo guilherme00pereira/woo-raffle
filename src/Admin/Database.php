@@ -126,25 +126,26 @@ class Database extends Base
         return $results;
     }
 
-    public static function getRaffleQuotaInfo($product_id, $quota) {
+    public static function getRaffleQuotaInfo($product_id, $quotas) {
         global $wpdb;
         $data = [];
-        $sql = "select pm.meta_key, pm.meta_value FROM {$wpdb->base_prefix}postmeta pm 
+        $orderId = "";
+        $sql = "select rn.order_id, pm.meta_key, pm.meta_value FROM {$wpdb->base_prefix}postmeta pm 
                 inner join {$wpdb->base_prefix}woo_raffles_numbers rn on rn.order_id = pm.post_id
-                where rn.generated_number = %s
+                where rn.generated_number in (%s)
                 and pm.post_id = rn.order_id
                 and rn.product_id = %s
-                and (pm.meta_key = '_billing_cpf'
-                or pm.meta_key = '_billing_first_name'
+                and (pm.meta_key = '_billing_first_name'
                 or pm.meta_key = '_billing_last_name'
-                or pm.meta_key = '_billing_email'
                 or pm.meta_key = '_billing_phone')";
-        $result = $wpdb->get_results($wpdb->prepare($sql, $quota, $product_id), ARRAY_A);
-        foreach ($result as $key => $value) {
+        $result = $wpdb->get_results($wpdb->prepare($sql, implode($quotas, ','), $product_id), ARRAY_A);
+        foreach ($result as $value) {
+            $orderId = $value['order_id'];
             $data[$value['meta_key']] = $value['meta_value'];
         }
         $sql = "SELECT post_status FROM {$wpdb->base_prefix}posts WHERE ID = %s";
-        $data['status'] = $wpdb->get_var($wpdb->prepare($sql, $quota));
+        $data['status'] = $wpdb->get_var($wpdb->prepare($sql, $orderId));
+        $data['pedido'] = $orderId;
         return $data;
     }
 

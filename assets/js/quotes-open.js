@@ -1,7 +1,7 @@
 (function ($) {
 
     let cotasModelo = {};
-    let impressosPagina = 1;
+    let impressosPagina = 0;
     let livresImpressos = 0;
     let cotasSelecionadas = [];
 

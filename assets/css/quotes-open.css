@@ -1727,7 +1727,6 @@ h4#tituloResumoDosNumerosEscolhidos{
 }
 
 
-
 @media(max-width: 540px){
     .cotas-disponiveis-modelo-4.cotas-disponiveis li.tab-content{
         text-align: center;
@@ -1749,4 +1748,16 @@ h4#tituloResumoDosNumerosEscolhidos{
     width: 57px !important;
     border: 1px solid #dd9933 !important;
     border-radius: 5px !important;
+}
+
+.btn-participar-sorteio {
+    display: block;
+    background: #0cd463;
+    border-radius: 1000px;
+    color: #fff;
+    font-size: 18px;
+    padding: 12px 0;
+    width: 300px;
+    margin-top: 40px;
+    border: 0;
 }

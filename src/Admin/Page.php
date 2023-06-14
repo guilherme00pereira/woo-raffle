@@ -56,34 +56,31 @@ class Page extends Template
     {
         try {
             $product_id = $_GET['pid'];
-            $quota = $_GET['cota'];
-            $raffleData = Database::getRaffleQuotaInfo($product_id, $quota);
+            $quota1= $_GET['cota1'];
+            $quota2= $_GET['cota2'];
+            $quota3= $_GET['cota3'];
+            $raffleData = Database::getRaffleQuotaInfo($product_id, [$quota1, $quota2, $quota3]);
             if ($raffleData['status'] == null) {
                 $html = "<p>Cota não encontrada.</p>";
             } else {
                 $status = $this->highlightStatus($raffleData['status']);
                 $html = "
                 <div class='raffle-customer-data'>
-                    <h4>Dados do cliente:</h4>
+                    <h4>Dados do pedido:</h4>
                     <div>
-                        <span class='raffle-customer-data-label'>Status Pedido:</span>
-                        " . $status . "
+                        <span class='raffle-customer-data-label'>Pedido:</span>
+                        <a href='post.php?post={$raffleData['pedido']}&action=edit' target='_blank'>
+                            {$raffleData['pedido']}
+                        </a>
+                        (" . $status . ")
                     </div>
                     <div>
                         <span class='raffle-customer-data-label'>Nome:</span>
                         <span>{$raffleData['_billing_first_name']} {$raffleData['_billing_last_name']} </span>
                     </div>
                     <div>
-                        <span class='raffle-customer-data-label'>E-mail:</span>
-                        <span>{$raffleData['_billing_email']}</span>
-                    </div>
-                    <div>
                         <span class='raffle-customer-data-label'>Telefone:</span>
                         <span>{$raffleData['_billing_phone']}</span>
-                    </div>
-                    <div>
-                        <span class='raffle-customer-data-label'>CPF:</span>
-                        <span>{$raffleData['_billing_cpf']}</span>
                     </div>
                 </div>
             ";

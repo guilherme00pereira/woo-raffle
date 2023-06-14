@@ -171,8 +171,8 @@ class RaffleMetaBoxes extends Template
                         ),
                         array(
                             'key' => 'field_5fd7d126c1769',
-                            'label' => 'Cor de fundo botão Participar',
-                            'name' => 'cor_de_fundo_btn_participar',
+                            'label' => 'Cor de fundo botão Finalizar Compra',
+                            'name' => 'cor_de_fundo_btn_finalizar_compra',
                             'type' => 'color_picker',
                             'instructions' => '',
                             'required' => 0,
@@ -182,7 +182,7 @@ class RaffleMetaBoxes extends Template
                                 'class' => '',
                                 'id' => '',
                             ),
-                            'default_value' => '',
+                            'default_value' => '#0cd463',
                             'placeholder' => '',
                             'prepend' => '',
                             'append' => '',
@@ -190,8 +190,8 @@ class RaffleMetaBoxes extends Template
                         ),
                         array(
                             'key' => 'field_5fd7d126c1770',
-                            'label' => 'Cor do texto do botão Participar',
-                            'name' => 'cor_do_texto_btn_participar',
+                            'label' => 'Cor do texto do botão Finalizar Compra',
+                            'name' => 'cor_do_texto_btn_finalizar_compra',
                             'type' => 'color_picker',
                             'instructions' => '',
                             'required' => 0,
@@ -201,8 +201,7 @@ class RaffleMetaBoxes extends Template
                                 'class' => '',
                                 'id' => '',
                             ),
-                            'default_value' => '',
-                            'placeholder' => '',
+                            'default_value' => '#ffffff',
                             'prepend' => '',
                             'append' => '',
                             'maxlength' => 22
@@ -221,7 +220,6 @@ class RaffleMetaBoxes extends Template
                                 'id' => '',
                             ),
                             'default_value' => '',
-                            'placeholder' => '',
                             'prepend' => '',
                             'append' => '',
                             'maxlength' => 22

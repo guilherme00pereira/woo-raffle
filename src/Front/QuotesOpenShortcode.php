@@ -185,7 +185,7 @@ class QuotesOpenShortcode extends Template
                         </p>
                         
                         <p style="text-align:center;display:block;">
-                            <a href="javascript:void(0)" id="btn-participate-quotes-open" class="btn-carregar-mais-numeros">
+                            <a href="javascript:void(0)" id="btn-participate-quotes-open" class="btn-participar-sorteio">
                             ' . esc_html__('Participar', 'plugin-rifa-drope') . '
                             </a>
                         </p>

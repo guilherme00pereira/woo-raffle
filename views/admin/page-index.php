@@ -20,29 +20,42 @@ $products = wc_get_products([
             <div id="tab-01">
                 <table class="form-table">
                     <tbody>
-                        <tr>
-                            <th scope="row"><label for="selectProduct">Selecione o sorteio</label></th>
-                            <td class="select-raffle-cell">
-                                <select name="selectProductforFilter" id="selectProductforFilter">
-                                    <option value="0">Selecione</option>
-                                    <?php foreach ($products as $product): ?>
-                                        <option value="<?php echo $product->get_id(); ?>"><?php echo $product->get_name(); ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr id="quota-search">
-                            <th scope="row"><label for="raffleStatus">Número da cota</label></th>
-                            <td>
-                                <input name="quotaNumber" type="text" id="quotaNumber" value="" class="regular-text">
-                            </td>
-                        </tr>
-                        <tr id="search-button">
-                            <td colspan="2">
-                                <button id="searchRaffle" class="button button-primary">Pesquisar cota</button>
-                                <span id="loading" class="spinner"></span>
-                            </td>
-                        </tr>
+                    <tr>
+                        <th scope="row"><label for="selectProduct">Selecione o sorteio</label></th>
+                        <td class="select-raffle-cell">
+                            <select name="selectProductforFilter" id="selectProductforFilter">
+                                <option value="0">Selecione</option>
+                                <?php foreach ($products as $product): ?>
+                                    <option value="<?php echo $product->get_id(); ?>"><?php echo $product->get_name(); ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr id="quota-search1">
+                        <th scope="row"><label for="raffleStatus">Cota 01</label></th>
+                        <td>
+                            <input name="quotaNumber" type="text" id="quotaNumber1" value="" class="regular-text">
+                        </td>
+                    </tr>
+                    <tr id="quota-search2">
+                        <th scope="row"><label for="raffleStatus">Cota 02</label></th>
+                        <td>
+                            <input name="quotaNumber" type="text" id="quotaNumber2" value="" class="regular-text">
+                        </td>
+                    </tr>
+                    <tr id="quota-search3">
+                        <th scope="row"><label for="raffleStatus">Cota 03</label></th>
+                        <td>
+                            <input name="quotaNumber" type="text" id="quotaNumber3" value="" class="regular-text">
+                        </td>
+                    </tr>
+                    </tr>
+                    <tr id="search-button">
+                        <td colspan="2">
+                            <button id="searchRaffle" class="button button-primary">Pesquisar cota</button>
+                            <span id="loading" class="spinner"></span>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
                 <div id="raffle-data"></div>
@@ -55,13 +68,13 @@ $products = wc_get_products([
                         <form method='post'>
                             <div class='image-preview-wrapper'>
                                 <img id='image-preview'
-                                    src='<?php echo wp_get_attachment_url(get_option('raffle_logo_export_attachment_id')); ?>'
-                                    width='200'>
+                                     src='<?php echo wp_get_attachment_url(get_option('raffle_logo_export_attachment_id')); ?>'
+                                     width='200'>
                             </div>
                             <input id="upload_image_button" type="button" class="button"
-                                value="<?php _e('Upload image'); ?>" />
+                                   value="<?php _e('Upload image'); ?>"/>
                             <input type='hidden' name='image_attachment_id' id='image_attachment_id'
-                                value='<?php echo get_option('raffle_logo_export_attachment_id'); ?>'>
+                                   value='<?php echo get_option('raffle_logo_export_attachment_id'); ?>'>
                             <input type="button" id="submit_logo_exporter" value="Salvar" class="button-primary">
                         </form>
                         <div id="logo-return"></div>
@@ -80,9 +93,11 @@ $products = wc_get_products([
                         </div>
                         <div>
                             <button id="exportRaffleExcel" class="button button-primary"
-                                style="background-color: #1D6F42; border-color: #1D6F42;">Exportar Excel</button>
+                                    style="background-color: #1D6F42; border-color: #1D6F42;">Exportar Excel
+                            </button>
                             <button id="exportRafflePdf" class="button button-primary"
-                                style="background-color: #F40F02; border-color: #F40F02;">Exportar PDF</button>
+                                    style="background-color: #F40F02; border-color: #F40F02;">Exportar PDF
+                            </button>
                         </div>
                     </div>
                 </div>

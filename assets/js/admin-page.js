@@ -13,7 +13,9 @@
             action: ajaxobj.action_ajaxGetRaffleData,
             nonce: ajaxobj.nonce,
             pid: $('#selectProductforFilter').val(),
-            cota: $('#quotaNumber').val()
+            cota1: $('#quotaNumber1').val(),
+            cota2: $('#quotaNumber2').val(),
+            cota3: $('#quotaNumber3').val()
         };
         $.get(ajaxobj.ajax_url, params, function (res) {
             console.log(res.data)
@@ -66,19 +68,19 @@
             $('#logo-return').html(res.data);
         });
     })
-    $('#exportRaffleExcel').on('click', function (e) {
-        e.preventDefault();
-        const params = {
-            action: ajaxobj.action_ajaxExportRaffleExcel,
-            nonce: ajaxobj.nonce,
-            pid: $('#selectProductforFilter').val(),
-            cota: $('#quotaNumber').val()
-        };
-        $.post(ajaxobj.ajax_url, params, function (res) {
-            console.log(res.data)
-            $('#raffle-data').html(res.data);
-        });
-    });
+    // $('#exportRaffleExcel').on('click', function (e) {
+    //     e.preventDefault();
+    //     const params = {
+    //         action: ajaxobj.action_ajaxExportRaffleExcel,
+    //         nonce: ajaxobj.nonce,
+    //         pid: $('#selectProductforFilter').val(),
+    //         cota: $('#quotaNumber').val()
+    //     };
+    //     $.post(ajaxobj.ajax_url, params, function (res) {
+    //         console.log(res.data)
+    //         $('#raffle-data').html(res.data);
+    //     });
+    // });
     $('#exportRaffleExcel').on('click', function (e) {
         e.preventDefault();
         const product_id = $('#selectProductforExport').val();
