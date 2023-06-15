@@ -64,31 +64,38 @@ class Page extends Template
             $quota1= $_GET['cota1'];
             $quota2= $_GET['cota2'];
             $quota3= $_GET['cota3'];
+
             $raffleData = Database::getRaffleQuotaInfo($product_ids, [$quota1, $quota2, $quota3]);
-            if ($raffleData['status'] == null) {
-                $html = "<p>Cota não encontrada.</p>";
+            if (count($raffleData) == 0) {
+                $html = "<td colspan='5'>Nenhum dado retornado.</td>";
             } else {
-                $status = $this->highlightStatus($raffleData['status']);
-                $html = "
-                <div class='raffle-customer-data'>
-                    <h4>Dados do pedido:</h4>
-                    <div>
-                        <span class='raffle-customer-data-label'>Pedido:</span>
-                        <a href='post.php?post={$raffleData['pedido']}&action=edit' target='_blank'>
-                            {$raffleData['pedido']}
-                        </a>
-                        (" . $status . ")
-                    </div>
-                    <div>
-                        <span class='raffle-customer-data-label'>Nome:</span>
-                        <span>{$raffleData['_billing_first_name']} {$raffleData['_billing_last_name']} </span>
-                    </div>
-                    <div>
-                        <span class='raffle-customer-data-label'>Telefone:</span>
-                        <span>{$raffleData['_billing_phone']}</span>
-                    </div>
-                </div>
-            ";
+                foreach($raffleData as $key => $value) 
+                {
+                    $status = $this->highlightStatus($value['status']);
+                    $html .= "
+                    <tr>
+                        <td>
+                            {$value['sorteio']}
+                        </td>
+                        <td>
+                            {$value['cota']}
+                        <td>
+                            <a href='post.php?post={$key}&action=edit' target='_blank'>
+                                {$key}
+                            </a>
+                        </td>
+                        <td>
+                            " . $status . "
+                        </td>
+                        <td>
+                            {$value['nome']} {$value['sobrenome']}
+                        </td>
+                        <td>
+                            {$value['telefone']}
+                        </td>
+                    </tr>
+                    }";
+                }
             }
             $response = [
                 'raffled'       => true,

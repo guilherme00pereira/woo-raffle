@@ -6,7 +6,7 @@ $products = wc_get_products([
     'order' => 'ASC',
 ]);
 $logo = wp_get_attachment_url(get_option('raffle_logo_export_attachment_id'))
-?>
+    ?>
 
 <div class="wrap">
     <h1>
@@ -21,62 +21,72 @@ $logo = wp_get_attachment_url(get_option('raffle_logo_export_attachment_id'))
             <div id="tab-01">
                 <table class="form-table">
                     <tbody>
-                    <tr>
-                        <th scope="row"><label for="selectProduct">Selecione o sorteio</label></th>
-                        <td class="select-raffle-cell">
-                            <select name="selectProductforFilter" id="selectProductforFilter" multiple="multiple">
-                                <?php foreach ($products as $product): ?>
-                                    <option value="<?php echo $product->get_id(); ?>"><?php echo $product->get_name(); ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr id="quota-search1">
-                        <th scope="row"><label for="raffleStatus">Cota 01</label></th>
-                        <td>
-                            <input name="quotaNumber" type="text" id="quotaNumber1" value="" class="regular-text">
-                        </td>
-                    </tr>
-                    <tr id="quota-search2">
-                        <th scope="row"><label for="raffleStatus">Cota 02</label></th>
-                        <td>
-                            <input name="quotaNumber" type="text" id="quotaNumber2" value="" class="regular-text">
-                        </td>
-                    </tr>
-                    <tr id="quota-search3">
-                        <th scope="row"><label for="raffleStatus">Cota 03</label></th>
-                        <td>
-                            <input name="quotaNumber" type="text" id="quotaNumber3" value="" class="regular-text">
-                        </td>
-                    </tr>
-                    </tr>
-                    <tr id="search-button">
-                        <td colspan="2">
-                            <button id="searchRaffle" class="button button-primary">Pesquisar cota</button>
-                            <button id="exportExcelRapidinha" class="button button-primary"
+                        <tr>
+                            <th scope="row"><label for="selectProduct">Selecione o sorteio</label></th>
+                            <td class="select-raffle-cell">
+                                <select name="selectProductforFilter" id="selectProductforFilter" multiple="multiple">
+                                    <?php foreach ($products as $product): ?>
+                                        <option value="<?php echo $product->get_id(); ?>"><?php echo $product->get_name(); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr id="quota-search1">
+                            <th scope="row"><label for="raffleStatus">Cota 01</label></th>
+                            <td>
+                                <input name="quotaNumber" type="text" id="quotaNumber1" value="" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr id="quota-search2">
+                            <th scope="row"><label for="raffleStatus">Cota 02</label></th>
+                            <td>
+                                <input name="quotaNumber" type="text" id="quotaNumber2" value="" class="regular-text">
+                            </td>
+                        </tr>
+                        <tr id="quota-search3">
+                            <th scope="row"><label for="raffleStatus">Cota 03</label></th>
+                            <td>
+                                <input name="quotaNumber" type="text" id="quotaNumber3" value="" class="regular-text">
+                            </td>
+                        </tr>
+                        </tr>
+                        <tr id="search-button">
+                            <td colspan="2">
+                                <button id="searchRaffle" class="button button-primary">Pesquisar cota</button>
+                                <button id="exportExcelRapidinha" class="button button-primary"
                                     style="background-color: #1D6F42; border-color: #1D6F42;">
-                                Planilha Rapidinha
-                            </button>
-                            <span id="loading" class="spinner"></span>
-                        </td>
-                    </tr>
+                                    Planilha Rapidinha
+                                </button>
+                                <span id="loading" class="spinner"></span>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
-                <div id="raffle-data"></div>
+                <table id="raffle-data" class="form-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Sorteio</th>
+                            <th scope="col">Cota</th>
+                            <th scope="col">Pedido</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Telefone</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
             </div>
             <div id="tab-02">
                 <div style="display: flex;">
                     <div style="padding: 20px; border-right: 1px solid #ccc;">
                         <h3>Logo</h3>
                         <div class='image-preview-wrapper'>
-                            <img id='image-preview'
-                                    src='<?= $logo; ?>'
-                                    width='200'>
+                            <img id='image-preview' src='<?= $logo; ?>' width='200'>
                         </div>
                         <div style="padding: 20px 0;">
                             <button id="upload_image_button" type="button" class="button">Enviar Imagem</button>
                             <input type='hidden' name='image_attachment_id' id='image_attachment_id'
-                                    value='<?php echo get_option('raffle_logo_export_attachment_id'); ?>'>
+                                value='<?php echo get_option('raffle_logo_export_attachment_id'); ?>'>
                             <button type="button" id="submit_logo_exporter" class="button-primary">Salvar</button>
                             <?php if ($logo): ?>
                                 <button type="button" id="remove_logo_exporter" class="button-danger">
@@ -100,10 +110,10 @@ $logo = wp_get_attachment_url(get_option('raffle_logo_export_attachment_id'))
                         </div>
                         <div style="padding: 20px;">
                             <button id="exportRaffleExcel" class="button button-primary"
-                                    style="background-color: #1D6F42; border-color: #1D6F42;">Exportar Excel
+                                style="background-color: #1D6F42; border-color: #1D6F42;">Exportar Excel
                             </button>
                             <button id="exportRafflePdf" class="button button-primary"
-                                    style="background-color: #F40F02; border-color: #F40F02;">Exportar PDF
+                                style="background-color: #F40F02; border-color: #F40F02;">Exportar PDF
                             </button>
                         </div>
                     </div>

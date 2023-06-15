@@ -146,7 +146,8 @@ class Database extends Base
             }
         }
 
-        $sql = "select ps.post_status, rn.order_id, pm.meta_key, pm.meta_value FROM {$wpdb->base_prefix}postmeta pm
+        $sql = "select (select post_title from {$wpdb->base_prefix}posts where ID = rn.product_id) as product_name,
+                rn.generated_number, ps.post_status, rn.order_id, pm.meta_key, pm.meta_value FROM {$wpdb->base_prefix}postmeta pm
                 inner join {$wpdb->base_prefix}posts ps on ps.ID = pm.post_id
                 inner join {$wpdb->base_prefix}woo_raffles_numbers rn on rn.order_id = pm.post_id
                 where (" . $sqlNumbers . ")
@@ -156,10 +157,38 @@ class Database extends Base
                 or pm.meta_key = '_billing_last_name'
                 or pm.meta_key = '_billing_phone')";
         $result = $wpdb->get_results($sql, ARRAY_A);
-        foreach ($result as $value) {
-            $data['status'] = $value['post_status'];
-            $data['pedido'] = $value['order_id'];
-            $data[$value['meta_key']] = $value['meta_value'];
+        
+        foreach ($result as $key => $value) 
+        {
+            $oid = $value['order_id'];
+            if(!isset($data[$oid]) )
+            {
+                $data[$oid] = [];
+            }
+            if(!isset($data[$oid]['status']) )
+            {
+                $data[$oid]['status'] = $value['post_status'];
+            }
+            if(!isset($data[$oid]['sorteio']))
+            {
+                $data[$oid]['sorteio'] = $value['product_name'];
+            }
+            if(!isset($data[$oid]['cota']))
+            {
+                $data[$oid]['cota'] = $value['generated_number'];
+            }
+            if($value['meta_key'] == '_billing_first_name')
+            {
+                $data[$oid]['nome'] = $value['meta_value'];
+            }
+            if($value['meta_key'] == '_billing_last_name')
+            {
+                $data[$oid]['sobrenome'] = $value['meta_value'];
+            }
+            if($value['meta_key'] == '_billing_phone')
+            {
+                $data[$oid]['telefone'] = $value['meta_value'];
+            }
         }
         return $data;
     }

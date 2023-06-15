@@ -29,10 +29,10 @@
         $.get(ajaxobj.ajax_url, params, function (res) {
             console.log(res.data)
             if(res.data.raffled) {
-                $('#raffle-data').html(res.data.customerData);
+                $('#raffle-data tbody').html(res.data.customerData);
             } else {
-                $('#raffle-data').html(
-                    `<div class="notice notice-error">erro</div>`
+                $('#raffle-data tbody').html(
+                    `<td colspan="5"><div class="notice notice-error">erro</div></td>`
                 );
             }
             loading.removeClass('is-active');
@@ -73,7 +73,6 @@
             attachment_id: $('#image_attachment_id').val()
         };
         $.post(ajaxobj.ajax_url, params, function (res) {
-            console.log(res.data)
             $('#logo-return').html(res.data);
         });
     })
@@ -84,7 +83,6 @@
             nonce: ajaxobj.nonce,
         };
         $.post(ajaxobj.ajax_url, params, function (res) {
-            console.log(res.data)
             $('#logo-return').html(res.data);
         });
     })
