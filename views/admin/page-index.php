@@ -53,6 +53,10 @@ $logo = wp_get_attachment_url(get_option('raffle_logo_export_attachment_id'))
                     <tr id="search-button">
                         <td colspan="2">
                             <button id="searchRaffle" class="button button-primary">Pesquisar cota</button>
+                            <button id="exportExcelRapidinha" class="button button-primary"
+                                    style="background-color: #1D6F42; border-color: #1D6F42;">
+                                Planilha Rapidinha
+                            </button>
                             <span id="loading" class="spinner"></span>
                         </td>
                     </tr>
@@ -62,23 +66,24 @@ $logo = wp_get_attachment_url(get_option('raffle_logo_export_attachment_id'))
             </div>
             <div id="tab-02">
                 <div style="display: flex;">
-                    <div style="border-right: 1px solid #ccc;">
+                    <div style="padding: 20px; border-right: 1px solid #ccc;">
                         <h3>Logo</h3>
                         <div class='image-preview-wrapper'>
                             <img id='image-preview'
                                     src='<?= $logo; ?>'
                                     width='200'>
                         </div>
-                        <input id="upload_image_button" type="button" class="button"
-                                value="<?php _e('Upload image'); ?>"/>
-                        <input type='hidden' name='image_attachment_id' id='image_attachment_id'
-                                value='<?php echo get_option('raffle_logo_export_attachment_id'); ?>'>
-                        <button type="button" id="submit_logo_exporter" class="button-primary">Salvar</button>
-                        <?php if ($logo): ?>
-                            <button type="button" id="remove_logo_exporter" class="button-danger">
-                                <span class="dashicons dashicons-trash"></span>
-                            </button>
-                        <?php endif; ?> 
+                        <div style="padding: 20px 0;">
+                            <button id="upload_image_button" type="button" class="button">Enviar Imagem</button>
+                            <input type='hidden' name='image_attachment_id' id='image_attachment_id'
+                                    value='<?php echo get_option('raffle_logo_export_attachment_id'); ?>'>
+                            <button type="button" id="submit_logo_exporter" class="button-primary">Salvar</button>
+                            <?php if ($logo): ?>
+                                <button type="button" id="remove_logo_exporter" class="button-danger">
+                                    <span class="dashicons dashicons-trash"></span>
+                                </button>
+                            <?php endif; ?>
+                        </div>
                         <div id="logo-return"></div>
                     </div>
                     <div style="display: flex; flex-direction: column; margin-left: 40px;">
@@ -93,7 +98,7 @@ $logo = wp_get_attachment_url(get_option('raffle_logo_export_attachment_id'))
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                        <div>
+                        <div style="padding: 20px;">
                             <button id="exportRaffleExcel" class="button button-primary"
                                     style="background-color: #1D6F42; border-color: #1D6F42;">Exportar Excel
                             </button>

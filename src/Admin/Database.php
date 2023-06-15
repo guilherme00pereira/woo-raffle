@@ -129,23 +129,38 @@ class Database extends Base
     public static function getRaffleQuotaInfo($product_ids, $quotas) {
         global $wpdb;
         $data = [];
-        $orderId = "";
-        $sql = "select rn.order_id, pm.meta_key, pm.meta_value FROM {$wpdb->base_prefix}postmeta pm 
+        $sqlProducts = '';
+        $sqlNumbers = '';
+
+        foreach ($product_ids as $key => $value) {
+            $sqlProducts .= "rn.product_id = " . $value;
+            if ($key < count($product_ids) - 1) {
+                $sqlProducts .= ' OR ';
+            }
+        }
+
+        foreach ($quotas as $key => $value) {
+            $sqlNumbers .= "rn.generated_number = " . $value;
+            if ($key < count($quotas) - 1) {
+                $sqlNumbers .= ' OR ';
+            }
+        }
+
+        $sql = "select ps.post_status, rn.order_id, pm.meta_key, pm.meta_value FROM {$wpdb->base_prefix}postmeta pm
+                inner join {$wpdb->base_prefix}posts ps on ps.ID = pm.post_id
                 inner join {$wpdb->base_prefix}woo_raffles_numbers rn on rn.order_id = pm.post_id
-                where rn.generated_number in (%s)
+                where (" . $sqlNumbers . ")
                 and pm.post_id = rn.order_id
-                and rn.product_id in (%s)
+                and (" . $sqlProducts . ")
                 and (pm.meta_key = '_billing_first_name'
                 or pm.meta_key = '_billing_last_name'
                 or pm.meta_key = '_billing_phone')";
-        $result = $wpdb->get_results($wpdb->prepare($sql, implode($quotas, ','), implode($product_ids, ',')), ARRAY_A);
+        $result = $wpdb->get_results($sql, ARRAY_A);
         foreach ($result as $value) {
-            $orderId = $value['order_id'];
+            $data['status'] = $value['post_status'];
+            $data['pedido'] = $value['order_id'];
             $data[$value['meta_key']] = $value['meta_value'];
         }
-        $sql = "SELECT post_status FROM {$wpdb->base_prefix}posts WHERE ID = %s";
-        $data['status'] = $wpdb->get_var($wpdb->prepare($sql, $orderId));
-        $data['pedido'] = $orderId;
         return $data;
     }
 
