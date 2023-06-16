@@ -228,34 +228,22 @@ class Database extends Base
 
         foreach ($result as $key => $value)
         {
-            $oid = $value['order_id'];
-            if(!isset($data[$oid]) )
+            $k = $value['product_id'] . "-" . $value['generated_number'];
+            if(!isset($data[$k]))
             {
-                $data[$oid] = [];
-            }
-            if(!isset($data[$oid]['status']) )
-            {
-                $data[$oid]['status'] = $value['post_status'];
-            }
-            if(!isset($data[$oid]['sorteio']))
-            {
-                $data[$oid]['sorteio'] = $value['product_name'];
-            }
-            if(!isset($data[$oid]['cota']))
-            {
-                $data[$oid]['cota'] = $value['generated_number'];
+                $data[$k] = "";
             }
             if($value['meta_key'] == '_billing_first_name')
             {
-                $data[$oid]['nome'] = $value['meta_value'];
+                $data[$k] = $value['meta_value'];
             }
             if($value['meta_key'] == '_billing_last_name')
             {
-                $data[$oid]['sobrenome'] = $value['meta_value'];
+                $data[$k] .= " " . $value['meta_value'];
             }
             if($value['meta_key'] == '_billing_phone')
             {
-                $data[$oid]['telefone'] = $value['meta_value'];
+                $data[$k] .= " - " . $value['meta_value'];
             }
         }
         return $data;

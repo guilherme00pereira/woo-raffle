@@ -86,16 +86,16 @@
             $('#logo-return').html(res.data);
         });
     })
-    // $('#exportExcelRapidinha').on('click', function (e) {
-    //     e.preventDefault();
-    //     const pids = $('#selectProductforFilter').val().join()
-    //     const cota1 = $('#quotaNumber1').val()
-    //     const cota2 = $('#quotaNumber2').val()
-    //     const cota3 = $('#quotaNumber3').val()
-    //     let params = `pids=${pids}&quotes=${cota1},${cota2},${cota3}`
-    //     window.open(`/wp-admin/admin.php?page=woo-raffles-export-rpd&${params}`, '_blank');
-    //     return false;
-    // });
+    $('#exportExcelRapidinha').on('click', function (e) {
+        e.preventDefault();
+        const pids = $('#selectProductforFilter').val().join()
+        const cota1 = $('#quotaNumber1').val()
+        const cota2 = $('#quotaNumber2').val()
+        const cota3 = $('#quotaNumber3').val()
+        let params = `pids=${pids}&quotes=${cota1},${cota2},${cota3}`
+        window.open(`/wp-admin/admin.php?page=woo-raffles-export-rpd&${params}`, '_blank');
+        return false;
+    });
     $('#exportRaffleExcel').on('click', function (e) {
         e.preventDefault();
         const product_id = $('#selectProductforExport').val();

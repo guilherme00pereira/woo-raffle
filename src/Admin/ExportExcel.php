@@ -5,7 +5,6 @@ namespace WooRaffles\Admin;
 use Shuchkin\SimpleXLSXGen;
 use UPFlex\MixUp\Core\Base;
 use WooRaffles\Admin\ExportPdf;
-use WooRaffles\Woocommerce\GenerateNumbers;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -29,7 +28,7 @@ class ExportExcel extends Base
                 $xlsx->downloadAs('woo-raffles-v1.xlsx');
             }
             if ($file_type === 'pdf') {
-                ob_end_clean();
+                ob_end_clean(); 
                 $pdf = new ExportPdf();
                 $pdf->AddPage();
                 $pdf->SetFont('Arial', '', 10);
@@ -69,15 +68,41 @@ class ExportExcel extends Base
         return $rows;
     }
 
-    public static function generateRowsQuickie($product_ids, $data)
+    public static function generateRowsQuickie($product_ids, $cotas, $data)
     {
+        sort($product_ids);
+        array_unshift($product_ids, '');
+        sort($cotas);
+
         $rows = [];
         $rows[0] = $product_ids;
-var_dump($data);die;
-        foreach ($data as $item) {
-            $rows[$item->order_id]['nome'] = $item->first_name . ' ' . $item->last_name;
-            $rows[$item->order_id]['cotas_escolhidas'] = $item->quotes;
+        foreach ($cotas as $idx => $cota) {
+            $rows[$idx + 1][0] = $cota;
         }
+        
+        foreach ($data as $key => $value) {
+            $keys = explode('-', $key);
+            $pidx = array_search($keys[0], $product_ids);
+            $cidx = array_search($keys[1], $cotas);
+            $rows[$cidx + 1][$pidx] = $value;
+        }
+
+        for($i=0; $i<count($product_ids); $i++)
+        {
+            for($j=0; $j<count($cotas)+1; $j++)
+            {
+                if(!isset($rows[$j][$i]))
+                {
+                    $rows[$j][$i] = "";
+                }
+            }
+        }
+
+        for($i=0;$i<count($rows);$i++)
+        {
+            ksort($rows[$i]);
+        }
+
         return $rows;
     }
 
@@ -88,10 +113,10 @@ var_dump($data);die;
         if(count($pids) > 0 && count($cotas) > 0)
         {
             $data = Database::getRaffleCustomersPerQuoteAndProduct($pids, $cotas);
-            $rows = self::generateRowsQuickie($product_ids, $data);
-
-//            $xlsx = SimpleXLSXGen::fromArray($rows);
-//            $xlsx->downloadAs('woo-raffles-rapidinha.xlsx');
+            $rows = self::generateRowsQuickie($pids, $cotas, $data);
+            
+            $xlsx = SimpleXLSXGen::fromArray($rows);
+            $xlsx->downloadAs('woo-raffles-rapidinha.xlsx');
         }
     }
 }
