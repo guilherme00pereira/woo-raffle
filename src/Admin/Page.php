@@ -65,7 +65,8 @@ class Page extends Template
             $quota2= $_GET['cota2'];
             $quota3= $_GET['cota3'];
 
-            $raffleData = Database::getRaffleQuotaInfo($product_ids, [$quota1, $quota2, $quota3]);
+            $raffleData = Database::getRaffleQuotesInfo($product_ids, [$quota1, $quota2, $quota3]);
+
             if (count($raffleData) == 0) {
                 $html = "<td colspan='5'>Nenhum dado retornado.</td>";
             } else {

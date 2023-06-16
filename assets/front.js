@@ -102,24 +102,21 @@ jQuery(document).ready(function ($) {
                     product_id: product_id,
                 },
                 success: function (response) {
-                    if (response?.error === '1') {
+                    console.log(response)
+                    if (response.data.error) {
                         $msg.addClass('woocommerce-error');
+                        $msg
+                            .removeClass('hidden')
+                            .html(response.data.msg);
                     } else {
-                        $msg.addClass('woocommerce-message');
+                        $button.removeAttr('disabled');
+                        scrollToTop();
+                        redirect(response.data.redirect);
                     }
-
-                    $msg
-                        .removeClass('hidden')
-                        .html(response?.msg);
-
-                    $button.removeAttr('disabled');
-
-                    scrollToTop();
-
-                    redirect(response);
                 },
                 error: function (err) {
-                    console.error(err);
+                    $msg.addClass('woocommerce-error');
+                    $msg.removeClass('hidden').html(response.data.msg);
                     $button.removeAttr('disabled');
 
                     scrollToTop();
@@ -233,10 +230,10 @@ jQuery(document).ready(function ($) {
         return result;
     }
 
-    function redirect(response) {
-        if (response?.redirect !== '') {
+    function redirect(url) {
+        if (url !== '') {
             window.setTimeout(function () {
-                window.location.href = response?.redirect;
+                window.location.href = url;
             }, 1000);
         }
     }

@@ -86,18 +86,15 @@
             $('#logo-return').html(res.data);
         });
     })
-    // $('#exportRaffleExcel').on('click', function (e) {
+    // $('#exportExcelRapidinha').on('click', function (e) {
     //     e.preventDefault();
-    //     const params = {
-    //         action: ajaxobj.action_ajaxExportRaffleExcel,
-    //         nonce: ajaxobj.nonce,
-    //         pid: $('#selectProductforFilter').val(),
-    //         cota: $('#quotaNumber').val()
-    //     };
-    //     $.post(ajaxobj.ajax_url, params, function (res) {
-    //         console.log(res.data)
-    //         $('#raffle-data').html(res.data);
-    //     });
+    //     const pids = $('#selectProductforFilter').val().join()
+    //     const cota1 = $('#quotaNumber1').val()
+    //     const cota2 = $('#quotaNumber2').val()
+    //     const cota3 = $('#quotaNumber3').val()
+    //     let params = `pids=${pids}&quotes=${cota1},${cota2},${cota3}`
+    //     window.open(`/wp-admin/admin.php?page=woo-raffles-export-rpd&${params}`, '_blank');
+    //     return false;
     // });
     $('#exportRaffleExcel').on('click', function (e) {
         e.preventDefault();

@@ -66,37 +66,6 @@ class GenerateNumbers extends Base
         );
     }
 
-    public static function getNumbersByProductId($product_id, $concat = true)
-    {
-        global $wpdb;
-
-        $table_name = Database::$table_name;
-        $str_pad_left = get_post_meta($product_id, '_woo_raffles_str_pad_left', true) ?? 5;
-
-        $wpdb->query("SET session group_concat_max_len=500000;");
-
-        $query = $concat ? "GROUP_CONCAT(LPAD(wrf.generated_number, {$str_pad_left}, '0') ORDER BY wrf.generated_number ASC SEPARATOR ',')" : 'wrf.generated_number';
-        $query_group_by = $concat ? 'GROUP BY wrf.order_id, product_name, user_name, user_email' : '';
-
-        return $wpdb->get_results(
-            $wpdb->prepare(
-                "SELECT wrf.order_id, wprdct.post_title AS product_name,
-                            $query AS quotes,
-                            (SELECT meta_value FROM {$wpdb->prefix}postmeta WHERE meta_key = '_billing_first_name' AND post_id = wrf.order_id) as first_name, 
-                            (SELECT meta_value FROM {$wpdb->prefix}postmeta WHERE meta_key = '_billing_last_name' AND post_id = wrf.order_id) as last_name,
-                            (SELECT meta_value 
-                                FROM {$wpdb->prefix}postmeta 
-                                WHERE meta_key = '_billing_email' AND post_id = wrf.order_id
-                             ) AS user_email
-                        FROM {$wpdb->prefix}{$table_name} wrf
-                        LEFT JOIN {$wpdb->prefix}posts wprdct ON wprdct.id = wrf.product_id
-                        WHERE wrf.product_id = %d
-                        $query_group_by;",
-                $product_id,
-            )
-        );
-    }
-
     protected static function checkExistsInOrder($order_id): ?string
     {
         global $wpdb;
@@ -117,10 +86,10 @@ class GenerateNumbers extends Base
         global $wpdb;
 
         $checkNumbersAllowed = false;
-
+        $sold_numbers = Database::getSoldQuotes($product_id);
         $table_name = Database::$table_name;
         $product = wc_get_product($product_id);
-        $total_numbers = $product->get_stock_quantity('') + $product->get_total_sales('');
+        $total_numbers = $product->get_stock_quantity('') + $sold_numbers;
         $numbers_sales = range(1, $total_numbers);
 
         $numbers_query = "INSERT INTO {$wpdb->base_prefix}{$table_name} (generated_number, order_id, order_item_id, product_id) VALUES ";

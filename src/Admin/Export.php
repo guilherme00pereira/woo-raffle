@@ -25,16 +25,36 @@ class Export extends Template
             'woo-raffles-export',
             [self::class, 'execute'],
         );
+        add_submenu_page(
+            'options-writing.php',
+            '',
+            '',
+            'manage_options',
+            'woo-raffles-export-rpd',
+            [self::class, 'executeQuickie'],
+        );
     }
 
     public static function execute()
     {
-        $product_id = sanitize_text_field($_GET['post'] ?? '');
+        $product_id = sanitize_text_field($_GET['posts'] ?? '');
         $file_type = sanitize_text_field($_GET['file_type'] ?? 'csv');
 
         do_action('woo_raffles_export_file', $product_id, $file_type);
 
         self::getPart('close', 'tab');
+
+        exit();
+    }
+
+    public static function executeQuickie()
+    {
+        $product_ids = sanitize_text_field($_GET['pids'] ?? '');
+        $quotes = sanitize_text_field($_GET['quotes'] ?? '');
+
+        do_action('woo_raffles_export_quickie', $product_ids, $quotes);
+
+        //self::getPart('close', 'tab');
 
         exit();
     }

@@ -16,17 +16,17 @@ class ProgressiveDiscount extends Base
 
     public function __construct()
     {
-        add_action('acf/init', [self::class, 'fieldGroup']);
-        add_action('woocommerce_before_calculate_totals', [self::class, 'cartItem'], 20, 1);
+        add_action('acf/init', [$this, 'fieldGroup']);
+        add_action('woocommerce_before_calculate_totals', [$this, 'cartItem'], 20, 1);
 
-        add_action('wp_ajax_nopriv_woo_discount_progressive', [self::class, 'getNumbers']);
-        add_action('wp_ajax_woo_discount_progressive', [self::class, 'getNumbers']);
+        add_action('wp_ajax_nopriv_woo_discount_progressive', [$this, 'getNumbers']);
+        add_action('wp_ajax_woo_discount_progressive', [$this, 'getNumbers']);
 
-        add_filter('woocommerce_cart_item_quantity', [self::class, 'changeQuantity'], 10, 3);
-        add_filter('woocommerce_get_item_data', [self::class, 'getItemData'], 10, 2);
+        add_filter('woocommerce_cart_item_quantity', [$this, 'changeQuantity'], 10, 3);
+        add_filter('woocommerce_get_item_data', [$this, 'getItemData'], 10, 2);
     }
 
-    public static function cartItem($cart)
+    public function cartItem($cart)
     {
         if (did_action('woocommerce_before_calculate_totals') >= 2)
             return;
@@ -72,7 +72,7 @@ class ProgressiveDiscount extends Base
         return $product_quantity;
     }
 
-    public static function fieldGroup()
+    public function fieldGroup()
     {
         acf_add_local_field_group(array(
             'key' => 'group_60a553ae2d1fb',
@@ -293,7 +293,7 @@ class ProgressiveDiscount extends Base
         ));
     }
 
-    public static function getItemData($data, $cart_item)
+    public function getItemData($data, $cart_item)
     {
         $key_field = $cart_item[self::$key_field_meta_data] ?? '';
         $product_id = $cart_item['product_id'] ?? '';
@@ -326,12 +326,9 @@ class ProgressiveDiscount extends Base
         return $data;
     }
 
-    public static function getNumbers()
+    public function getNumbers()
     {
-        $error = true;
         $key = '';
-        $msg = __('O produto não possui estoque suficiente.', 'woo-raffles');
-        $redirect = null;
 
         $field_key = sanitize_text_field($_POST['key'] ?? 1);
         $product_id = sanitize_text_field($_POST['product_id'] ?? '');
@@ -353,6 +350,7 @@ class ProgressiveDiscount extends Base
                 );
             } catch (\Exception $e) {
                 error_log($e->getMessage());
+                wp_send_json_error(['msg' => __('Ocorreu um erro ao adicionar o produto ao carrinho.', 'woo-raffles'), 'error' => true]);
             }
 
             if ($key) {
@@ -361,14 +359,16 @@ class ProgressiveDiscount extends Base
                     : __('Quantidade adicionada com sucesso.', 'woo-raffles');
                 $error = false;
                 $redirect = wc_get_checkout_url();
+                wp_send_json_success(compact('msg', 'error', 'redirect'));
             }
+        } else {
+            wp_send_json_error(['msg' => __('O produto não possui estoque suficiente.', 'woo-raffles'), 'error' => true]);
         }
 
-        echo json_encode(['error' => $error, 'msg' => $msg, 'redirect' => $redirect]);
         wp_die();
     }
 
-    protected static function removeItemInCart($product_id, $cart): bool
+    protected function removeItemInCart($product_id, $cart): bool
     {
         if ($cart) {
             foreach ($cart->get_cart() as $cart_item_key => $cart_item) {

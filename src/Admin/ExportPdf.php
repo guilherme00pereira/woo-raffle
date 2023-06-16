@@ -4,7 +4,7 @@ namespace WooRaffles\Admin;
 
 use Fpdf\Fpdf;
 
-class PDF extends FPDF
+class ExportPdf extends FPDF
 {
     function Header()
     {

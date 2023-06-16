@@ -12,13 +12,13 @@ class AddToCart extends Base
 {
     public function __construct()
     {
-        add_action('wp_ajax_nopriv_woo_numbers_selected', [self::class, 'getNumbers']);
-        add_action('wp_ajax_woo_numbers_selected', [self::class, 'getNumbers']);
+        add_action('wp_ajax_nopriv_woo_numbers_selected', [$this, 'getNumbers']);
+        add_action('wp_ajax_woo_numbers_selected', [$this, 'getNumbers']);
 
-        add_filter('woocommerce_cart_item_quantity', [self::class, 'changeQuantity'], 10, 3);
+        add_filter('woocommerce_cart_item_quantity', [$this, 'changeQuantity'], 10, 3);
     }
 
-    public static function getNumbers()
+    public function getNumbers()
     {
         $key_meta_data = 'woo_raffles_numbers';
 
@@ -73,7 +73,7 @@ class AddToCart extends Base
         return $product_quantity;
     }
 
-    protected static function removeItemInCart($product_id, $cart): bool
+    protected function removeItemInCart($product_id, $cart): bool
     {
         if ($cart) {
             foreach ($cart->get_cart() as $cart_item_key => $cart_item) {
