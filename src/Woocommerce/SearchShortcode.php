@@ -14,11 +14,15 @@ class SearchShortcode extends Template
     {
         parent::__construct();
 
-        add_shortcode('woo-raffles-buscar', [self::class, 'content']);
+        add_shortcode('woo-raffles-buscar', [$this, 'content']);
+        add_action('wp_ajax_getProductNumbersByCPF', [$this, 'getProductNumbersByCPF']);
+        add_action('wp_ajax_nopriv_getProductNumbersByCPF', [$this, 'getProductNumbersByCPF']);
     }
 
-    public static function content($attrs)
+    public function content($attrs)
     {
+        wp_enqueue_script('woo_raffles_number_search', WOORAFFLES_URL . 'assets/js/search.js', ['jquery-core', 'jquery-mask', ], '1.0.1', true);
+
         extract(shortcode_atts(array(
             'colunas' => 1,
             'id' => 0,
@@ -32,14 +36,14 @@ class SearchShortcode extends Template
 
         $data = [];
         if (isset($_POST['cpf'])) {
-            $data = strlen($cpf) > 0 ? self::getResults($cpf, $id) : [];
+            $data = strlen($cpf) > 0 ? $this->getResults($cpf, $id) : [];
         }
 
         ob_start();
-        self::getPart('search', 'form', ['cpf' => $cpf]);
+        $this->getPart('search', 'form', ['cpf' => $cpf]);
 
         if (!empty($data)) {
-            self::getPart('search', 'content', ['columns' => $columns, 'data' => $data]);
+            $this->getPart('search', 'content', ['columns' => $columns, 'data' => $data]);
         }
 
         $content = ob_get_contents();
@@ -48,7 +52,7 @@ class SearchShortcode extends Template
         return $content;
     }
 
-    protected static function getResults($cpf, $product_id = 0)
+    protected function getResults($cpf, $product_id = 0)
     {
         global $wpdb;
 
@@ -70,11 +74,16 @@ class SearchShortcode extends Template
             INNER JOIN {$wpdb->prefix}postmeta pst ON pst.post_id = wrf.order_id 
             WHERE pst.meta_key = '_billing_cpf' AND (REPLACE(REPLACE(REPLACE(REPLACE(pst.meta_value, '.', ''), '-', ''), ' ', ''), '_', '') = %s)
                 AND wrf.order_item_id != ''
-                $query
+                AND wrf.product_id = %s
             GROUP BY product_id
             ORDER BY wrf.generated_number ASC;
-        ", $cpf)
+        ", $cpf, $product_id)
         );
+    }
+
+    public function getProductNumbersByCPF()
+    {
+
     }
 }
 ?>
