@@ -227,19 +227,26 @@ class WhatsappOrderStatus extends Base
         if (!strlen($numbers_selected) && !$force_send) {
             return;
         }
- 
- 
+
         if (!empty(self::$message)) :
             woo_whatsapp_send_message($order_id, $name, $product_list, $address, $order_total, $shipping_total, $payment_method, $numbers_selected, $phone, $code_zip, $email, self::$message, self::$image, self::$button_text, self::$button_url);
         endif;
  
         if (!empty($vendor_phone)) :
-            woo_whatsapp_send_message_admin($order_id, $name, $product_list, $address, $order_total, $shipping_total, $payment_method, $numbers_selected, $vendor_phone, $code_zip, $email, self::$message_admin, self::$image, self::$button_text, self::$button_url);
+            //woo_whatsapp_send_message_admin($order_id, $name, $product_list, $address, $order_total, $shipping_total, $payment_method, $numbers_selected, $vendor_phone, $code_zip, $email, self::$message_admin, self::$image, self::$button_text, self::$button_url);
         endif;
  
         if (!empty(self::$message_admin) && !empty($phone_admin)) :
-            woo_whatsapp_send_message_admin($order_id, $name, $product_list, $address, $order_total, $shipping_total, $payment_method, $numbers_selected, $phone_admin, $code_zip, $email, self::$message_admin, self::$image, self::$button_text, self::$button_url);
+            //woo_whatsapp_send_message_admin($order_id, $name, $product_list, $address, $order_total, $shipping_total, $payment_method, $numbers_selected, $phone_admin, $code_zip, $email, self::$message_admin, self::$image, self::$button_text, self::$button_url);
         endif;
     }
 }
- 
+
+
+/*
+ * *[CLIENTE]* parabénsss pela sua participação!!✅\n\nCHEGOU a sua vez de andar de *Jaguar...*😍😍
+ * \n\nOu receber *150mil NA CONTA!!* 👏👏\n\nAbaixo estão seus números da sorte👇\n\n🔵🔵🔵\n[PRODUTOS]\n\n[COTAS_RIFA]
+ * \n🔵🔵🔵\n\nBOA SORTE!!🍀🍀\n\nE você GANHOU um Desconto em nossa *Ação SECRETA* que é exclusiva para os participantes
+ * do *Jaguar*😱\n\nSe caso você quer receber me diga *SIM* e eu irei enviar pra você👇
+ *
+ */
