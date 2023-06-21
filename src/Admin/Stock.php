@@ -21,6 +21,7 @@ class Stock extends Base
         add_action( 'woocommerce_order_status_processing_to_refunded', array( $this, 'restoreOrderStock'), 10, 1 );
         add_action( 'woocommerce_order_status_completed_to_refunded', array( $this, 'restoreOrderStock'), 10, 1 );
         add_action( 'woocommerce_order_status_on-hold_to_refunded', array( $this, 'restoreOrderStock'), 10, 1 );
+
     }
 
     public static function change($product)

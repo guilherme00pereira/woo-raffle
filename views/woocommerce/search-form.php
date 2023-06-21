@@ -14,6 +14,7 @@
                     <div class="col-lg-6 col-12">
                         <button id="btn-search-cpf-numbers" type="submit" class="btn btn-primary woo-raffles-submit mt-2">
                             <?php esc_html_e('Buscar', 'woo-raffles'); ?>
+                            <span id="loading-search-cpf-numbers" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none;"></span>
                         </button>
                     </div>
                 </div>

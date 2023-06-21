@@ -18,6 +18,7 @@ class GenerateNumbers extends Base
         add_action('woocommerce_order_status_on-hold', [self::class, 'delete']);
         add_action('woocommerce_order_status_refunded', [self::class, 'delete']);
         add_action('woocommerce_order_status_processing', [self::class, 'insert']);
+        add_action( 'wp_trash_post', [self::class, 'removeOrdersNumbers'], 10, 1 );
     }
 
     public static function delete($order_id)
@@ -46,6 +47,13 @@ class GenerateNumbers extends Base
                 $product_id,
             )
         );
+    }
+
+    public static function removeOrdersNumbers($order_id)
+    {
+        global $wpdb;
+        $table_name = Database::$table_name;
+        $wpdb->delete("{$wpdb->base_prefix}{$table_name}", ['order_id' => $order_id]);
     }
 
     public static function getNumberRaffle($product_id)
