@@ -1,4 +1,6 @@
-<?php $cpf = $args['cpf'] ?? ''; ?>
+<?php
+
+?>
 
 <div class="bootstrap">
     <div class="row">
@@ -7,8 +9,7 @@
                 <div class="row">
                     <div class="col-lg-6 col-12">
                         <input id="search-cpf-val" type="text" name="cpf" class="form-control woo-raffles-search input-cpf"
-                               placeholder="<?php esc_attr_e('Digite seu CPF', 'woo-raffles'); ?>"
-                               value="<?php echo $cpf; ?>" required/>
+                               placeholder="<?php esc_attr_e('Digite seu CPF', 'woo-raffles'); ?>" required/>
                     </div>
                     <div class="col-lg-6 col-12">
                         <button id="btn-search-cpf-numbers" type="submit" class="btn btn-primary woo-raffles-submit mt-2">

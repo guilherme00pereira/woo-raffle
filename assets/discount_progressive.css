@@ -5,4 +5,474 @@
   Site - https://dropestore.com/
 */
 
-@import url(https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap);.caixa-descontos-progressivo,.caixa-descontos-progressivo.caixa-descontos-progressivo-checkout{position:relative;display:block;width:100%!important;max-width:960px!important;margin-left:auto;margin-right:auto}.caixa-descontos-progressivo .itens{margin:64px 0 0}.caixa-descontos-progressivo .itens__container{max-width:calc(960px + 24px);width:100%;padding:0 24px;margin:0 auto}.caixa-descontos-progressivo .itens__container__header{background:#fff;-webkit-box-shadow:0 0 12px rgba(0,0,0,.16);box-shadow:0 0 12px rgba(0,0,0,.16);border-radius:8px;padding:32px 24px;max-width:510px;width:100%;margin:0 auto 32px}.caixa-descontos-progressivo .itens__container__header h1{text-align:center;margin:0 0 6px;font-size:27px}.caixa-descontos-progressivo .itens__container__header p{font:500 17px/1.5 Montserrat,sans-serif;text-align:center}.caixa-descontos-progressivo .itens__container__grid{display:-ms-grid;display:grid;grid-template-columns:repeat(2,1fr);gap:24px 40px}.caixa-descontos-progressivo .itens__container__grid__item{border-radius:6px;position:relative;border:2px solid #c5c5c5;background:#fff;padding:10px 16px;-webkit-transition:.3s;transition:.3s;display:-webkit-box;display:-ms-flexbox;height:148px;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column;-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;cursor:pointer}@media screen and (max-width:540px){.caixa-descontos-progressivo .itens__container__grid__item{margin:0 0 24px;height:auto!important}}.caixa-descontos-progressivo .itens__container__grid__item input:checked~section h2::after{content:"";background:url('check.svg') center/cover no-repeat;width:14px;height:14px;display:block;position:absolute;top:48%;-webkit-transform:translateY(-50%);transform:translateY(-50%);left:5px}.caixa-descontos-progressivo .itens__container__grid__item--popular header h5{background:#fc427b!important;display:-webkit-box!important;display:-ms-flexbox!important;display:flex!important;-webkit-box-align:center!important;-ms-flex-align:center!important;align-items:center!important;text-transform:initial!important}.caixa-descontos-progressivo .itens__container__grid__item--popular header h5::before{content:"";margin:0 8px 0 0;display:block;width:16px;height:16px;background:url('star.svg') center/cover no-repeat}.caixa-descontos-progressivo .itens__container__grid__item--popular footer h4{color:#fc427b!important}.caixa-descontos-progressivo .itens__container__grid__item input{position:absolute;top:0;left:0;opacity:0;visibility:hidden}.caixa-descontos-progressivo .itens__container__grid__item header{height:28px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;margin:0 0 8px}@media screen and (max-width:460px){.caixa-descontos-progressivo .itens__container__grid{display:block}.caixa-descontos-progressivo .itens__container{padding:0}.caixa-descontos-progressivo .itens__container__grid__item header{height:auto}}.caixa-descontos-progressivo .itens__container__grid__item header h5{border-radius:14px;color:#fff;font:600 15px/1 Montserrat,sans-serif;background:#1e3799;padding:6px 12px;text-transform:uppercase}.caixa-descontos-progressivo .itens__container__grid__item header span{display:block;letter-spacing:1px;position:relative;font:500 16px/1 Montserrat,sans-serif}.caixa-descontos-progressivo .itens__container__grid__item header span::before{content:"";background:#686868;position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%);width:100%;height:1px;display:block}.caixa-descontos-progressivo .itens__container__grid__item section{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.caixa-descontos-progressivo .itens__container__grid__item section h2{font:500 18px/1 Montserrat,sans-serif;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;position:relative}.caixa-descontos-progressivo .itens__container__grid__item section h2::before{content:"";border:2px solid #dadada;min-width:24px;height:24px;border-radius:1000px;background:#fff;-webkit-transition:.3s;transition:.3s;display:block;margin:0 12px 0 0}.caixa-descontos-progressivo .itens__container__grid__item section div{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.caixa-descontos-progressivo .itens__container__grid__item section div h6{color:#1e3799;margin:0 10px 2px 0;font-size:16px;font-weight:700;letter-spacing:1px}.caixa-descontos-progressivo .itens__container__grid__item section div h3{font:600 34px/1 Montserrat,sans-serif;color:#1e3799}.caixa-descontos-progressivo .itens__container__grid__item footer{margin:12px 0 0;padding:12px 0 0;border-top:1px solid #dadada}.caixa-descontos-progressivo .itens__container__grid__item footer h4{font-size:18px;text-transform:uppercase;color:#17c45f}.caixa-descontos-progressivo .itens__container__grid__item footer h4 small{color:#000;display:block;font-size:12px;padding-top:4px}.caixa-descontos-progressivo .caixa-link-action{text-align:center;padding-top:32px}.caixa-descontos-progressivo .desconto-progressivo-link-action{background:#71c358;color:#fff!important;font-weight:700;border:0;padding:14px 44px;margin:0 auto;border-bottom:5px solid #50b232;border-radius:6px!important;font-size:15px!important;width:auto;text-transform:uppercase;text-decoration:none}.caixa-descontos-progressivo .itens__container__grid__item input#selecaoLivreNumeros{border:1px solid #dadada;padding:8px;opacity:1;visibility:visible;position:relative;border-radius:4px;margin:0 12px 0 0;font-size:16px;width:100%;display:block;-webkit-box-sizing:border-box;box-sizing:border-box}label.destacar_essa_opcao{border:2px solid #ff085f!important}span.estoudestacado{background:#ff085f;color:#fff;position:absolute;display:block;left:-10px;top:-12px;z-index:99;border-radius:12px;padding:2px 8px;font-size:12px}.variation dd.variation-Descontoaplicado,.variation dt.variation-Descontoaplicado{display:none!important}.variation dd.variation-Descontoaplicado:nth-child(2),.variation dt.variation-Descontoaplicado:first-child{display:block!important}h3.titulo-bimp-checkout{font-size:18px;margin-bottom:-30px}.caixa-descontos-progressivo-checkout .itens__container__grid{-ms-grid-columns:(1fr) [ 2 ];grid-template-columns:repeat(2,1fr);gap:24px 40px;position:relative;display:block}.caixa-descontos-progressivo-checkout .itens__container__grid__item{border-radius:6px;position:relative;border:2px solid #c5c5c5;background:#fff;padding:10px 16px;-webkit-transition:.3s;transition:.3s;display:-webkit-box;display:-ms-flexbox;height:148px;margin-bottom:30px;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column;-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;cursor:pointer}.caixa-descontos-progressivo-checkout .desconto-progressivo-link-action{background:0 0;color:#666!important;font-weight:700;border:1px solid #666;padding:11px 44px;margin:-32px auto 40px;border-bottom:5px solid #666;border-radius:6px!important;font-size:13px!important;width:100%;display:block;text-transform:uppercase;text-decoration:none}.caixa-descontos-progressivo.layout-2 .itens__container__grid{display:block;-ms-grid-columns:(1fr) [ 2 ];grid-template-columns:repeat(2,1fr);gap:24px 40px}.caixa-descontos-progressivo.layout-2 .itens__container__grid__item{border-radius:6px;position:relative;border:2px solid #11698e;background:#f2f2f7;padding:10px 16px;-webkit-transition:.3s;transition:.3s;display:-webkit-box;display:-ms-flexbox;height:148px;display:bloxk;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column;-webkit-box-pack:end;-ms-flex-pack:end;justify-content:flex-end;cursor:pointer;width:48%;float:left;margin-right:12px;margin-bottom:20px}.caixa-descontos-progressivo.layout-2 .itens__container__grid__item header,.payment_box.payment_method_woowhatsappgateway{display:none!important}.caixa-descontos-progressivo-checkout.layout-2 .itens__container__grid__item{width:100%;float:none}@media (max-width:540px){.caixa-descontos-progressivo .itens__container__grid__item section div h3{text-align:center}.caixa-descontos-progressivo.layout-2 .itens__container__grid__item{width:100%;float:none}}.caixa-descontos-progressivo.layout-2 .itens__container__grid__item section div h3{font-weight:900}.caixa-descontos-progressivo.layout-2 label.destacar_essa_opcao span.estoudestacado{background:#ff0;color:#000;font-weight:700;position:absolute;display:block;left:-10px;top:-12px;z-index:99;border-radius:12px;padding:2px 8px;font-size:12px}.caixa-descontos-progressivo.layout-2 .itens__container__grid__item footer h4{font-size:18px;text-transform:uppercase;color:#000;font-weight:700}.caixa-descontos-progressivo.layout-2 label.destacar_essa_opcao{border:2px solid #11698e!important;background:#11698e!important;color:#fff}.caixa-descontos-progressivo.layout-2 label.destacar_essa_opcao section div h3{font:600 34px/1 Montserrat,sans-serif;color:#e2cd83}.caixa-descontos-progressivo.layout-2 label.destacar_essa_opcao footer h4{color:#fff}.caixa-descontos-progressivo.layout-2 label.destacar_essa_opcao footer h4 small{color:#ff0;display:block;font-size:12px;padding-top:4px;font-weight:700}
+@import url(https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap);
+
+.caixa-descontos-progressivo, .caixa-descontos-progressivo.caixa-descontos-progressivo-checkout {
+    position: relative;
+    display: block;
+    width: 100% !important;
+    max-width: 960px !important;
+    margin-left: auto;
+    margin-right: auto
+}
+
+.caixa-descontos-progressivo .itens {
+    margin: 64px 0 0
+}
+
+.caixa-descontos-progressivo .itens__container {
+    max-width: calc(960px + 24px);
+    width: 100%;
+    padding: 0 24px;
+    margin: 0 auto
+}
+
+.caixa-descontos-progressivo .itens__container__header {
+    background: #fff;
+    -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, .16);
+    box-shadow: 0 0 12px rgba(0, 0, 0, .16);
+    border-radius: 8px;
+    padding: 32px 24px;
+    max-width: 510px;
+    width: 100%;
+    margin: 0 auto 32px
+}
+
+.caixa-descontos-progressivo .itens__container__header h1 {
+    text-align: center;
+    margin: 0 0 6px;
+    font-size: 27px
+}
+
+.caixa-descontos-progressivo .itens__container__header p {
+    font: 500 17px/1.5 Montserrat, sans-serif;
+    text-align: center
+}
+
+.caixa-descontos-progressivo .itens__container__grid {
+    display: -ms-grid;
+    display: grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap: 24px 40px
+}
+
+.caixa-descontos-progressivo .itens__container__grid__item {
+    border-radius: 0.5rem;
+    position: relative;
+    border: 2px solid #c5c5c5;
+    background: #fff;
+    padding: 10px 16px;
+    -webkit-transition: .3s;
+    transition: .3s;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    height: 148px;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+    cursor: pointer
+}
+
+@media screen and (max-width: 540px) {
+    .caixa-descontos-progressivo .itens__container__grid__item {
+        margin: 0 0 24px;
+        height: auto !important
+    }
+}
+
+.caixa-descontos-progressivo .itens__container__grid__item input:checked ~ section h2::after {
+    content: "";
+    background: url('check.svg') center/cover no-repeat;
+    width: 14px;
+    height: 14px;
+    display: block;
+    position: absolute;
+    top: 48%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    left: 5px
+}
+
+.caixa-descontos-progressivo .itens__container__grid__item--popular header h5 {
+    background: #fc427b !important;
+    display: -webkit-box !important;
+    display: -ms-flexbox !important;
+    display: flex !important;
+    -webkit-box-align: center !important;
+    -ms-flex-align: center !important;
+    align-items: center !important;
+    text-transform: initial !important
+}
+
+.caixa-descontos-progressivo .itens__container__grid__item--popular header h5::before {
+    content: "";
+    margin: 0 8px 0 0;
+    display: block;
+    width: 16px;
+    height: 16px;
+    background: url('star.svg') center/cover no-repeat
+}
+
+.caixa-descontos-progressivo .itens__container__grid__item--popular footer h4 {
+    color: #fc427b !important
+}
+
+.caixa-descontos-progressivo .itens__container__grid__item input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    visibility: hidden
+}
+
+.caixa-descontos-progressivo .itens__container__grid__item header {
+    height: 28px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    margin: 0 0 8px
+}
+
+@media screen and (max-width: 460px) {
+    .caixa-descontos-progressivo .itens__container__grid {
+        display: block
+    }
+
+    .caixa-descontos-progressivo .itens__container {
+        padding: 0
+    }
+
+    .caixa-descontos-progressivo .itens__container__grid__item header {
+        height: auto
+    }
+}
+
+.caixa-descontos-progressivo .itens__container__grid__item header h5 {
+    border-radius: 14px;
+    color: #fff;
+    font: 600 15px/1 Montserrat, sans-serif;
+    background: #1e3799;
+    padding: 6px 12px;
+    text-transform: uppercase
+}
+
+.caixa-descontos-progressivo .itens__container__grid__item header span {
+    display: block;
+    letter-spacing: 1px;
+    position: relative;
+    font: 500 16px/1 Montserrat, sans-serif
+}
+
+.caixa-descontos-progressivo .itens__container__grid__item header span::before {
+    content: "";
+    background: #686868;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 1px;
+    display: block
+}
+
+.caixa-descontos-progressivo .itens__container__grid__item section {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between
+}
+
+.caixa-descontos-progressivo .itens__container__grid__item section h2 {
+    font: 500 18px/1 Montserrat, sans-serif;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    position: relative
+}
+
+.caixa-descontos-progressivo .itens__container__grid__item section h2::before {
+    content: "";
+    border: 2px solid #dadada;
+    min-width: 24px;
+    height: 24px;
+    border-radius: 1000px;
+    background: #fff;
+    -webkit-transition: .3s;
+    transition: .3s;
+    display: block;
+    margin: 0 12px 0 0
+}
+
+.caixa-descontos-progressivo .itens__container__grid__item section div {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: end;
+    -ms-flex-align: end;
+    align-items: flex-end
+}
+
+.caixa-descontos-progressivo .itens__container__grid__item section div h6 {
+    color: #1e3799;
+    margin: 0 10px 2px 0;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1px
+}
+
+.caixa-descontos-progressivo .itens__container__grid__item section div h3 {
+    font: 600 34px/1 Montserrat, sans-serif;
+    color: #1e3799
+}
+
+.caixa-descontos-progressivo .itens__container__grid__item footer {
+    margin: 12px 0 0;
+    padding: 12px 0 0;
+    border-top: 1px solid #dadada
+}
+
+.caixa-descontos-progressivo .itens__container__grid__item footer h4 {
+    font-size: 18px;
+    text-transform: uppercase;
+    color: #17c45f
+}
+
+.caixa-descontos-progressivo .itens__container__grid__item footer h4 small {
+    color: #000;
+    display: block;
+    font-size: 12px;
+    padding-top: 4px
+}
+
+.caixa-descontos-progressivo .caixa-link-action {
+    text-align: center;
+    padding-top: 32px
+}
+
+.caixa-descontos-progressivo .desconto-progressivo-link-action {
+    background: #71c358;
+    color: #fff !important;
+    font-weight: 700;
+    border: 0;
+    padding: 14px 44px;
+    margin: 0 auto;
+    border-bottom: 5px solid #50b232;
+    border-radius: 6px !important;
+    font-size: 15px !important;
+    width: auto;
+    text-transform: uppercase;
+    text-decoration: none
+}
+
+.caixa-descontos-progressivo .itens__container__grid__item input#selecaoLivreNumeros {
+    border: 1px solid #dadada;
+    padding: 8px;
+    opacity: 1;
+    visibility: visible;
+    position: relative;
+    border-radius: 4px;
+    margin: 0 12px 0 0;
+    font-size: 16px;
+    width: 100%;
+    display: block;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box
+}
+
+label.destacar_essa_opcao {
+    border: 2px solid #ff085f !important
+}
+
+span.estoudestacado {
+    background: #ff085f;
+    color: #fff;
+    position: absolute;
+    display: block;
+    left: -10px;
+    top: -12px;
+    z-index: 99;
+    border-radius: 12px;
+    padding: 2px 8px;
+    font-size: 12px
+}
+
+.variation dd.variation-Descontoaplicado, .variation dt.variation-Descontoaplicado {
+    display: none !important
+}
+
+.variation dd.variation-Descontoaplicado:nth-child(2), .variation dt.variation-Descontoaplicado:first-child {
+    display: block !important
+}
+
+h3.titulo-bimp-checkout {
+    font-size: 18px;
+    margin-bottom: -30px
+}
+
+.caixa-descontos-progressivo-checkout .itens__container__grid {
+    -ms-grid-columns:(1fr) [ 2 ];
+    grid-template-columns:repeat(2, 1fr);
+    gap: 24px 40px;
+    position: relative;
+    display: block
+}
+
+.caixa-descontos-progressivo-checkout .itens__container__grid__item {
+    border-radius: 6px;
+    position: relative;
+    border: 2px solid #c5c5c5;
+    background: #fff;
+    padding: 10px 16px;
+    -webkit-transition: .3s;
+    transition: .3s;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    height: 148px;
+    margin-bottom: 30px;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+    cursor: pointer
+}
+
+.caixa-descontos-progressivo-checkout .desconto-progressivo-link-action {
+    background: 0 0;
+    color: #666 !important;
+    font-weight: 700;
+    border: 1px solid #666;
+    padding: 11px 44px;
+    margin: -32px auto 40px;
+    border-bottom: 5px solid #666;
+    border-radius: 6px !important;
+    font-size: 13px !important;
+    width: 100%;
+    display: block;
+    text-transform: uppercase;
+    text-decoration: none
+}
+
+.caixa-descontos-progressivo.layout-2 .itens__container__grid {
+    display: block;
+    -ms-grid-columns:(1fr) [ 2 ];
+    grid-template-columns:repeat(2, 1fr);
+    gap: 24px 40px
+}
+
+.caixa-descontos-progressivo.layout-2 .itens__container__grid__item {
+    border-radius: 6px;
+    position: relative;
+    border: 2px solid #11698e;
+    background: #f2f2f7;
+    padding: 10px 16px;
+    -webkit-transition: .3s;
+    transition: .3s;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    height: 148px;
+    display: bloxk;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+    cursor: pointer;
+    width: 48%;
+    float: left;
+    margin-right: 12px;
+    margin-bottom: 20px
+}
+
+.caixa-descontos-progressivo.layout-2 .itens__container__grid__item header, .payment_box.payment_method_woowhatsappgateway {
+    display: none !important
+}
+
+.caixa-descontos-progressivo-checkout.layout-2 .itens__container__grid__item {
+    width: 100%;
+    float: none
+}
+
+@media (max-width: 540px) {
+    .caixa-descontos-progressivo .itens__container__grid__item section div h3 {
+        text-align: center
+    }
+
+    .caixa-descontos-progressivo.layout-2 .itens__container__grid__item {
+        width: 100%;
+        float: none
+    }
+}
+
+.caixa-descontos-progressivo.layout-2 .itens__container__grid__item section div h3 {
+    font-weight: 900
+}
+
+.caixa-descontos-progressivo.layout-2 label.destacar_essa_opcao span.estoudestacado {
+    background: #ff0;
+    color: #000;
+    font-weight: 700;
+    position: absolute;
+    display: block;
+    left: -10px;
+    top: -12px;
+    z-index: 99;
+    border-radius: 12px;
+    padding: 2px 8px;
+    font-size: 12px
+}
+
+.caixa-descontos-progressivo.layout-2 .itens__container__grid__item footer h4 {
+    font-size: 18px;
+    text-transform: uppercase;
+    color: #000;
+    font-weight: 700
+}
+
+.caixa-descontos-progressivo.layout-2 label.destacar_essa_opcao {
+    border: 2px solid #11698e !important;
+    background: #11698e !important;
+    color: #fff
+}
+
+.caixa-descontos-progressivo.layout-2 label.destacar_essa_opcao section div h3 {
+    font: 600 34px/1 Montserrat, sans-serif;
+    color: #e2cd83
+}
+
+.caixa-descontos-progressivo.layout-2 label.destacar_essa_opcao footer h4 {
+    color: #fff
+}
+
+.caixa-descontos-progressivo.layout-2 label.destacar_essa_opcao footer h4 small {
+    color: #ff0;
+    display: block;
+    font-size: 12px;
+    padding-top: 4px;
+    font-weight: 700
+}

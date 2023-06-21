@@ -1,6 +1,7 @@
 <?php
 $generated_numbers = $args['numbers'] ?? [];
 $str_pad_left = $args['str_pad_left'] ?? 5;
+$description = $args['description'] ?? '';
 if ($generated_numbers) {
     ?>
     <tr>
@@ -9,6 +10,9 @@ if ($generated_numbers) {
                 <i class="fa-solid fa-clover"></i> &nbsp;
                 <?php esc_html_e('Números da Sorte', 'woo-raffles'); ?>
             </h3>
+            <div>
+                <?= $description ?>
+            </div>
             <div class="bootstrap">
                 <div class="row">
                     <?php

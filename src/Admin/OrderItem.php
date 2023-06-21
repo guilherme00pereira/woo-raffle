@@ -30,11 +30,13 @@ class OrderItem extends Template
 
     public static function numbersGeneratedContent($item_id, $item, $order)
     {
-        $product_id = $item->get_product_id();
-
+        $product = $item->get_product();
+        $id = $product->get_id();
+        $description = $product->get_short_description();
         self::getPart('orders', 'numbers', [
-            'numbers' => GenerateNumbers::getNumbers($item_id, $product_id, 'generated_number'),
-            'str_pad_left' => get_post_meta($product_id, '_woo_raffles_str_pad_left', true) ?? 5,
+            'numbers' => GenerateNumbers::getNumbers($item_id, $id, 'generated_number'),
+            'str_pad_left' => get_post_meta($id, '_woo_raffles_str_pad_left', true) ?? 5,
+            'description' => $description,
         ]);
     }
 }
