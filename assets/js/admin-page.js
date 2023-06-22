@@ -102,7 +102,7 @@
         const cota1 = $('#quotaNumber1').val()
         const cota2 = $('#quotaNumber2').val()
         const cota3 = $('#quotaNumber3').val()
-        if(!pid || !cota1) {
+        if(!pids || !cota1) {
             alert('Selecione ao menos um produto e digite ao menos a primeira cota')
         } else {
             let params = `pids=${pids}&quotes=${cota1},${cota2},${cota3}`
