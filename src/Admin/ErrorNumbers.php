@@ -14,29 +14,63 @@ class ErrorNumbers extends Template
 
         add_action('admin_menu', [self::class, 'menu']);
         add_filter('woo_raffles_error_numbers', [self::class, 'getErrors'], 10, 3);
+        add_action('wp_ajax_getAmountGeneratedErrors', [self::class, 'getAmountGeneratedErrors']);
+        add_action('wp_ajax_getStockErrors', [self::class, 'getStockErrors']);
+        add_action('wp_ajax_getOrderWithNoNumbersError', [self::class, 'getOrderWithNoNumbersError']);
     }
 
-    public static function getErrors($error, $sum_quotes, $qty): string
-    {
-        if ($error === 'amount_generated') {
-            return sprintf(__('A quantidade vendida foi %d. E a quantidade gerada foi: %d.', 'woo-raffles'), $qty, $sum_quotes);
-        }
-
-        return __('Números ultrapassaram a soma do estoque e das vendas.', 'woo-raffles');
-    }
-
-    protected static function getNumbers()
+    public static function getAmountGeneratedErrors()
     {
         global $wpdb;
-
         $table_name = Database::$table_name;
-
         $wpdb->query("SET session group_concat_max_len=500000;");
+        $html = "";
+        $items = $wpdb->get_results(
+            "
+                SELECT wrf2.order_id, wrf2.order_item_id,
+                    GROUP_CONCAT(LPAD(wrf2.generated_number, 5, '0') ORDER BY wrf2.generated_number ASC SEPARATOR ', ') AS quotes,
+                    COUNT(wrf2.generated_number) AS sum_quotes, 
+                    (
+                        SELECT CAST(woi.meta_value AS UNSIGNED)
+                        FROM {$wpdb->base_prefix}woocommerce_order_itemmeta woi 
+                        WHERE woi.meta_key = '_qty' 
+                        AND woi.order_item_id = wrf2.order_item_id LIMIT 1
+                    ) AS qty,
+                    'amount_generated' AS error
+                FROM {$wpdb->base_prefix}{$table_name} wrf2
+                INNER JOIN {$wpdb->base_prefix}posts pst2 ON pst2.ID = wrf2.order_id 
+                GROUP BY wrf2.order_id, wrf2.order_item_id
+                HAVING sum_quotes < qty
+                ORDER BY order_id ASC;
+                "
+        );
+        foreach ($items as $item)
+        {
+            $url = admin_url("post.php?post=$item->order_id&action=edit");
+            $html .= '<tr>
+                <th scope="row">
+                <a href="' . $url . '" target="_blank">
+                    ' . $item->order_id . '
+                </a>
+            </th>
+            <td>
+                ' . sprintf(__("A quantidade vendida foi %d. E a quantidade gerada foi: %d.", "woo-raffles"), $item->qty, $item->sum_quotes) . '
+            </td>
+            </tr>';
+        }
+        wp_send_json_success($html);
+        wp_die();
+    }
 
-        return $wpdb->get_results(
-            $wpdb->prepare("
-                (
-                    SELECT 
+    public static function getStockErrors(): string
+    {
+        global $wpdb;
+        $table_name = Database::$table_name;
+        $wpdb->query("SET session group_concat_max_len=500000;");
+        $html = "";
+        $items = $wpdb->get_results(
+            "
+                SELECT 
                         wrf.order_id, wrf.order_item_id,
                         GROUP_CONCAT(LPAD(wrf.generated_number, 5, '0') ORDER BY wrf.generated_number ASC SEPARATOR ',') AS quotes,
                         '' AS sum_quotes,
@@ -51,28 +85,57 @@ class ErrorNumbers extends Template
                             AND pm.post_id = wrf.product_id LIMIT 1
                     )
                     GROUP BY wrf.order_id, wrf.order_item_id
-                )
-                UNION ALL
-                (
-                    SELECT wrf2.order_id, wrf2.order_item_id,
-                        GROUP_CONCAT(LPAD(wrf2.generated_number, 5, '0') ORDER BY wrf2.generated_number ASC SEPARATOR ', ') AS quotes,
-                        COUNT(wrf2.generated_number) AS sum_quotes, 
-                        (
-                            SELECT CAST(woi.meta_value AS UNSIGNED)
-                            FROM {$wpdb->base_prefix}woocommerce_order_itemmeta woi 
-                            WHERE woi.meta_key = '_qty' 
-                            AND woi.order_item_id = wrf2.order_item_id LIMIT 1
-                        ) AS qty,
-                        'amount_generated' AS error
-                    FROM {$wpdb->base_prefix}{$table_name} wrf2
-                    INNER JOIN {$wpdb->base_prefix}posts pst2 ON pst2.ID = wrf2.order_id 
-                    GROUP BY wrf2.order_id, wrf2.order_item_id
-                    HAVING sum_quotes < qty
-                )
                 ORDER BY order_id ASC;
                 "
-            )
         );
+        foreach ($items as $item)
+        {
+            $url = admin_url("post.php?post=$item->order_id&action=edit");
+            $html .= '<tr>
+                <th scope="row">
+                <a href="' . $url . '" target="_blank">
+                    ' . $item->order_id . '
+                </a>
+            </th>
+            <td>
+                ' . __('Números ultrapassaram a soma do estoque e das vendas.', 'woo-raffles') . '
+            </td>
+            </tr>';
+        }
+        wp_send_json_success($html);
+        wp_die();
+    }
+
+    public static function getOrderWithNoNumbersError()
+    {
+        global $wpdb;
+        $table_name = Database::$table_name;
+        $wpdb->query("SET session group_concat_max_len=500000;");
+        $html = "";
+        $items = $wpdb->get_results(
+            "
+                select ID from {$wpdb->base_prefix}posts
+                where post_status = 'wc-processing'
+                and ID not in (select distinct(order_id) from {$wpdb->base_prefix}{$table_name})
+                ORDER BY ID ASC;
+                "
+        );
+        foreach ($items as $item)
+        {
+            $url = admin_url("post.php?post=$item->ID&action=edit");
+            $html .= '<tr>
+                <th scope="row">
+                <a href="' . $url . '" target="_blank">
+                    ' . $item->ID . '
+                </a>
+            </th>
+            <td>
+                ' . __('Pedido sem números gerados.', 'woo-raffles') . '
+            </td>
+            </tr>';
+        }
+        wp_send_json_success($html);
+        wp_die();
     }
 
     public static function menu()
@@ -89,11 +152,8 @@ class ErrorNumbers extends Template
 
     public static function pageContents()
     {
-        $numbers = self::getNumbers();
+        wp_enqueue_script('woo-raffle-errors-numbers', WOORAFFLES_URL . 'assets/js/errors-numbers.js', ['jquery-core'], '1.0.0', true);
 
-        self::getPart('error', 'numbers', [
-            'numbers' => $numbers,
-            'title' => __('Pedidos com erros nos números', 'woo-raffles'),
-        ]);
+        self::getPart('error', 'numbers');
     }
 }

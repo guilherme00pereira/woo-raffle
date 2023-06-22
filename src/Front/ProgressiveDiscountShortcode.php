@@ -73,16 +73,16 @@ class ProgressiveDiscountShortcode extends Base
                 $html = $html . '
 						        <label class="itens__container__grid__item ' . $classe_destaque . '" for="woo_raffles_discount_qty' . $a . '"> ' . $html_destaque . '
 				                    <input id="woo_raffles_discount_qty' . $a . '"  name="woo_raffles_discount_qty" type="radio" data-field="' . $row_index . '" value="' . get_sub_field('quantidade') . '" ' . ($y === 2 ? "checked=\"\"" : "") . '>
-				                    <header></header>
 				                    <section>
-				                        <h2>' . get_sub_field('quantidade') . ' ' . $saida . '</h2>
 				                        <div>
+                                            <h2>' . get_sub_field('quantidade') . ' ' . $saida . '</h2>
+                                            <h4>' . get_sub_field('titulo_opcao') . '</h4>
+                                        </div>
+				                        <div style="align-items: center;">
+				                            <small>' . get_sub_field('subtitulo_opcao') . '</small>
 				                            <h3>' . get_sub_field('valor_mkt') . '</h3>
 				                        </div>
 				                    </section>
-				                    <footer>
-				                        <h4>' . get_sub_field('titulo_opcao') . ' <small>' . get_sub_field('subtitulo_opcao') . '</small></h4>
-				                    </footer>
 				                </label>		
 
 				        ';

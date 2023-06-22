@@ -31,5 +31,6 @@ class Asset extends Base
         wp_register_script('woo-raffle-quotes-open', WOORAFFLES_URL . 'assets/js/quotes-open.js', ['jquery-core']);
         wp_register_script('woo-raffle-admin-page', WOORAFFLES_URL . 'assets/js/admin-page.js', ['jquery-core']);
         wp_register_script('woo-raffle-multi-dropdown', WOORAFFLES_URL . 'assets/js/jquery.sumoselect/jquery.sumoselect.min.js', ['jquery-core']);
+        wp_register_script('woo-raffle-errors-numbers', WOORAFFLES_URL . 'assets/js/errors-numbers.js', ['jquery-core']);
     }
 }

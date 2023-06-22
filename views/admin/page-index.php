@@ -16,13 +16,14 @@ $logo = wp_get_attachment_url(get_option('raffle_logo_export_attachment_id'))
         <div id="raffle-tabs" class="nav-tab-wrapper">
             <a href="#" class="nav-tab nav-tab-active" data-tab="tab-01">Pesquisar Cota</a>
             <a href="#" class="nav-tab" data-tab="tab-02">Exportar</a>
+            <a href="<?= get_admin_url() . "admin.php?page=woo-raffles-error-numbers" ?>" class="nav-tab" data-tab="tab-02">Pedidos com Erro</a>
         </div>
         <div id="raffle-tabs-content" class="tabs-content">
             <div id="tab-01">
                 <table class="form-table">
                     <tbody>
                         <tr>
-                            <th scope="row"><label for="selectProduct">Selecione o sorteio</label></th>
+                            <th scope="row"><label for="selectProductforFilter">Selecione o sorteio</label></th>
                             <td class="select-raffle-cell">
                                 <select name="selectProductforFilter" id="selectProductforFilter" multiple="multiple">
                                     <?php foreach ($products as $product): ?>

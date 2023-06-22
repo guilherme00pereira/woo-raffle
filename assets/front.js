@@ -252,4 +252,9 @@ jQuery(document).ready(function ($) {
             scrollTop: 0
         }, 'slow');
     }
+
+    $('.itens__container__grid__item').click(function (e) {
+        $('.itens__container__grid__item').removeClass('destacar_essa_opcao');
+        $(this).addClass('destacar_essa_opcao');
+    });
 });
