@@ -885,6 +885,7 @@
 }
 
 
+
 .pcss3t-icons-top > label {
     text-align: center;
 }
@@ -929,7 +930,12 @@
     margin-left: 0 !important;
 }
 
-
+.pcss3t > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
 
 .pcss3t > label {
     padding: 0 20px;
@@ -1751,13 +1757,17 @@ h4#tituloResumoDosNumerosEscolhidos{
 }
 
 .btn-participar-sorteio {
+    background: #71c358;
+    color: #fff !important;
+    font-weight: 700;
+    padding: 11px 44px;
+    margin: -32px auto 40px;
+    border: none;
+    border-radius: 6px !important;
+    font-size: 18px !important;
+    width: 50%;
     display: block;
-    background: #0cd463;
-    border-radius: 1000px;
-    color: #fff;
-    font-size: 18px;
-    padding: 12px 0;
-    width: 300px;
-    margin-top: 40px;
-    border: 0;
+    text-transform: uppercase;
+    text-decoration: none;
+    margin-top: 40px;;
 }

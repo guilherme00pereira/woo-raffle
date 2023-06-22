@@ -16,7 +16,7 @@ $logo = wp_get_attachment_url(get_option('raffle_logo_export_attachment_id'))
         <div id="raffle-tabs" class="nav-tab-wrapper">
             <a href="#" class="nav-tab nav-tab-active" data-tab="tab-01">Pesquisar Cota</a>
             <a href="#" class="nav-tab" data-tab="tab-02">Exportar</a>
-            <a href="<?= get_admin_url() . "admin.php?page=woo-raffles-error-numbers" ?>" class="nav-tab" data-tab="tab-02">Pedidos com Erro</a>
+            <a href="<?= get_admin_url() . "admin.php?page=woo-raffles-error-numbers" ?>" class="nav-tab" no-tab>Pedidos com Erro</a>
         </div>
         <div id="raffle-tabs-content" class="tabs-content">
             <div id="tab-01">
@@ -53,12 +53,14 @@ $logo = wp_get_attachment_url(get_option('raffle_logo_export_attachment_id'))
                         </tr>
                         <tr id="search-button">
                             <td colspan="2">
-                                <button id="searchRaffle" class="button button-primary">Pesquisar cota</button>
-                                <button id="exportExcelRapidinha" class="button button-primary"
-                                    style="background-color: #1D6F42; border-color: #1D6F42;">
-                                    Planilha Rapidinha
-                                </button>
-                                <span id="loading" class="spinner"></span>
+                                <div class="search-quotes-action">
+                                    <button id="searchRaffle" class="button button-primary">Pesquisar cota</button>
+                                    <button id="exportExcelRapidinha" class="button button-primary"
+                                        style="background-color: #1D6F42; border-color: #1D6F42;">
+                                        Planilha Rapidinha
+                                    </button>
+                                    <span id="loading" class="spinner"></span>
+                                </div>
                             </td>
                         </tr>
                     </tbody>

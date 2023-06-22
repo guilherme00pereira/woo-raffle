@@ -37,13 +37,10 @@ class Export extends Template
 
     public static function execute()
     {
-        $product_id = sanitize_text_field($_GET['posts'] ?? '');
+        $product_id = sanitize_text_field($_GET['post'] ?? '');
         $file_type = sanitize_text_field($_GET['file_type'] ?? 'csv');
-
         do_action('woo_raffles_export_file', $product_id, $file_type);
-
         self::getPart('close', 'tab');
-
         exit();
     }
 
@@ -51,11 +48,8 @@ class Export extends Template
     {
         $product_ids = sanitize_text_field($_GET['pids'] ?? '');
         $quotes = sanitize_text_field($_GET['quotes'] ?? '');
-
         do_action('woo_raffles_export_quickie', $product_ids, $quotes);
-
-        //self::getPart('close', 'tab');
-
+        self::getPart('close', 'tab');
         exit();
     }
 }

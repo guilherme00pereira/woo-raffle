@@ -98,15 +98,14 @@ class Database extends Base
             )
         );
 
-        self::$table_exist = (bool)$table_exist;
+        self::$table_exist = (bool) $table_exist;
 
         return self::$table_exist;
     }
 
     public static function getOrdersIdsByProductId(
         $product_id,
-        $order_status = array( 'wc-completed', 'wc-processing', 'wc-on-hold', 'wc-pending' )
-    ): array
+        $order_status = array('wc-completed', 'wc-processing', 'wc-on-hold', 'wc-pending')): array
     {
 
         global $wpdb;
@@ -117,7 +116,7 @@ class Database extends Base
         LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta as order_item_meta ON order_items.order_item_id = order_item_meta.order_item_id
         LEFT JOIN {$wpdb->posts} AS posts ON order_items.order_id = posts.ID
         WHERE posts.post_type = 'shop_order'
-        AND posts.post_status IN ( '" . implode( "','", $order_status ) . "' )
+        AND posts.post_status IN ( '" . implode("','", $order_status) . "' )
         AND order_items.order_item_type = 'line_item'
         AND order_item_meta.meta_key = '_product_id'
         AND order_item_meta.meta_value = '$product_id'
@@ -139,7 +138,9 @@ class Database extends Base
                 $sqlProducts .= ' OR ';
             }
         }
-
+        $quotas = array_filter($quotas, function($value) {
+            return $value !== '';
+        });
         foreach ($quotas as $key => $value) {
             $sqlNumbers .= "rn.generated_number = " . $value;
             if ($key < count($quotas) - 1) {
@@ -159,35 +160,28 @@ class Database extends Base
                 or pm.meta_key = '_billing_phone')";
         $result = $wpdb->get_results($sql, ARRAY_A);
 
-        foreach ($result as $key => $value) 
-        {
+
+        foreach ($result as $key => $value) {
             $oid = $value['order_id'];
-            if(!isset($data[$oid]) )
-            {
+            if (!isset($data[$oid])) {
                 $data[$oid] = [];
             }
-            if(!isset($data[$oid]['status']) )
-            {
+            if (!isset($data[$oid]['status'])) {
                 $data[$oid]['status'] = $value['post_status'];
             }
-            if(!isset($data[$oid]['sorteio']))
-            {
+            if (!isset($data[$oid]['sorteio'])) {
                 $data[$oid]['sorteio'] = $value['product_name'];
             }
-            if(!isset($data[$oid]['cota']))
-            {
+            if (!isset($data[$oid]['cota'])) {
                 $data[$oid]['cota'] = $value['generated_number'];
             }
-            if($value['meta_key'] == '_billing_first_name')
-            {
+            if ($value['meta_key'] == '_billing_first_name') {
                 $data[$oid]['nome'] = $value['meta_value'];
             }
-            if($value['meta_key'] == '_billing_last_name')
-            {
+            if ($value['meta_key'] == '_billing_last_name') {
                 $data[$oid]['sobrenome'] = $value['meta_value'];
             }
-            if($value['meta_key'] == '_billing_phone')
-            {
+            if ($value['meta_key'] == '_billing_phone') {
                 $data[$oid]['telefone'] = $value['meta_value'];
             }
         }
@@ -226,23 +220,18 @@ class Database extends Base
                 or pm.meta_key = '_billing_phone')";
         $result = $wpdb->get_results($sql, ARRAY_A);
 
-        foreach ($result as $key => $value)
-        {
+        foreach ($result as $key => $value) {
             $k = $value['product_id'] . "-" . $value['generated_number'];
-            if(!isset($data[$k]))
-            {
+            if (!isset($data[$k])) {
                 $data[$k] = "";
             }
-            if($value['meta_key'] == '_billing_first_name')
-            {
+            if ($value['meta_key'] == '_billing_first_name') {
                 $data[$k] = $value['meta_value'];
             }
-            if($value['meta_key'] == '_billing_last_name')
-            {
+            if ($value['meta_key'] == '_billing_last_name') {
                 $data[$k] .= " " . $value['meta_value'];
             }
-            if($value['meta_key'] == '_billing_phone')
-            {
+            if ($value['meta_key'] == '_billing_phone') {
                 $data[$k] .= " - " . $value['meta_value'];
             }
         }

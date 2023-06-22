@@ -119,3 +119,11 @@
 .button-danger>span {
     vertical-align: sub;
 }
+
+.search-quotes-action {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 300px;
+}

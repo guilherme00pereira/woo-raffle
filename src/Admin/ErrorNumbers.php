@@ -27,7 +27,7 @@ class ErrorNumbers extends Template
         $html = "";
         $items = $wpdb->get_results(
             "
-                SELECT wrf2.order_id, wrf2.order_item_id,
+                SELECT wrf2.order_id, wrf2.order_item_id, wrf2.product_id,
                     GROUP_CONCAT(LPAD(wrf2.generated_number, 5, '0') ORDER BY wrf2.generated_number ASC SEPARATOR ', ') AS quotes,
                     COUNT(wrf2.generated_number) AS sum_quotes, 
                     (
@@ -47,7 +47,7 @@ class ErrorNumbers extends Template
         foreach ($items as $item)
         {
             $url = admin_url("post.php?post=$item->order_id&action=edit");
-            $html .= '<tr>
+            $html .= '<tr data-pid="' . $item->product_id . '">
                 <th scope="row">
                 <a href="' . $url . '" target="_blank">
                     ' . $item->order_id . '
@@ -62,7 +62,7 @@ class ErrorNumbers extends Template
         wp_die();
     }
 
-    public static function getStockErrors(): string
+    public static function getStockErrors()
     {
         global $wpdb;
         $table_name = Database::$table_name;
@@ -71,7 +71,7 @@ class ErrorNumbers extends Template
         $items = $wpdb->get_results(
             "
                 SELECT 
-                        wrf.order_id, wrf.order_item_id,
+                        wrf.order_id, wrf.order_item_id, wrf.product_id,
                         GROUP_CONCAT(LPAD(wrf.generated_number, 5, '0') ORDER BY wrf.generated_number ASC SEPARATOR ',') AS quotes,
                         '' AS sum_quotes,
                         '' AS qty,
@@ -91,7 +91,7 @@ class ErrorNumbers extends Template
         foreach ($items as $item)
         {
             $url = admin_url("post.php?post=$item->order_id&action=edit");
-            $html .= '<tr>
+            $html .= '<tr data-pid="' . $item->product_id . '">
                 <th scope="row">
                 <a href="' . $url . '" target="_blank">
                     ' . $item->order_id . '
@@ -125,14 +125,14 @@ class ErrorNumbers extends Template
             $url = admin_url("post.php?post=$item->ID&action=edit");
             $html .= '<tr>
                 <th scope="row">
-                <a href="' . $url . '" target="_blank">
-                    ' . $item->ID . '
-                </a>
-            </th>
-            <td>
-                ' . __('Pedido sem números gerados.', 'woo-raffles') . '
-            </td>
-            </tr>';
+                    <a href="' . $url . '" target="_blank">
+                        ' . $item->ID . '
+                    </a>
+                </th>
+                <td>
+                    ' . __('Pedido sem números gerados.', 'woo-raffles') . '
+                </td>
+                </tr>';
         }
         wp_send_json_success($html);
         wp_die();

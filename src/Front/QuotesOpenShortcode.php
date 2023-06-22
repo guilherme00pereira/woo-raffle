@@ -221,11 +221,13 @@ class QuotesOpenShortcode extends Template
                 <!-- ABAS -->
                 <div class="page-tabs">
                    <div class="pcss3t pcss3t-height-auto">
-
+                        
                           <input type="radio" name="pcss3t" checked id="tabTodos" class="tab-content-first">
-                          <label class="label-aba-todas" for="tabTodos">' . esc_html__('TODAS', 'plugin-rifa-drope') . ' (<span id="totalTodos">0</span>)</label>
-                            
-                            ' . $more_tabs . '
+                          
+                            <label class="label-aba-todas" for="tabTodos">' . esc_html__('TODAS', 'plugin-rifa-drope') . ' (<span id="totalTodos">0</span>)</label>
+                                
+                                ' . $more_tabs . '
+                        
                             
                         <ul style="padding-left:0px;margin-left:0px;">
 

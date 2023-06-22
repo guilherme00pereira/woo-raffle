@@ -368,15 +368,14 @@ h3.titulo-bimp-checkout {
 }
 
 .caixa-descontos-progressivo-checkout .desconto-progressivo-link-action {
-    background: 0 0;
-    color: #666 !important;
+    background: #71c358;
+    color: #fff !important;
     font-weight: 700;
-    border: 1px solid #666;
     padding: 11px 44px;
     margin: -32px auto 40px;
-    border-bottom: 5px solid #666;
+    border: none;
     border-radius: 6px !important;
-    font-size: 13px !important;
+    font-size: 18px !important;
     width: 100%;
     display: block;
     text-transform: uppercase;
