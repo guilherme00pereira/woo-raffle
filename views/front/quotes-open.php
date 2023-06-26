@@ -74,9 +74,10 @@ $shortcode_style = $args['style_shortcode'] ?? [];
                                 $btn_class = $allow_duplicate ? 'todos' : 'livres';
                                 if( in_array($i, $numbers_payed) )$btn_class = 'pagas';
                                 if( in_array($i, $numbers_reserved) )$btn_class = 'reservadas';
+                                $selected = in_array($i, $numbers_selected) ? 'selected' : '';
 
                                 ?>
-                                <button type="button" class="btn btn-number <?= $btn_class; ?>"
+                                <button type="button" class="btn btn-number <?= $btn_class . " " . $selected ?>"
                                         data-number="<?php echo esc_html($i); ?>"
                                         <?php echo in_array($i, $numbers_payed) ? 'disabled' : ''; ?>
                                 >
@@ -93,7 +94,7 @@ $shortcode_style = $args['style_shortcode'] ?? [];
                         <div id="contentPagas"></div>
                     <?php endif; ?>
                 </div>
-                <div>
+                <div class="mt-3">
                     <div class="d-flex justify-content-center">
                         <button id="load-more-numbers" style="<?= $shortcode_style['btn_carregar_mais_numeros'] ?>">
                             Carregar mais números
@@ -120,6 +121,7 @@ $shortcode_style = $args['style_shortcode'] ?? [];
     let numbersPayed = [<?php echo esc_html(implode(',', $numbers_payed)); ?>];
     let numbersSelected = [<?php echo esc_html(implode(',', $numbers_selected)); ?>];
     const numbersReserved = [<?php echo esc_html(implode(',', $numbers_reserved)); ?>];
+    const totalNumbers = <?php echo esc_html(count($all_numbers)); ?>;
     const limit = <?php echo esc_html($limit); ?>;
     const allowDuplicate = <?= $allow_duplicate ? 'true' : 'false' ?>;
     const str_pad_left = <?php echo esc_html($str_pad_left); ?>;

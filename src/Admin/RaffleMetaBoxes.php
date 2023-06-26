@@ -245,6 +245,44 @@ class RaffleMetaBoxes extends Template
                             'maxlength' => 22
                         ),
                         array(
+                            'key' => 'field_5fd7d126c1774',
+                            'label' => 'Cor de fundo da barra de progresso',
+                            'name' => 'cor_de_fundo_barra_progresso',
+                            'type' => 'color_picker',
+                            'instructions' => '',
+                            'required' => 0,
+                            'conditional_logic' => 0,
+                            'wrapper' => array(
+                                'width' => '25',
+                                'class' => '',
+                                'id' => '',
+                            ),
+                            'default_value' => '',
+                            'placeholder' => '',
+                            'prepend' => '',
+                            'append' => '',
+                            'maxlength' => 22
+                        ),
+                        array(
+                            'key' => 'field_5fd7d126c1775',
+                            'label' => 'Cor do texto da barra de progresso',
+                            'name' => 'cor_do_texto_barra_progresso',
+                            'type' => 'color_picker',
+                            'instructions' => '',
+                            'required' => 0,
+                            'conditional_logic' => 0,
+                            'wrapper' => array(
+                                'width' => '25',
+                                'class' => '',
+                                'id' => '',
+                            ),
+                            'default_value' => '',
+                            'placeholder' => '',
+                            'prepend' => '',
+                            'append' => '',
+                            'maxlength' => 22
+                        ),
+                        array(
                             'key' => 'field_61185ed590977',
                             'label' => 'Cores Modelos TODAS',
                             'name' => 'cores_modelos_todas',

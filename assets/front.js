@@ -52,8 +52,7 @@ jQuery(document).ready(function ($) {
     }
 
     $('body').on('click', '#open-quotes-tab-content button', function (e) {
-        e.preventDefault();
-        const numberSelected = $(this).attr('data-number');
+        const numberSelected = parseInt( $(this).attr('data-number') );
 
         if ($(this).hasClass('selected')) {
             $(this).removeClass('selected');
@@ -61,10 +60,10 @@ jQuery(document).ready(function ($) {
             $(this).addClass('selected');
         }
 
-        if ($.inArray(numberSelected, numbersSelected) !== -1) {
-            numbersSelected.splice(numbersSelected.indexOf(numberSelected), 1);
-        } else {
+        if ($.inArray(numberSelected, numbersSelected) === -1) {
             numbersSelected.push(numberSelected);
+        } else {
+            numbersSelected.splice(numbersSelected.indexOf(numberSelected), 1);
         }
 
         generateNumbersSelected();
@@ -99,7 +98,7 @@ jQuery(document).ready(function ($) {
                     product_id: product_id,
                 },
                 success: function (response) {
-                    console.log(response)
+
                     if (response.data.error) {
                         $msg.addClass('woocommerce-error');
                         $msg
@@ -127,26 +126,32 @@ jQuery(document).ready(function ($) {
     $('#load-more-numbers').click(function (e) {
         let html = ''
         const rendered = $('#woo_raffles_qty_rendered').val();
-        const to_render = parseInt(rendered) + limit;
-        
-        for(let i = rendered; i < to_render; i++) {
-            
+        let to_render = parseInt(rendered) + limit;
+
+        if(to_render >= totalNumbers) {
+            to_render = totalNumbers;
+            $(this).hide();
+        }
+
+        for (let i = rendered; i < to_render; i++) {
+
             let btn_class = allowDuplicate ? 'todos' : 'livres';
-            if( $.inArray(i, numbersPayed) !== -1 ) btn_class = 'pagas';
-            if( $.inArray(i, numbersReserved) !== -1 ) btn_class = 'reservadas';
-            
+            if ($.inArray(i, numbersPayed) !== -1) btn_class = 'pagas';
+            if ($.inArray(i, numbersReserved) !== -1) btn_class = 'reservadas';
+
 
             html += `
-                <button type="button" class="btn btn-number ${btn_class}" data-number="${i}"
-                    ${$.inArray(i, numbersPayed) > -1 ? 'disabled' : ''}
-                >
-                    ${i.toString().padStart(str_pad_left, '0')}
-                </button>
-            `
+            <button type="button" class="btn btn-number ${btn_class}" data-number="${i}"
+                ${$.inArray(i, numbersPayed) > -1 ? 'disabled' : ''}
+            >
+                ${i.toString().padStart(str_pad_left, '0')}
+            </button>
+        `
         }
-        $('#woo_raffles_qty_rendered').val(rendered)
+        $('#woo_raffles_qty_rendered').val(to_render)
 
         $('#contentTodos .row').append(html);
+
     });
 
     $('#quotes-selected-submit').click(function (e) {
@@ -168,26 +173,20 @@ jQuery(document).ready(function ($) {
                     numbers: numbersSelected.join(','),
                 },
                 success: function (response) {
-                    if (response?.error === '1') {
+                    if (response.data.error) {
                         $msg.addClass('woocommerce-error');
+                        $msg
+                            .removeClass('hidden')
+                            .html(response.data.msg);
                     } else {
-                        $msg.addClass('woocommerce-message');
-                    }
-
-                    $msg
-                        .removeClass('hidden')
-                        .html(response?.msg);
-
                         $(this).removeAttr('disabled');
-
-                    scrollToTop();
-
-                    redirect(response);
+                        scrollToTop();
+                        redirect(response.data.route);
+                    }
                 },
                 error: function (err) {
-                    console.error(err);
-                    $(this).removeAttr('disabled');
-
+                    $msg.addClass('woocommerce-error');
+                    $msg.removeClass('hidden').html(response.data.msg);
                     scrollToTop();
                 }
             });

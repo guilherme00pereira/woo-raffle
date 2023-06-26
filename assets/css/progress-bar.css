@@ -11,9 +11,9 @@
     position: relative;
     display: block;
     width: 100%;
-    height: 50px;
+    height: 10px;
     background: #f2f2f2;
-    border-radius: 12px;
+    border-radius: 25px;
 }
 .rifa-barra-de-progresso .quantidade-ate-meta{
     position: absolute;
