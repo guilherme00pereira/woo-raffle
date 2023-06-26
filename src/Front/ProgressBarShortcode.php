@@ -31,10 +31,14 @@ class ProgressBarShortcode extends Template
 
         $barra = get_field("cor_de_fundo_barra_progresso", $rifa);
         $fonte = get_field("cor_do_texto_barra_progresso", $rifa);
-
-        $cotas = get_field("numero_de_cotas", $rifa);
+        $percentage = 0;
         $soldNumbers = Database::getSoldQuotes($rifa);
-        $percentage = $soldNumbers / $cotas * 100;
+        $product = wc_get_product($rifa);
+
+        if($product) {
+            $totalNumbers = $product->get_stock_quantity('') + $soldNumbers;
+            $percentage = $soldNumbers / $totalNumbers * 100;
+        }
 
         return '
         <div class="rifa-barra-de-progresso" data-prova-real="' . $percentage . '">

@@ -220,7 +220,7 @@ class Database extends Base
                 or pm.meta_key = '_billing_phone')";
         $result = $wpdb->get_results($sql, ARRAY_A);
 
-        foreach ($result as $key => $value) {
+        foreach ($result as $value) {
             $k = $value['product_id'] . "-" . $value['generated_number'];
             if (!isset($data[$k])) {
                 $data[$k] = "";

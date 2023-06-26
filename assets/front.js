@@ -135,7 +135,7 @@ jQuery(document).ready(function ($) {
 
         for (let i = rendered; i < to_render; i++) {
 
-            let btn_class = allowDuplicate ? 'todos' : 'livres';
+            let btn_class = 'livres';
             if ($.inArray(i, numbersPayed) !== -1) btn_class = 'pagas';
             if ($.inArray(i, numbersReserved) !== -1) btn_class = 'reservadas';
 
@@ -193,6 +193,28 @@ jQuery(document).ready(function ($) {
         }
 
         return false;
+    });
+
+    $('#open-quotes-tabs button').click(function (e) {
+        const tab = $(this).attr('id');
+        const buttons = $('#contentTodos button')
+        switch (tab) {
+            case 'tabLivres':
+                buttons.hide();
+                $('#contentTodos button.livres').show();
+                break;
+            case 'tabReservadas':
+                buttons.hide();
+                $('#contentTodos button.reservadas').show();
+                break;
+            case 'tabPagas':
+                buttons.hide();
+                $('#contentTodos button.pagas').show();
+                break;
+            default:
+                buttons.show();
+                break;
+        }
     });
 
     function generateNumbersSelected() {

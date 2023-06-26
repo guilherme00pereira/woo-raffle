@@ -43,13 +43,11 @@ $shortcode_style = $args['style_shortcode'] ?? [];
         <div id="woo-raffles-open-quotes">
             <div class="data-container">
                 <ul id="open-quotes-tabs" class="list-unstyled">
-                    <?php if($allow_duplicate): ?>
                         <li class="list-inline-item">
                             <button type="button" id="tabTodos" style="<?= $shortcode_style['aba_todas'] ?>">
-                                Todos<span>(<?= $all_numbers ?>)</span>
+                                Todos<span>(<?= count($all_numbers) - 1 ?>)</span>
                             </button>
                         </li>
-                    <?php else: ?>
                         <li class="list-inline-item">
                             <button type="button" id="tabLivres" style="<?= $shortcode_style['aba_livres'] ?>">
                                 Livres<span>(<?= $numbers_open ?>)</span>
@@ -65,20 +63,19 @@ $shortcode_style = $args['style_shortcode'] ?? [];
                                 Pagas<span>(<?= count($numbers_payed); ?>)</span>
                             </button>
                         </li>
-                    <?php endif; ?>
                 </ul>
                 <div id="open-quotes-tab-content" class="tab-content">
                     <div id="contentTodos">
                         <div class="row">
                             <?php for ($i = 0; $i < $limit; $i++):
-                                $btn_class = $allow_duplicate ? 'todos' : 'livres';
+                                $btn_class = 'livres';
                                 if( in_array($i, $numbers_payed) )$btn_class = 'pagas';
                                 if( in_array($i, $numbers_reserved) )$btn_class = 'reservadas';
                                 $selected = in_array($i, $numbers_selected) ? 'selected' : '';
 
                                 ?>
                                 <button type="button" class="btn btn-number <?= $btn_class . " " . $selected ?>"
-                                        data-number="<?php echo esc_html($i); ?>"
+                                        data-number="<?php echo esc_html($i); ?>" data-type="<?= $btn_class ?>"
                                         <?php echo in_array($i, $numbers_payed) ? 'disabled' : ''; ?>
                                 >
                                     <?php echo esc_html(str_pad($i, $str_pad_left, '0', STR_PAD_LEFT)); ?>
@@ -86,13 +83,6 @@ $shortcode_style = $args['style_shortcode'] ?? [];
                             <?php endfor; ?>
                         </div>
                     </div>
-                    <?php if(!$allow_duplicate): ?>
-                        <div id="contentLivres">
-
-                        </div>
-                        <div id="contentReservadas"></div>
-                        <div id="contentPagas"></div>
-                    <?php endif; ?>
                 </div>
                 <div class="mt-3">
                     <div class="d-flex justify-content-center">
@@ -123,6 +113,5 @@ $shortcode_style = $args['style_shortcode'] ?? [];
     const numbersReserved = [<?php echo esc_html(implode(',', $numbers_reserved)); ?>];
     const totalNumbers = <?php echo esc_html(count($all_numbers)); ?>;
     const limit = <?php echo esc_html($limit); ?>;
-    const allowDuplicate = <?= $allow_duplicate ? 'true' : 'false' ?>;
     const str_pad_left = <?php echo esc_html($str_pad_left); ?>;
 </script>

@@ -26,6 +26,7 @@ class ProgressiveDiscountShortcode extends Base
 
         $product_id = $attrs['id'] ?? get_the_ID();
         $exibir = $attrs['exibir'] ?? '';
+        $destacar = $attrs['destacar'] ?? '';
         if(!empty($exibir)) $exibir = explode(',', $exibir);
         
 
@@ -64,15 +65,13 @@ class ProgressiveDiscountShortcode extends Base
 
                     if (get_sub_field('quantidade') == 1) $saida = "número";
 
-                    $destacar_essa_opcao = get_sub_field('destacar_essa_opcao');
+                    //$destacar_essa_opcao = get_sub_field('destacar_essa_opcao');
                     $classe_destaque = "";
                     $html_destaque = "";
 
-                    if ($destacar_essa_opcao == 'Destacar'):
-
+                    if ((int)$destacar == ($row_index)):
                         $classe_destaque = 'destacar_essa_opcao';
                         $html_destaque = '<span class="estoudestacado">MELHOR OPÇÃO</span>';
-
                     endif;
 
                     $html = $html . '
