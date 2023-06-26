@@ -2,66 +2,63 @@ jQuery(document).ready(function ($) {
     $('.input-cpf').mask('000.000.000-00', {reverse: true});
 
     const $inputNumbers = $('#woo_raffles_numbers');
-    const str_pad_left = 5;
 
-    if ($('#woo-raffles-open-quotes').length) {
-        $('#woo-raffles-open-quotes').pagination({
-            dataSource: generateObjData($inputNumbers.attr('data-qty')),
-            pageSize: 100,
-            showPrevious: false,
-            showNext: false,
-            callback: function (data, pagination) {
-                const dataContainer = $('#woo-raffles-open-quotes .data-container');
-
-                let html = `
-                <div class="bootstrap">
-                    <div class="row mb-20">`;
-
-                $.each(data, function (index, item) {
-                    html += `  
-                        <div class="col-lg-1 col-md-2 col-3">
-                            <div class="content">
-                                <div class="orders-raffles-numbers ${$.inArray(item.a.toString(), numbersSelected) !== -1 ? 'selected' : ''} ${$.inArray(item.a, numbersDisabled) !== -1 ? 'disabled' : ''}">
-                                    ${
-                        $.inArray(item.a, numbersDisabled) !== -1
-                            ? item.a.toString().padStart(str_pad_left, '0')
-                            : `
-                                                <a href="#" data-value="${item.a}">
-                                                    ${item.a.toString().padStart(str_pad_left, '0')}
-                                                </a>
-                                               `
-                    }
-                                   
-                                </div>
-                            </div>
-                        </div>
-                        `;
-                });
-
-                html += `
-                    </div>
-                </div>
-                `;
-
-                dataContainer.html(html);
-            }
-        });
-    }
+    //if ($('#woo-raffles-open-quotes').length) {
+        // $('#woo-raffles-open-quotes').pagination({
+        //     dataSource: generateObjData($inputNumbers.attr('data-qty')),
+        //     pageSize: 100,
+        //     showPrevious: false,
+        //     showNext: false,
+        //     callback: function (data, pagination) {
+        //         const dataContainer = $('#woo-raffles-open-quotes .data-container');
+        //
+        //         let html = `
+        //         <div class="bootstrap">
+        //             <div class="row mb-20">`;
+        //
+        //         $.each(data, function (index, item) {
+        //             html += `
+        //                 <div class="col-lg-1 col-md-2 col-3">
+        //                     <div class="content">
+        //                         <div class="orders-raffles-numbers ${$.inArray(item.a.toString(), numbersSelected) !== -1 ? 'selected' : ''} ${$.inArray(item.a, numbersDisabled) !== -1 ? 'disabled' : ''}">
+        //                             ${
+        //                 $.inArray(item.a, numbersDisabled) !== -1
+        //                     ? item.a.toString().padStart(str_pad_left, '0')
+        //                     : `
+        //                                         <a href="#" data-value="${item.a}">
+        //                                             ${item.a.toString().padStart(str_pad_left, '0')}
+        //                                         </a>
+        //                                        `
+        //             }
+        //
+        //                         </div>
+        //                     </div>
+        //                 </div>
+        //                 `;
+        //         });
+        //
+        //         html += `
+        //             </div>
+        //         </div>
+        //         `;
+        //
+        //         dataContainer.html(html);
+        //     }
+        // });
+    //}
 
     if ($('#woo-raffles-quotes-selected').length) {
         generateNumbersSelected();
     }
 
-    $('body').on('click', '.orders-raffles-numbers a', function (e) {
+    $('body').on('click', '#open-quotes-tab-content button', function (e) {
         e.preventDefault();
+        const numberSelected = $(this).attr('data-number');
 
-        const numberSelected = $(this).attr('data-value');
-        const $parent = $(this).parent();
-
-        if ($parent.hasClass('selected')) {
-            $parent.removeClass('selected');
+        if ($(this).hasClass('selected')) {
+            $(this).removeClass('selected');
         } else {
-            $parent.addClass('selected');
+            $(this).addClass('selected');
         }
 
         if ($.inArray(numberSelected, numbersSelected) !== -1) {
@@ -179,44 +176,22 @@ jQuery(document).ready(function ($) {
     });
 
     function generateNumbersSelected() {
-        if (numbersSelected.length > 0) {
-            $('#quotes-selected-submit').removeClass('hidden');
-            $('#quotes-selected-title').removeClass('hidden');
-        } else {
-            $('#quotes-selected-submit').addClass('hidden');
-            $('#quotes-selected-title').addClass('hidden');
-        }
 
+        if (numbersSelected.length > 0) {
+            $('#woo-raffles-quotes-selected').removeClass('hidden');
+        } else {
+            $('#woo-raffles-quotes-selected').addClass('hidden');
+        }
         numbersSelected.sort(function (a, b) {
             return a - b;
         });
-
-        $inputNumbers.val(numbersSelected.join(','));
-
         const dataContainer = $('#woo-raffles-quotes-selected #quotes-selected');
-
-        let html = `
-        <div class="bootstrap">
-            <div class="row mb-4">
-        `;
-
+        let html = '<div class="row d-flex justify-content-center my-3">';
         numbersSelected.forEach(function (index) {
-            html += `  
-                    <div class="col-lg-1 col-md-2 col-3">
-                        <div class="content">
-                            <div class="orders-raffles-numbers">
-                                ${index.toString().padStart(str_pad_left, '0')}
-                            </div>
-                        </div>
-                    </div>
-                    `;
+            html += `<div class="content"><span>${index.toString()}</span></div>
+            `;
         });
-
-        html += `
-            </div>
-        </div>
-        `;
-
+        html += '</div>';
         dataContainer.html(html);
     }
 

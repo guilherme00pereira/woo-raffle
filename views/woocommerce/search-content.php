@@ -2,6 +2,7 @@
 
 $data = $args['data'] ?? [];
 $total = $args['total'] ?? 0;
+$str_pad_left = $args['str_pad_left'] ?? 5;
 
 if (count($data) > 0) {
     ?>

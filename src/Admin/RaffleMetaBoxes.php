@@ -152,8 +152,8 @@ class RaffleMetaBoxes extends Template
                         ),
                         array(
                             'key' => 'field_5fd7d126c1768',
-                            'label' => 'Cor de fundo cota selecionada modal',
-                            'name' => 'cor_de_fundo_selecao_modal_rodape',
+                            'label' => 'Cor do texto e borda ao selecionar cota',
+                            'name' => 'cor_do_texto_selecao',
                             'type' => 'color_picker',
                             'instructions' => '',
                             'required' => 0,

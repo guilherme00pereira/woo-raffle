@@ -19,7 +19,7 @@ class SearchShortcode extends Template
         add_action('wp_ajax_nopriv_getProductNumbersByCPF', [$this, 'getProductNumbersByCPF']);
     }
 
-    public function content()
+    public function content($attrs)
     {
         wp_enqueue_script(
             'woo_raffles_number_search',
@@ -28,8 +28,14 @@ class SearchShortcode extends Template
             '1.0.1',
             true);
 
+        extract(shortcode_atts([
+            'id' => 0,
+        ], $attrs));
+
         ob_start();
-        $this->getPart('search', 'form');
+
+        $product_id = $attrs['id'] ?? '';
+        $this->getPart('search', 'form', ['product_id' => $product_id,]);
 
         $content = ob_get_contents();
         ob_end_clean();
@@ -37,13 +43,15 @@ class SearchShortcode extends Template
         return $content;
     }
 
-    protected function getResults($cpf)
+    protected function getResults($cpf, $productId)
     {
         global $wpdb;
 
         $table_name = Database::$table_name;
 
         $wpdb->query("SET session group_concat_max_len=500000;");
+
+        $sqlProduct = $productId > 0 ?  "AND wrf.product_id = {$productId}" : "";
 
         return $wpdb->get_results(
             $wpdb->prepare("
@@ -53,6 +61,7 @@ class SearchShortcode extends Template
             INNER JOIN {$wpdb->prefix}postmeta pst ON pst.post_id = wrf.order_id 
             WHERE pst.meta_key = '_billing_cpf' AND pst.meta_value = %s
             AND wrf.order_item_id != ''
+            {$sqlProduct}
             GROUP BY product
             ORDER BY wrf.generated_number ASC;
         ", $cpf)
@@ -64,10 +73,12 @@ class SearchShortcode extends Template
         try {
             if (isset($_GET['cpf']) && strlen($_GET['cpf']) > 0) {
                 $cpf = sanitize_text_field($_GET['cpf'] ?? '');
+                $productId = sanitize_text_field($_GET['product_id'] ?? 0);
                 //$cpf = preg_replace('/[^0-9]*([0-9]{3})[^0-9]*([0-9]{3})[^0-9]*([0-9]{3})[^0-9]*([0-9]{2})[^0-9]*/', '$1$2$3$4', $cpf);
-                $dbItems = $this->getResults($cpf);
+                $dbItems = $this->getResults($cpf, $productId);
                 $total = 0;
-                $data = [];            
+                $data = [];
+                $globos = get_field("numero_globos", $productId);
 
                 foreach ($dbItems as $item) {
                     $generated_numbers = explode(',', $item->quotes);
@@ -89,6 +100,7 @@ class SearchShortcode extends Template
                 $this->getPart('search', 'content', [
                     'total' => $total,
                     'data' => $data,
+                    'str_pad_left' => $globos,
                 ]);
                 $content = ob_get_contents();
                 ob_end_clean();

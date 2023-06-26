@@ -5,9 +5,9 @@
         e.preventDefault();
         $.get('/wp-admin/admin-ajax.php', {
             action: 'getProductNumbersByCPF',
-            cpf: $('#search-cpf-val').val()
+            cpf: $('#search-cpf-val').val(),
+            product_id: $('#product_id').val()
         }, function (res) {
-            console.log(res.data)
             $('#cpf-numbers-search-result').html(res.data.html);
             loading.hide();
         });

@@ -1771,3 +1771,71 @@ h4#tituloResumoDosNumerosEscolhidos{
     text-decoration: none;
     margin-top: 40px;;
 }
+
+/* ============= NOVO =================== */
+
+#woo-raffles-open-quotes .data-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+#open-quotes-tabs {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+}
+
+#open-quotes-tabs li {
+    margin: 0 20px;
+}
+
+#open-quotes-tabs button {
+    border-radius: 15px;
+    width: 175px;
+    height: 32px;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 30px;
+    padding: 0;
+}
+
+#open-quotes-tab-content button {
+    margin: 10px;
+    width: 60px;
+    height: 40px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+#woo-raffles-quotes-selected {
+    background-color: #FFFFFF;
+    padding: 20px;
+}
+
+#woo-raffles-quotes-selected h6 {
+    color: #333;
+}
+
+#woo-raffles-quotes-selected span {
+    background-color: #333;
+    color: #FFFFFF;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+#quotes-selected-submit {
+    font-weight: 700;
+    border: none;
+    border-radius: 25px !important;
+    font-size: 18px !important;
+    width: 50%;
+    display: block;
+    text-transform: uppercase;
+    text-decoration: none;
+}

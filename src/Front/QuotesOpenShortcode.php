@@ -16,7 +16,8 @@ class QuotesOpenShortcode extends Template
     {
         parent::__construct();
 
-        add_shortcode('woo-raffles-cotas_abertas', [$this, 'content_v2']);
+        add_shortcode('woo-raffles-cotas_abertas', [$this, 'content']);
+        add_shortcode('woo-raffles-cotas_abertas_v2', [$this, 'content_v2']);
         add_action('wp_ajax_ajaxApiRifaInfos', [$this, 'ajaxApiRifaInfos']);
         add_action('wp_ajax_nopriv_ajaxApiRifaInfos', [$this, 'ajaxApiRifaInfos']);
     }
@@ -25,6 +26,8 @@ class QuotesOpenShortcode extends Template
 
     public function content($attrs)
     {
+        $this->enqueueStyleAndScript();
+
         extract(shortcode_atts(array(
             'id' => 0,
         ), $attrs));
@@ -34,10 +37,11 @@ class QuotesOpenShortcode extends Template
         $product_id = $attrs['id'] ?? '';
 
         $product = wc_get_product($product_id);
-
-        $qty = $product->get_stock_quantity() + $product->get_total_sales();
-
-        $numbers_disabled = self::getNumbersByProductId($product_id);
+        $globos = get_field("numero_globos", $product_id);
+        $numeros = get_field("numero_de_cotas", $product_id);
+        $limit = get_field("max_por_pagina", $product_id);
+        $all_numbers = range(0, $numeros);
+        $numbers_payed = self::getPayedNumbers($product_id);
         $numbers_selected = [];
 
         $cart = \WC()->cart;
@@ -50,10 +54,13 @@ class QuotesOpenShortcode extends Template
         }
 
         self::getPart('quotes', 'open', [
-                'numbers_disabled' => $numbers_disabled,
+                'all_numbers' => $all_numbers,
+                'globos' => $globos,
+                'limit' => $limit,
+                'numbers_payed' => $numbers_payed,
                 'numbers_selected' => $numbers_selected,
                 'product_id' => $product_id,
-                'qty' => $qty,
+                'style_shortcode' => $this->getShorcodeStyles($product_id),
             ]
         );
 
@@ -63,7 +70,7 @@ class QuotesOpenShortcode extends Template
         return $content;
     }
 
-    public static function getNumbersByProductId($product_id): array
+    public static function getPayedNumbers($product_id): array
     {
         global $wpdb;
 
@@ -87,7 +94,7 @@ class QuotesOpenShortcode extends Template
 
         $allow_duplicate = get_field("cotas_duplicadas", $product_id);
 
-        $this->enqueueStyleAndScript($product_id);
+        $this->enqueueStyleAndScript_v2();
 
         $quantidade_cotas = get_field("numero_de_cotas", $product_id);
 
@@ -364,7 +371,12 @@ class QuotesOpenShortcode extends Template
     /**
      * @return void
      */
-    public function enqueueStyleAndScript($product_id): void
+    public function enqueueStyleAndScript(): void
+    {
+        wp_enqueue_style('woo-raffle-quotes-open', WOORAFFLES_URL . 'assets/css/quotes-open.css');
+    }
+
+    public function enqueueStyleAndScript_v2(): void
     {
         wp_enqueue_style('woo-raffle-quotes-open', WOORAFFLES_URL . 'assets/css/quotes-open.css');
         wp_enqueue_script('woo-raffle-quotes-open', WOORAFFLES_URL . 'assets/js/quotes-open.js', ['jquery-core'], false, true);
@@ -404,5 +416,39 @@ class QuotesOpenShortcode extends Template
               </li>
               <!-- ABA TRES -->
         ';
+    }
+
+    private function getShorcodeStyles($product_id): array
+    {
+        $cores_modelos_todas = get_field("cores_modelos_todas", $product_id);
+        $cor_de_fundo_aba_todas = $cores_modelos_todas["cor_de_fundo_aba_todas"];
+        $cor_do_texto_e_borda_aba_todas = $cores_modelos_todas["cor_do_texto_e_borda_aba_todas"];
+
+        $cores_modelos_livres = get_field("cores_modelos_livres", $product_id);
+        $cor_de_fundo_aba_livres = $cores_modelos_livres["cor_de_fundo_aba_livres"];
+        $cor_do_texto_e_borda_aba_livres = $cores_modelos_livres["cor_do_texto_e_borda_aba_livres"];
+
+        $cores_modelos_reservadas = get_field("cores_modelos_reservadas", $product_id);
+        $cor_de_fundo_aba_reservadas = $cores_modelos_reservadas["cor_de_fundo_aba_reservadas"];
+        $cor_do_texto_e_borda_aba_reservadas = $cores_modelos_reservadas["cor_do_texto_e_borda_aba_reservadas"];
+
+        $cores_modelos_pagas = get_field("cores_modelos_pagas", $product_id);
+        $cor_de_fundo_aba_pagas = $cores_modelos_pagas["cor_de_fundo_aba_pagas"];
+        $cor_do_texto_e_borda_aba_pagas = $cores_modelos_pagas["cor_do_texto_e_borda_aba_pagas"];
+
+        $cor_fundo_botao_finalizar_compra = get_field("cor_de_fundo_btn_finalizar_compra", $product_id);
+        $cor_texto_botao_finalizar_compra = get_field("cor_do_texto_btn_finalizar_compra", $product_id);
+
+        $cor_fundo_btn_selected = get_field("cor_de_fundo_selecao", $product_id);
+        $cor_texto_btn_selected = get_field("cor_do_texto_selecao", $product_id);
+
+        return [
+            'btn_selected' => "background-color: {$cor_fundo_btn_selected} !important; border: 1px solid {$cor_texto_btn_selected} !important; color: {$cor_texto_btn_selected} !important;",
+            'aba_todas' => "background-color: {$cor_de_fundo_aba_todas} ; border:1px solid {$cor_do_texto_e_borda_aba_todas} ; color: {$cor_do_texto_e_borda_aba_todas} ;",
+            'aba_livres' => "background-color: {$cor_de_fundo_aba_livres} ; border:1px solid {$cor_do_texto_e_borda_aba_livres} ; color: {$cor_do_texto_e_borda_aba_livres} ;",
+            'aba_reservadas' => "background-color: {$cor_de_fundo_aba_reservadas} ; border:1px solid {$cor_do_texto_e_borda_aba_reservadas} ; color: {$cor_do_texto_e_borda_aba_reservadas} ;",
+            'aba_pagas' => "background-color: {$cor_de_fundo_aba_pagas} ; border:1px solid {$cor_do_texto_e_borda_aba_pagas} ; color: {$cor_do_texto_e_borda_aba_pagas} ;",
+            'btn_finalizar_compra' => "background-color: {$cor_fundo_botao_finalizar_compra} ; color: {$cor_texto_botao_finalizar_compra} ",
+        ];
     }
 }

@@ -255,7 +255,7 @@ class Database extends Base
         $wpdb->query("SET session group_concat_max_len=500000;");
 
         $query = $concat ? "GROUP_CONCAT(LPAD(wrf.generated_number, {$str_pad_left}, '0') ORDER BY wrf.generated_number ASC SEPARATOR ',')" : 'wrf.generated_number';
-        $query_group_by = $concat ? 'GROUP BY wrf.order_id, product_name, user_name, user_email' : '';
+        $query_group_by = $concat ? 'GROUP BY wrf.order_id, product_name, first_name, user_email' : '';
 
         return $wpdb->get_results(
             $wpdb->prepare(

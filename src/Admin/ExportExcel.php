@@ -4,7 +4,6 @@ namespace WooRaffles\Admin;
 
 use Shuchkin\SimpleXLSXGen;
 use UPFlex\MixUp\Core\Base;
-use WooRaffles\Admin\ExportPdf;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -22,9 +21,14 @@ class ExportExcel extends Base
     {
         if ($product_id > 0) {
             $numbers = Database::getNumbersByProductId($product_id, false);
-            $rows = self::generateRows($numbers);
+            $rows = self::generateRows($numbers, $product_id);
+            $end = count($rows);
             if ($file_type === 'csv') {
-                $xlsx = SimpleXLSXGen::fromArray($rows);
+                $xlsx = SimpleXLSXGen::fromArray($rows)
+                    ->setColWidth(0, 100)
+                    ->setColWidth(1, 100)
+                    ->mergeCells('A2:B2')
+                    ->mergeCells('A' . $end . ':B' . $end);
                 $xlsx->downloadAs('woo-raffles-v1.xlsx');
             }
             if ($file_type === 'pdf') {
@@ -32,11 +36,25 @@ class ExportExcel extends Base
                 $pdf = new ExportPdf();
                 $pdf->AddPage();
                 $pdf->SetFont('Arial', '', 10);
+                var_dump($rows);die;
                 foreach ($rows as $index => $row) {
                     if ($index > 0) {
-                        $pdf->Cell(100, 10, $row['nome']);
-                        $pdf->Cell(40, 10, $row['cotas_escolhidas']);
-                        $pdf->Ln();
+                        if($row['nome'] && $row['cotas_escolhidas'])
+                        {
+                            $pdf->Cell(100, 10, $row['nome']);
+                            $pdf->Cell(40, 10, $row['cotas_escolhidas']);
+                            $pdf->Ln();
+                        } else {
+                            if(count($row) == 2)
+                            {
+                                $pdf->Cell(100, 10, $row[0]);
+                                $pdf->Cell(40, 10, $row[1]);
+                                $pdf->Ln();
+                            } else {
+                                $pdf->Cell(140, 10, $row[0]);
+                                $pdf->Ln();
+                            }
+                        }
                     }
                 }
                 $pdf->Output('D', 'woo-raffles-v1.pdf', true);
@@ -44,27 +62,46 @@ class ExportExcel extends Base
         }
     }
 
-    protected static function generateRows($numbers): array
+    protected static function generateRows($numbers, $product_id): array
     {
         $rows = [];
+
+        $attId = get_option('raffle_logo_export_attachment_id');
+        $image = wp_get_attachment_image_url($attId);
+        $product = wc_get_product($product_id);
+        $warningText = "TESTE";
+
+
         $rows[0] = [
-            __('NOME COMPRADOR', 'woo-raffles'),
-            __('NÚMEROS RESERVADO', 'woo-raffles'),
+            '<img src="' . $image . '" />',
+            '<middle><center><style height="60" bgcolor="#000000" color="#FFFFFF">' . $product->get_title() . '</style></center></middle>',
+        ];
+
+        $rows[1] = [
+            '<middle><center><style bgcolor="#F28500" color="#FFFFFF">' . $warningText . '</style></center></middle>',
+        ];
+
+        $rows[2] = [
+            '<center><style bgcolor="#000000" color="#FFFFFF">PARTICIPANTES</style></center>',
+            '<center><style bgcolor="#000000" color="#FFFFFF">NÚMERO DA SORTE</style></center>',
         ];
 
         if ($numbers) {
-            $y = 1;
+            $y = 3;
 
             foreach ($numbers as $item) {
                 $fn = $item->first_name ?? '';
                 $ln = $item->last_name ?? '';
-                $key_list = "{$item->order_id}__$y";
-                $rows[$key_list]['nome'] = $fn . ' ' . $ln;
-                $rows[$key_list]['cotas_escolhidas'] = $item->quotes ?? '';
+                //$key_list = "{$item->order_id}__$y";
+                $rows[$y]['nome'] = $fn . ' ' . $ln;
+                $rows[$y]['cotas_escolhidas'] = $item->quotes ?? '';
                 $y++;
             }
         }
 
+        $rows[] = [
+            '<middle><center><style bgcolor="#F28500" color="#FFFFFF">' . $warningText . '</style></center></middle>',
+        ];
         return $rows;
     }
 
