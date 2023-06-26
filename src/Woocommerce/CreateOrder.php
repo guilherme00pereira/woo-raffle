@@ -52,7 +52,7 @@ class CreateOrder extends Base
         global $wpdb;
 
         $checkNumbersAllowed = false;
-        $sold_numbers = Database::getSoldQuotes(get_the_ID());
+        $sold_numbers = Database::getSoldQuotes($product_id);
         $table_name = Database::$table_name;
         $product = wc_get_product($product_id);
         $total_numbers = $product->get_stock_quantity('') + $sold_numbers;
@@ -77,8 +77,8 @@ class CreateOrder extends Base
                 $checkNumbersAllowed = true;
 
             else:
+                $numbers_sales = range(0, $total_numbers);
 
-                $numbers_sales = range(1, $total_numbers);
                 $numbers_allowed = array_diff($numbers_sales, $numbers_result);
 
                 if ($numbers_allowed) {

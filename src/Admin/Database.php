@@ -275,4 +275,39 @@ class Database extends Base
             )
         );
     }
+
+    public static function getPayedNumbers($product_id): array
+    {
+        global $wpdb;
+
+        $table_name = Database::$table_name;
+
+        return $wpdb->get_col(
+            $wpdb->prepare(
+                "SELECT wrf.generated_number
+                        FROM {$wpdb->prefix}{$table_name} wrf
+                        WHERE wrf.product_id = %d;",
+                $product_id,
+            )
+        );
+    }
+
+    public static function getReserverdNumbers($product_id): array
+    {
+        global $wpdb;
+        return $wpdb->get_col(
+            $wpdb->prepare(
+                "select woim.meta_value from {$wpdb->prefix}woocommerce_order_itemmeta woim
+                inner join {$wpdb->prefix}woocommerce_order_items woi on woi.order_item_id = woim.order_item_id
+                inner join {$wpdb->prefix}posts ps on ps.ID = woi.order_id
+                where woim.meta_key = 'Números escolhidos'
+                and (ps.post_status = 'wc-pending' or ps.post_status = 'wc-on-hold')
+                and woim.order_item_id in
+                (select order_item_id from wp_woocommerce_order_itemmeta
+                where meta_key = '_product_id'
+                and meta_value = '%d')",
+                $product_id,
+            )
+        );
+    }
 }

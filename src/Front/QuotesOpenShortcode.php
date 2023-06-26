@@ -36,14 +36,13 @@ class QuotesOpenShortcode extends Template
 
         $product_id = $attrs['id'] ?? '';
 
-        $product = wc_get_product($product_id);
         $globos = get_field("numero_globos", $product_id);
         $numeros = get_field("numero_de_cotas", $product_id);
         $limit = get_field("max_por_pagina", $product_id);
         $all_numbers = range(0, $numeros);
-        $numbers_payed = self::getPayedNumbers($product_id);
+        $numbers_payed =  Database::getPayedNumbers($product_id);
+        $numbers_reserved = Database::getReserverdNumbers($product_id);
         $numbers_selected = [];
-
         $cart = \WC()->cart;
         if ($cart) {
             foreach ($cart->get_cart() as $cart_item) {
@@ -57,7 +56,8 @@ class QuotesOpenShortcode extends Template
                 'all_numbers' => $all_numbers,
                 'globos' => $globos,
                 'limit' => $limit,
-                'numbers_payed' => $numbers_payed,
+                'numbers_payed' => count($numbers_payed) > 0 ? $numbers_payed : [],
+                'numbers_reserved' => count($numbers_reserved) > 0 ? explode(',', $numbers_reserved[0]): [],
                 'numbers_selected' => $numbers_selected,
                 'product_id' => $product_id,
                 'style_shortcode' => $this->getShorcodeStyles($product_id),
@@ -68,22 +68,6 @@ class QuotesOpenShortcode extends Template
         ob_end_clean();
 
         return $content;
-    }
-
-    public static function getPayedNumbers($product_id): array
-    {
-        global $wpdb;
-
-        $table_name = Database::$table_name;
-
-        return $wpdb->get_col(
-            $wpdb->prepare(
-                "SELECT wrf.generated_number
-                        FROM {$wpdb->prefix}{$table_name} wrf
-                        WHERE wrf.product_id = %d;",
-                $product_id,
-            )
-        );
     }
 
     #endregion
@@ -439,6 +423,9 @@ class QuotesOpenShortcode extends Template
         $cor_fundo_botao_finalizar_compra = get_field("cor_de_fundo_btn_finalizar_compra", $product_id);
         $cor_texto_botao_finalizar_compra = get_field("cor_do_texto_btn_finalizar_compra", $product_id);
 
+        $cor_fundo_botao_carregar_mais_numeros = get_field("cor_de_fundo_btn_carregar_mais_numeros", $product_id);
+        $cor_texto_botao_carregar_mais_numeros = get_field("cor_do_texto_btn_carregar_mais_numeros", $product_id);
+
         $cor_fundo_btn_selected = get_field("cor_de_fundo_selecao", $product_id);
         $cor_texto_btn_selected = get_field("cor_do_texto_selecao", $product_id);
 
@@ -448,7 +435,8 @@ class QuotesOpenShortcode extends Template
             'aba_livres' => "background-color: {$cor_de_fundo_aba_livres} ; border:1px solid {$cor_do_texto_e_borda_aba_livres} ; color: {$cor_do_texto_e_borda_aba_livres} ;",
             'aba_reservadas' => "background-color: {$cor_de_fundo_aba_reservadas} ; border:1px solid {$cor_do_texto_e_borda_aba_reservadas} ; color: {$cor_do_texto_e_borda_aba_reservadas} ;",
             'aba_pagas' => "background-color: {$cor_de_fundo_aba_pagas} ; border:1px solid {$cor_do_texto_e_borda_aba_pagas} ; color: {$cor_do_texto_e_borda_aba_pagas} ;",
-            'btn_finalizar_compra' => "background-color: {$cor_fundo_botao_finalizar_compra} ; color: {$cor_texto_botao_finalizar_compra} ",
+            'btn_finalizar_compra' => "background-color: {$cor_fundo_botao_finalizar_compra} ; border: none !important; color: {$cor_texto_botao_finalizar_compra} ",
+            'btn_carregar_mais_numeros' => "background-color: {$cor_fundo_botao_carregar_mais_numeros}; border: none !important; color: {$cor_texto_botao_carregar_mais_numeros}",
         ];
     }
 }

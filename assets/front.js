@@ -124,15 +124,36 @@ jQuery(document).ready(function ($) {
         return false;
     });
 
-    $('#quotes-selected-form').submit(function (e) {
+    $('#load-more-numbers').click(function (e) {
+        let html = ''
+        const rendered = $('#woo_raffles_qty_rendered').val();
+        const to_render = parseInt(rendered) + limit;
+        
+        for(let i = rendered; i < to_render; i++) {
+            
+            let btn_class = allowDuplicate ? 'todos' : 'livres';
+            if( $.inArray(i, numbersPayed) !== -1 ) btn_class = 'pagas';
+            if( $.inArray(i, numbersReserved) !== -1 ) btn_class = 'reservadas';
+            
+
+            html += `
+                <button type="button" class="btn btn-number ${btn_class}" data-number="${i}"
+                    ${$.inArray(i, numbersPayed) > -1 ? 'disabled' : ''}
+                >
+                    ${i.toString().padStart(str_pad_left, '0')}
+                </button>
+            `
+        }
+        $('#woo_raffles_qty_rendered').val(rendered)
+
+        $('#contentTodos .row').append(html);
+    });
+
+    $('#quotes-selected-submit').click(function (e) {
         e.preventDefault();
-
-        const $button = $(this).find('button');
         const $msg = $('#woo_raffles_notice p');
-
         const product_id = $('#woo_raffles_product_id').val();
-
-        $button.attr('disabled', 'disabled');
+        $(this).attr('disabled', 'disabled');
 
         removeClassNotices($msg);
 
@@ -157,7 +178,7 @@ jQuery(document).ready(function ($) {
                         .removeClass('hidden')
                         .html(response?.msg);
 
-                    $button.removeAttr('disabled');
+                        $(this).removeAttr('disabled');
 
                     scrollToTop();
 
@@ -165,7 +186,7 @@ jQuery(document).ready(function ($) {
                 },
                 error: function (err) {
                     console.error(err);
-                    $button.removeAttr('disabled');
+                    $(this).removeAttr('disabled');
 
                     scrollToTop();
                 }
@@ -176,7 +197,7 @@ jQuery(document).ready(function ($) {
     });
 
     function generateNumbersSelected() {
-
+        
         if (numbersSelected.length > 0) {
             $('#woo-raffles-quotes-selected').removeClass('hidden');
         } else {

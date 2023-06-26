@@ -52,7 +52,6 @@ class AddToCart extends Base
                     ], 200);
                 }
             } catch (\Exception $e) {
-                //error_log($e->getMessage());
                 wp_send_json_error([
                     'redirect' => false,
                     'msg' => $e->getMessage(),
