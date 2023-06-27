@@ -94,15 +94,19 @@ $shortcode_style = $args['style_shortcode'] ?? [];
             <input type="hidden" id="woo_raffles_product_id" value="<?php echo esc_html($product_id); ?>"/>
             <input type="hidden" id="woo_raffles_qty_rendered" value="<?php echo esc_html($limit); ?>"/>
         </div>
-        <div id="woo-raffles-quotes-selected" class="hidden">
-            <h6 id="quotes-selected-title" class="my-2">
-                Números escolhidos
-            </h6>
-            <div id="quotes-selected"></div>
-            <div class="d-flex justify-content-center">
-                <button style="<?= $shortcode_style['btn_finalizar_compra'] ?>" id="quotes-selected-submit">
-                    Finalizar Compra
-                </button>
+        <div id="woo-raffles-quotes-modal" class="hidden">
+            <div>
+                <h6 id="quotes-selected-title" class="my-2">
+                    Números escolhidos
+                </h6>
+            </div>
+            <div>
+                <div id="quotes-selected"></div>
+                <div class="d-flex justify-content-center">
+                    <button style="<?= $shortcode_style['btn_finalizar_compra'] ?>" id="quotes-selected-submit">
+                        Finalizar Compra
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -115,3 +119,20 @@ $shortcode_style = $args['style_shortcode'] ?? [];
     const limit = <?php echo esc_html($limit); ?>;
     const str_pad_left = <?php echo esc_html($str_pad_left); ?>;
 </script>
+
+<!-- <article class="widget-rifa-modelo-2 aposta" id="modalRifa">
+    <header class="aposta__header">
+        <aside onclick="abrirWidgetRifas(this)">
+        '. esc_html__( 'Números escolhidos', 'plugin-rifa-drope') .'
+        </aside>
+        <button class="aposta__header__close" type="button" onclick="abrirWidgetRifas(this)"></button>
+    </header>
+    <section class="aposta__content">
+        <div class="coluna-1" id="colunaUm">
+            Nenhum número escolhido ainda
+        </div>
+        <div class="coluna-2" id="colunaDois">
+            
+        </div>
+    </section>
+</article> -->

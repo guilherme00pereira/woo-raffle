@@ -2,6 +2,22 @@
 $generated_numbers = $args['numbers'] ?? [];
 $str_pad_left = $args['str_pad_left'] ?? 5;
 $description = $args['description'] ?? '';
+?>
+<script>
+    const orderItemId = <?= $args['item_id'] ?? 0 ?>;
+</script>
+<tr>
+    <td colspan="2">
+        <span>Adicionar números abertos</span>
+        <input id="add-open-numbersto-order-item" name="add-open-numbersto-order-item" type="text" placeholder="Ex: 1,2,3,4,5" />
+        <button type="button" class="button button-primary add-open-numbers-order-item" style="padding-top: 5px;">
+            <span class="dashicons dashicons-plus-alt"></span>
+        </a>
+    </td>
+    
+</tr>
+
+<?php
 if ($generated_numbers) {
     ?>
     <tr>

@@ -47,7 +47,7 @@ jQuery(document).ready(function ($) {
         // });
     //}
 
-    if ($('#woo-raffles-quotes-selected').length) {
+    if ($('#woo-raffles-quotes-modal').length) {
         generateNumbersSelected();
     }
 
@@ -220,14 +220,14 @@ jQuery(document).ready(function ($) {
     function generateNumbersSelected() {
         
         if (numbersSelected.length > 0) {
-            $('#woo-raffles-quotes-selected').removeClass('hidden');
+            $('#woo-raffles-quotes-modal').removeClass('hidden');
         } else {
-            $('#woo-raffles-quotes-selected').addClass('hidden');
+            $('#woo-raffles-quotes-modal').addClass('hidden');
         }
         numbersSelected.sort(function (a, b) {
             return a - b;
         });
-        const dataContainer = $('#woo-raffles-quotes-selected #quotes-selected');
+        const dataContainer = $('#woo-raffles-quotes-modal #quotes-selected');
         let html = '<div class="row d-flex justify-content-center my-3">';
         numbersSelected.forEach(function (index) {
             html += `<div class="content"><span>${index.toString()}</span></div>

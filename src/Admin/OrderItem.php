@@ -27,6 +27,7 @@ class OrderItem extends Template
             'str_pad_left' => get_post_meta($product_id, '_woo_raffles_str_pad_left', true) ?? 5,
         ]);
     }
+    
 
     public static function numbersGeneratedContent($item_id, $item, $order)
     {
@@ -37,6 +38,7 @@ class OrderItem extends Template
             'numbers' => GenerateNumbers::getNumbers($item_id, $id, 'generated_number'),
             'str_pad_left' => get_post_meta($id, '_woo_raffles_str_pad_left', true) ?? 5,
             'description' => $description,
+            'item_id' => $item_id,
         ]);
     }
 }

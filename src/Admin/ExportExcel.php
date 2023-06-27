@@ -105,26 +105,30 @@ class ExportExcel extends Base
         return $rows;
     }
 
-    public static function generateRowsQuickie($product_ids, $cotas, $data)
+    public static function generateRowsQuickie($cotas, $data)
     {
-        sort($product_ids);
-        array_unshift($product_ids, '');
+        $winners = $data[0];
+        $names = $data[1];
+        if(count($names) > 0) {
+            sort($names);
+            array_unshift($names, '');
+        }
         sort($cotas);
 
         $rows = [];
-        $rows[0] = $product_ids;
+        $rows[0] = $names;
         foreach ($cotas as $idx => $cota) {
             $rows[$idx + 1][0] = $cota;
         }
         
-        foreach ($data as $key => $value) {
-            $keys = explode('-', $key);
-            $pidx = array_search($keys[0], $product_ids);
+        foreach ($winners as $key => $value) {
+            $keys = explode('|', $key);
+            $pname = array_search($keys[0], $names);
             $cidx = array_search($keys[1], $cotas);
-            $rows[$cidx + 1][$pidx] = $value;
+            $rows[$cidx + 1][$pname] = $value;
         }
-
-        for($i=0; $i<count($product_ids); $i++)
+        
+        for($i=0; $i<count($names); $i++)
         {
             for($j=0; $j<count($cotas)+1; $j++)
             {
@@ -150,7 +154,7 @@ class ExportExcel extends Base
         if(count($pids) > 0 && count($cotas) > 0)
         {
             $data = Database::getRaffleCustomersPerQuoteAndProduct($pids, $cotas);
-            $rows = self::generateRowsQuickie($pids, $cotas, $data);
+            $rows = self::generateRowsQuickie($cotas, $data);
             
             $xlsx = SimpleXLSXGen::fromArray($rows);
             $xlsx->downloadAs('woo-raffles-rapidinha.xlsx');

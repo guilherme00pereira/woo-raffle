@@ -117,4 +117,8 @@ jQuery(document).ready(function ($) {
         alert('Shortcode copiado para a área de transferência');
     }); */
 
+    $('.add-open-numbers-order-item').click(function (e) {
+        alert(orderItemId);
+    });
+
 });

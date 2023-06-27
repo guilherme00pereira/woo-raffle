@@ -1787,16 +1787,33 @@ h4#tituloResumoDosNumerosEscolhidos{
     font-size: 14px;
 }
 
-#woo-raffles-quotes-selected {
-    background-color: #FFFFFF;
-    padding: 20px;
+#woo-raffles-quotes-modal {
+    background: #fff;
+    position: fixed;
+    right: 40px;
+    bottom: 0px;
+    -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    max-width: 320px;
+    width: 100%;
+    border-top: 4px solid #0cd664;
+    z-index: 999;
+    max-height: calc(100% - 40px);
 }
 
-#woo-raffles-quotes-selected h6 {
+@media screen and (max-width: 960px) {
+    #woo-raffles-quotes-modal {
+      max-width: 100%;
+      right: 0;
+      overflow-y: auto;
+    }
+  }
+
+#woo-raffles-quotes-modal h6 {
     color: #333;
 }
 
-#woo-raffles-quotes-selected span {
+#woo-raffles-quotes-modal span {
     background-color: #666;
     color: #FFFFFF;
     padding: 5px;

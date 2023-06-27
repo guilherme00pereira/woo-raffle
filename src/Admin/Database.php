@@ -191,7 +191,7 @@ class Database extends Base
     public static function getRaffleCustomersPerQuoteAndProduct($product_ids, $quotas): array
     {
         global $wpdb;
-        $data = [];
+        $data = $names = [];
         $sqlProducts = '';
         $sqlNumbers = '';
 
@@ -209,7 +209,8 @@ class Database extends Base
             }
         }
 
-        $sql = "select rn.product_id, rn.generated_number, pm.meta_key, pm.meta_value FROM {$wpdb->base_prefix}postmeta pm
+        $sql = "select (select post_title from wp_posts where ID = rn.product_id) as product_name,
+                rn.product_id, rn.generated_number, pm.meta_key, pm.meta_value FROM {$wpdb->base_prefix}postmeta pm
                 inner join {$wpdb->base_prefix}posts ps on ps.ID = pm.post_id
                 inner join {$wpdb->base_prefix}woo_raffles_numbers rn on rn.order_id = pm.post_id
                 where (" . $sqlNumbers . ")
@@ -221,7 +222,10 @@ class Database extends Base
         $result = $wpdb->get_results($sql, ARRAY_A);
 
         foreach ($result as $value) {
-            $k = $value['product_id'] . "-" . $value['generated_number'];
+            if(!in_array($value['product_name'], $names)) {
+                $names[] = $value['product_name'];
+            }
+            $k = $value['product_name'] . "|" . $value['generated_number'];
             if (!isset($data[$k])) {
                 $data[$k] = "";
             }
@@ -235,7 +239,7 @@ class Database extends Base
                 $data[$k] .= " - " . $value['meta_value'];
             }
         }
-        return $data;
+        return [$data, $names];
     }
 
     public static function getSoldQuotes($product_id): ?string
