@@ -106,8 +106,7 @@ jQuery(document).ready(function ($) {
                 $('.quotes-open-status').show();
                 $('#quotesOpenStatus').html('<span class="quotes-open-message">Este sorteio é por cotas abertas</span>');
             }
-        }
-        );
+        }, 'json');
     });
 
     /* $('#shortcodeQuotesOpen').on('click', function (e) {
@@ -118,7 +117,22 @@ jQuery(document).ready(function ($) {
     }); */
 
     $('.add-open-numbers-order-item').click(function (e) {
-        alert(orderItemId);
+        $('message-add-open-numbers').hide();
+        $('#loading-add-open-numbers').show();
+        const numbers = $('#add-open-numbers-to-order-item').val();
+        $.post('/wp-admin/admin-ajax.php', {
+            action: 'ajaxSaveOrderItemOpenNumbers',
+            numbers: numbers,
+            item_id: orderItemId
+        }, function (response) {
+            $('#loading-add-open-numbers').hide();
+            $('message-add-open-numbers').show();
+            if(response.success){
+                window.location.reload();
+            }else{
+                $('#message-add-open-numbers').html(response.data);
+            }
+        }, 'json');
     });
 
 });

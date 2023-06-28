@@ -56,14 +56,14 @@ class CreateOrder extends Base
         $table_name = Database::$table_name;
         $product = wc_get_product($product_id);
         $total_numbers = $product->get_stock_quantity('') + $sold_numbers;
-        $raffle_open_quote = get_post_meta($product_id, '_woo_raffles_numbers_random', true);
+        $raffle_random_quote = get_post_meta($product_id, '_woo_raffles_numbers_random', true);
 
         $numbers_query = "INSERT INTO {$wpdb->base_prefix}{$table_name} (generated_number, order_id, order_item_id, product_id) VALUES ";
         $numbers_result = $wpdb->get_col("SELECT generated_number FROM {$wpdb->base_prefix}{$table_name} WHERE product_id = {$product_id} ORDER BY generated_number ASC");
 
         foreach ($numbers_selected as $number_selected) {
 
-            if ($raffle_open_quote === 'yes'):
+            if ($raffle_random_quote === 'no'):
 
                 $numbers_query .= $wpdb->prepare(
                     "(%d, %d, %d, %d),",

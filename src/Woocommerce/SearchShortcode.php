@@ -62,7 +62,7 @@ class SearchShortcode extends Template
             WHERE pst.meta_key = '_billing_cpf' AND pst.meta_value = %s
             AND wrf.order_item_id != ''
             {$sqlProduct}
-            GROUP BY product
+            GROUP BY product, wrf.order_id
             ORDER BY wrf.generated_number ASC;
         ", $cpf)
         );

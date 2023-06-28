@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
  * @wordpress-plugin
  * Plugin Name:       WooSorteios
  * Description:       Plugin criado para sorteios no Woocommerce.
- * Version:           2.1.2
+ * Version:           2.1.3
  * Author:            Agência UPFlex
  * Text Domain:       woo-raffles
  * Domain Path:       /

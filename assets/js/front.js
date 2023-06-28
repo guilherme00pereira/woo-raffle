@@ -1,51 +1,7 @@
 jQuery(document).ready(function ($) {
     $('.input-cpf').mask('000.000.000-00', {reverse: true});
 
-    const $inputNumbers = $('#woo_raffles_numbers');
 
-    //if ($('#woo-raffles-open-quotes').length) {
-        // $('#woo-raffles-open-quotes').pagination({
-        //     dataSource: generateObjData($inputNumbers.attr('data-qty')),
-        //     pageSize: 100,
-        //     showPrevious: false,
-        //     showNext: false,
-        //     callback: function (data, pagination) {
-        //         const dataContainer = $('#woo-raffles-open-quotes .data-container');
-        //
-        //         let html = `
-        //         <div class="bootstrap">
-        //             <div class="row mb-20">`;
-        //
-        //         $.each(data, function (index, item) {
-        //             html += `
-        //                 <div class="col-lg-1 col-md-2 col-3">
-        //                     <div class="content">
-        //                         <div class="orders-raffles-numbers ${$.inArray(item.a.toString(), numbersSelected) !== -1 ? 'selected' : ''} ${$.inArray(item.a, numbersDisabled) !== -1 ? 'disabled' : ''}">
-        //                             ${
-        //                 $.inArray(item.a, numbersDisabled) !== -1
-        //                     ? item.a.toString().padStart(str_pad_left, '0')
-        //                     : `
-        //                                         <a href="#" data-value="${item.a}">
-        //                                             ${item.a.toString().padStart(str_pad_left, '0')}
-        //                                         </a>
-        //                                        `
-        //             }
-        //
-        //                         </div>
-        //                     </div>
-        //                 </div>
-        //                 `;
-        //         });
-        //
-        //         html += `
-        //             </div>
-        //         </div>
-        //         `;
-        //
-        //         dataContainer.html(html);
-        //     }
-        // });
-    //}
 
     if ($('#woo-raffles-quotes-modal').length) {
         generateNumbersSelected();
@@ -218,33 +174,36 @@ jQuery(document).ready(function ($) {
     });
 
     function generateNumbersSelected() {
-        
+        const modal = $(".widget-rifa-modelo-2.aposta");
         if (numbersSelected.length > 0) {
-            $('#woo-raffles-quotes-modal').removeClass('hidden');
+            modal.addClass("open")
         } else {
-            $('#woo-raffles-quotes-modal').addClass('hidden');
+            modal.removeClass("open")
         }
         numbersSelected.sort(function (a, b) {
             return a - b;
         });
-        const dataContainer = $('#woo-raffles-quotes-modal #quotes-selected');
+        const numbersContainer = $('#colunaUm');
         let html = '<div class="row d-flex justify-content-center my-3">';
         numbersSelected.forEach(function (index) {
             html += `<div class="content"><span>${index.toString()}</span></div>
             `;
         });
         html += '</div>';
-        dataContainer.html(html);
+        numbersContainer.html(html);
     }
 
-    function generateObjData(number) {
-        let result = [];
+    $('#woo-raffles-quotes-modal aside').click(function (e) {
+        openCloseApostaModal();
+    });
 
-        for (let i = 1; i < number + 1; i++) {
-            result.push({a: i});
-        }
+    $('.aposta__header__close').click(function (e) {
+        openCloseApostaModal();
+    });
 
-        return result;
+    function openCloseApostaModal() {
+        const modal = $(".widget-rifa-modelo-2.aposta");
+        modal.hasClass("open") ? modal.removeClass("open") : modal.addClass("open");
     }
 
     function redirect(url) {

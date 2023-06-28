@@ -2,22 +2,37 @@
 $generated_numbers = $args['numbers'] ?? [];
 $str_pad_left = $args['str_pad_left'] ?? 5;
 $description = $args['description'] ?? '';
+$order = $args['order'] ?? null;
+$random = $args['random'] ?? 'no';
+
+if($order && $random === 'no' &&
+    ($order->get_status() === 'pending' || $order->get_status() === 'on-hold')):
 ?>
 <script>
     const orderItemId = <?= $args['item_id'] ?? 0 ?>;
 </script>
 <tr>
     <td colspan="2">
-        <span>Adicionar números abertos</span>
-        <input id="add-open-numbersto-order-item" name="add-open-numbersto-order-item" type="text" placeholder="Ex: 1,2,3,4,5" />
-        <button type="button" class="button button-primary add-open-numbers-order-item" style="padding-top: 5px;">
-            <span class="dashicons dashicons-plus-alt"></span>
-        </a>
+        <div class="form-field" style="display: inline-block;">
+            <label for="add-open-numbers-to-order-item">Adicionar números abertos</label>
+            <input id="add-open-numbers-to-order-item" name="add-open-numbersto-order-item" type="text" placeholder="Ex: 1,2,3,4,5" style="line-height: 1;" />
+        </div>
+        <button type="button" class="button button-secondary add-open-numbers-order-item" style="vertical-align: baseline;">
+            <span class="dashicons dashicons-plus" style="vertical-align: middle;"></span>
+        </button>
+        <span id="loading-add-open-numbers" class="spinner is-active" style="display: none; margin-top: 20px;"></span>
     </td>
-    
+</tr>
+<tr>
+    <td colspan="2">
+        <div id="message-add-open-numbers" style="display: none; color: #b81c23;"></div>
+    </td>
 </tr>
 
 <?php
+endif;
+
+
 if ($generated_numbers) {
     ?>
     <tr>
