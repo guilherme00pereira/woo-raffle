@@ -21,9 +21,9 @@ class ExportExcel extends Base
     {
         if ($product_id > 0) {
             $numbers = Database::getNumbersByProductId($product_id, false);
-            $rows = self::generateRows($numbers, $product_id);
-            $end = count($rows);
             if ($file_type === 'csv') {
+                $rows = self::generateExcelRows($numbers, $product_id);
+                $end = count($rows);
                 $xlsx = SimpleXLSXGen::fromArray($rows)
                     ->setColWidth(0, 100)
                     ->setColWidth(1, 100)
@@ -34,35 +34,27 @@ class ExportExcel extends Base
             if ($file_type === 'pdf') {
                 ob_end_clean(); 
                 $pdf = new ExportPdf();
-                $pdf->AddPage();
                 $pdf->SetFont('Arial', '', 10);
-                var_dump($rows);die;
-                foreach ($rows as $index => $row) {
-                    if ($index > 0) {
-                        if($row['nome'] && $row['cotas_escolhidas'])
-                        {
-                            $pdf->Cell(100, 10, $row['nome']);
-                            $pdf->Cell(40, 10, $row['cotas_escolhidas']);
-                            $pdf->Ln();
-                        } else {
-                            if(count($row) == 2)
-                            {
-                                $pdf->Cell(100, 10, $row[0]);
-                                $pdf->Cell(40, 10, $row[1]);
-                                $pdf->Ln();
-                            } else {
-                                $pdf->Cell(140, 10, $row[0]);
-                                $pdf->Ln();
-                            }
-                        }
+                $pdf->AddPage('P', 'A4', 0);
+                $rows = self::generatePdfRows($numbers, $product_id);
+                foreach ($rows as $row) {
+                    if(count($row) == 2)
+                    {
+                        $pdf->Cell(100, 10, $row[0]);
+                        $pdf->Cell(40, 10, $row[1]);
+                        $pdf->Ln();
+                    } else {
+                        $pdf->Cell(140, 10, $row[0]);
+                        $pdf->Ln();
                     }
                 }
                 $pdf->Output('D', 'woo-raffles-v1.pdf', true);
+                unset($pdf);
             }
         }
     }
 
-    protected static function generateRows($numbers, $product_id): array
+    protected static function generateExcelRows($numbers, $product_id): array
     {
         $rows = [];
 
@@ -105,7 +97,34 @@ class ExportExcel extends Base
         return $rows;
     }
 
-    public static function generateRowsQuickie($cotas, $data)
+    protected static function generatePdfRows($numbers, $product_id): array
+    {
+        $rows = [];
+        $warningText = "TESTE";
+
+        //$rows[1] = [$warningText,null];
+
+        $rows[2] = [
+            'PARTICIPANTES',
+            'NÚMERO DA SORTE',
+        ];
+
+        if ($numbers) {
+            $y = 3;
+
+            foreach ($numbers as $item) {
+                $fn = $item->first_name ?? '';
+                $ln = $item->last_name ?? '';
+                //$key_list = "{$item->order_id}__$y";
+                $rows[$y][0] = $fn . ' ' . $ln;
+                $rows[$y][1] = $item->quotes ?? '';
+                $y++;
+            }
+        }
+        return $rows;
+    }
+
+    public static function generateRowsQuickie($cotas, $data): array
     {
         $winners = $data[0];
         $names = $data[1];

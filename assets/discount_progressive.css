@@ -156,6 +156,16 @@
     .caixa-descontos-progressivo .itens__container__grid__item header {
         height: auto
     }
+
+    /* Label */
+    .caixa-descontos-progressivo label{
+        margin-bottom:23px !important;
+    }
+
+    /* Label */
+    #rifa .elementor-widget-container .elementor-shortcode .caixa-descontos-progressivo .itens .itens_container .itenscontainer_grid label{
+        height:88px !important;
+    }
 }
 
 .caixa-descontos-progressivo .itens__container__grid__item header h5 {
