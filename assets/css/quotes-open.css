@@ -40,6 +40,16 @@
 }
 
 
+@media screen and (max-width: 960px) {
+    #open-quotes-tabs {
+        flex-direction: column;
+    }
+
+    #open-quotes-tabs li {
+        margin: 10px 0;
+    }
+}
+
 
 
 /* ============= APOSTA =================== */
@@ -79,6 +89,10 @@
     height: auto;
     overflow-y: scroll;
     padding-bottom: 30px;
+}
+
+.aposta.open .aposta__content.close {
+    display: none;
 }
 
 
@@ -612,3 +626,43 @@
 .aposta__content__button:disabled {
     opacity: .4;
 }
+
+#quotes-selected-submit {
+    color: #fff;
+    background: #8BC34A;
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    border: 2px solid #8bc34a;
+    font-weight: bold;
+    font-size: 18px;
+    text-transform: uppercase;
+    line-height: 28px;
+    padding: 0;
+  }
+    
+  
+  .widget-rifa-modelo-2#modalRifa .coluna-1 span{
+      display: inline-block;
+      width: 49px;
+      text-align: center;
+      background: #666;
+      margin-left: 6px;
+      margin-right: 6px;
+      color: #fff;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 11px;
+  }
+  
+  
+  .widget-rifa-modelo-2#modalRifa form{
+    font-size: 18px;
+    margin-top: 20px;
+  }
+
+  #colunaDois {
+    font-size: 18px;
+    margin-top: 20px;
+  }

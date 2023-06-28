@@ -119,11 +119,13 @@ jQuery(document).ready(function ($) {
     $('.add-open-numbers-order-item').click(function (e) {
         $('message-add-open-numbers').hide();
         $('#loading-add-open-numbers').show();
-        const numbers = $('#add-open-numbers-to-order-item').val();
+        const input = $('#add-open-numbers-to-order-item');
+        const numbers = input.val();
+        const item_id = input.data('item');
         $.post('/wp-admin/admin-ajax.php', {
             action: 'ajaxSaveOrderItemOpenNumbers',
             numbers: numbers,
-            item_id: orderItemId
+            item_id: item_id
         }, function (response) {
             $('#loading-add-open-numbers').hide();
             $('message-add-open-numbers').show();

@@ -481,3 +481,30 @@ h3.titulo-bimp-checkout {
     padding-top: 4px;
     font-weight: 700
 }
+
+
+@media screen and (max-width: 960px) {
+    .caixa-descontos-progressivo .itens__container__grid__item section h2 {
+        font-size: 16px;   
+    }
+
+    .caixa-descontos-progressivo .itens__container__grid__item section h4 {
+        font-size: 14px;
+        width: 140px;
+        height: 18px;
+    }
+
+    .caixa-descontos-progressivo .itens__container__grid__item section div h3 {
+        font-size: 30px;
+    }
+
+    .caixa-descontos-progressivo .itens__container__grid__item section h2::before {
+        min-width: 20px;
+        height: 20px;
+    }
+
+    .caixa-descontos-progressivo .itens__container__grid__item input:checked ~ section h2::after {
+        width: 11px;
+        height: 11px;
+    }
+}

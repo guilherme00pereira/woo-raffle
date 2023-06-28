@@ -7,6 +7,7 @@ $numbers_payed = $args['numbers_payed'] ?? [];
 $numbers_open = (count($all_numbers) -1)  - (count($numbers_reserved) + count($numbers_payed));
 $numbers_selected = $args['numbers_selected'] ?? [];
 $product_id = $args['product_id'] ?? '';
+$price = $args['price'] ?? 0;
 $is_open_quotes = get_post_meta($product_id, '_woo_raffles_numbers_open', true);
 $allow_duplicate = get_field("cotas_duplicadas", $product_id);
 $shortcode_style = $args['style_shortcode'] ?? [];
@@ -122,23 +123,6 @@ $shortcode_style = $args['style_shortcode'] ?? [];
     const numbersReserved = [<?php echo esc_html(implode(',', $numbers_reserved)); ?>];
     const totalNumbers = <?php echo esc_html(count($all_numbers)); ?>;
     const limit = <?php echo esc_html($limit); ?>;
-    const str_pad_left = <?php echo esc_html($str_pad_left); ?>;
+    const str_pad_left = <?php echo $str_pad_left ?>;
+    const openQuoteItemPrice = <?php echo $price ?>;
 </script>
-
-<!--
- <div id="woo-raffles-quotes-modal" class="hidden">
-            <div id="woo-raffles-quotes-modal-header">
-                <h6 id="quotes-selected-title" class="my-2">
-                    Números escolhidos
-                </h6>
-            </div>
-            <div id="woo-raffles-quotes-modal-content">
-                <div id="quotes-selected"></div>
-                <div class="d-flex justify-content-center">
-                    <button style="<?= $shortcode_style['btn_finalizar_compra'] ?>" id="quotes-selected-submit">
-                        Finalizar Compra
-                    </button>
-                </div>
-            </div>
-        </div>
- -->

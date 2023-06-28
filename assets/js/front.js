@@ -184,33 +184,27 @@ jQuery(document).ready(function ($) {
             return a - b;
         });
         const numbersContainer = $('#colunaUm');
+
         let html = '<div class="row d-flex justify-content-center my-3">';
         numbersSelected.forEach(function (index) {
-            html += `<div class="content"><span>${index.toString()}</span></div>
+            html += `<div class="content"><span>${index.toString().padStart(str_pad_left, '0')}</span></div>
             `;
         });
         html += '</div>';
         numbersContainer.html(html);
+        $('#colunaDois').html(`<p>Total das ${numbersSelected.length} cotas: <b>R$ ${(numbersSelected.length * parseFloat(openQuoteItemPrice)).toFixed(2)}</b></p>`)
     }
 
-    $('#woo-raffles-quotes-modal aside').click(function (e) {
-        openCloseApostaModal();
+    $('#woo-raffles-quotes-modal').on('click', function (e) {
+        const section = $("section.aposta__content");
+        section.hasClass("close") ? section.removeClass("close") : section.addClass("close");
     });
-
-    $('.aposta__header__close').click(function (e) {
-        openCloseApostaModal();
-    });
-
-    function openCloseApostaModal() {
-        const modal = $(".widget-rifa-modelo-2.aposta");
-        modal.hasClass("open") ? modal.removeClass("open") : modal.addClass("open");
-    }
 
     function redirect(url) {
         if (url !== '') {
             window.setTimeout(function () {
                 window.location.href = url;
-            }, 1000);
+            }, 500);
         }
     }
 

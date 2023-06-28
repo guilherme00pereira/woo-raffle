@@ -8,14 +8,12 @@ $random = $args['random'] ?? 'no';
 if($order && $random === 'no' &&
     ($order->get_status() === 'pending' || $order->get_status() === 'on-hold')):
 ?>
-<script>
-    const orderItemId = <?= $args['item_id'] ?? 0 ?>;
-</script>
 <tr>
     <td colspan="2">
         <div class="form-field" style="display: inline-block;">
             <label for="add-open-numbers-to-order-item">Adicionar números abertos</label>
-            <input id="add-open-numbers-to-order-item" name="add-open-numbersto-order-item" type="text" placeholder="Ex: 1,2,3,4,5" style="line-height: 1;" />
+            <input id="add-open-numbers-to-order-item" name="add-open-numbersto-order-item" type="text" 
+                placeholder="Ex: 1,2,3,4,5" style="line-height: 1;" data-item="<?= $args['item_id'] ?? 0 ?>" />
         </div>
         <button type="button" class="button button-secondary add-open-numbers-order-item" style="vertical-align: baseline;">
             <span class="dashicons dashicons-plus" style="vertical-align: middle;"></span>
