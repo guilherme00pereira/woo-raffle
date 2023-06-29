@@ -27,6 +27,33 @@ jQuery(document).ready(function ($) {
         return false;
     });
 
+    $('body').on('click', '.quote-pre-cart', function (e) {
+        const numberSelected = parseInt( $(this).text() );
+        if ($.inArray(numberSelected, numbersSelected) !== -1) {
+            numbersSelected.splice(numbersSelected.indexOf(numberSelected), 1);
+        }
+        const quotes = $('#open-quotes-tab-content button');
+        quotes.each(function (index, element) {
+            if (parseInt($(element).attr('data-number')) === numberSelected) {
+                $(element).removeClass('selected');
+            }
+        });
+        generateNumbersSelected();
+        return false;
+    });
+
+    $('body').on('click', '.aposta__header__close', function (e) {
+        const quotes = $('#open-quotes-tab-content button');
+        quotes.each(function (index, element) {
+            if ($.inArray(parseInt($(element).attr('data-number')), numbersSelected) !== -1) {
+                $(element).removeClass('selected');
+            }
+        });
+        generateNumbersSelected();
+        return false;
+    });
+        
+
     $('#woo_raffles_discount_submit').click(function (e) {
         e.preventDefault();
 
@@ -187,7 +214,7 @@ jQuery(document).ready(function ($) {
 
         let html = '<div class="row d-flex justify-content-center my-3">';
         numbersSelected.forEach(function (index) {
-            html += `<div class="content"><span>${index.toString().padStart(str_pad_left, '0')}</span></div>
+            html += `<div class="content"><span class="quote-pre-cart">${index.toString().padStart(str_pad_left, '0')}</span></div>
             `;
         });
         html += '</div>';
