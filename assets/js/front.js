@@ -1,9 +1,6 @@
 jQuery(document).ready(function ($) {
     $('.input-cpf').mask('000.000.000-00', {reverse: true});
 
-    if(numbersSelected.length > 0) {
-        generateNumbersSelected();
-    }
 
     if ($('#woo-raffles-quotes-modal').length) {
         generateNumbersSelected();
