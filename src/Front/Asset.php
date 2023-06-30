@@ -28,8 +28,8 @@ class Asset extends Base
 
         wp_enqueue_script('jquery-pagination', WOORAFFLES_URL . 'assets/pagination.min.js', ['jquery-core'], '2.5.0', true);
         wp_enqueue_script('jquery-mask', WOORAFFLES_URL . 'assets/jquery.mask.min.js', ['jquery-core'], '1.14.16', true);
-        wp_enqueue_script('woo_raffles', WOORAFFLES_URL . 'assets/js/front.js', ['jquery-core', 'jquery-mask', 'jquery-pagination'], '1.0.1', true);
+        wp_enqueue_script('woo_raffles', WOORAFFLES_URL . 'assets/js/front.js', ['jquery-core', 'jquery-mask', 'jquery-pagination'], '2.1.9', true);
         
-        wp_register_script('woo_raffles_number_search', WOORAFFLES_URL . 'assets/js/search.js', ['jquery-core', 'jquery-mask', ], '1.0.1', true);
+        wp_register_script('woo_raffles_number_search', WOORAFFLES_URL . 'assets/js/search.js', ['jquery-core', 'jquery-mask', ], '2.1.9', true);
     }
 }
