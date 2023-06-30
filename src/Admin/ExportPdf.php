@@ -2,18 +2,28 @@
 
 namespace WooRaffles\Admin;
 
-use Fpdf\Fpdf;
+use Mpdf\Mpdf;
 
-class ExportPdf extends FPDF
+class ExportPdf extends Template
 {
-    function Header()
+    public static function generatePDF($rows)
     {
-        $attId = get_option('raffle_logo_export_attachment_id');
-        $image = wp_get_attachment_image_url($attId);
-        if($image) 
-        {
-            $this->Image($image, 10, 6, 30);
-            $this->Ln(30);
+
+        try {
+            $pdf = new Mpdf();
+            $pdf->debug = true;
+            ob_start();
+            self::getPart('raffle', 'pdf', [
+                'rows' => $rows,
+                //'logo' => wp_get_attachment_image_url(get_option('raffle_logo_export_attachment_id')),
+            ]);
+            $html = ob_get_contents();
+            if($html === "") throw new \Exception("Não foi possível gerar o PDF");
+            $pdf->WriteHTML($html);
+            ob_clean();
+            $pdf->Output('woo-raffle.pdf', 'D');
+        } catch (\Exception $e) {
+            var_dump($e->getMessage());die;
         }
     }
 }

@@ -34,8 +34,8 @@ class SearchShortcode extends Template
 
         ob_start();
 
-        $product_id = $attrs['id'] ?? '';
-        $this->getPart('search', 'form', ['product_id' => $product_id,]);
+        $product_ids = $attrs['id'] ?? '';
+        $this->getPart('search', 'form', ['product_ids' => $product_ids,]);
 
         $content = ob_get_contents();
         ob_end_clean();
@@ -43,15 +43,17 @@ class SearchShortcode extends Template
         return $content;
     }
 
-    protected function getResults($cpf, $productId)
+    protected function getResults($cpf, $productIds)
     {
         global $wpdb;
 
         $table_name = Database::$table_name;
 
+        $cpf_clean = preg_replace('/[^0-9]/', '', $cpf);
+
         $wpdb->query("SET session group_concat_max_len=500000;");
 
-        $sqlProduct = $productId > 0 ?  "AND wrf.product_id = {$productId}" : "";
+        $sqlProduct = !empty($productIds) ?  "AND wrf.product_id in ({$productIds})" : "";
 
         return $wpdb->get_results(
             $wpdb->prepare("
@@ -59,12 +61,12 @@ class SearchShortcode extends Template
             GROUP_CONCAT(wrf.generated_number ORDER BY wrf.generated_number ASC SEPARATOR ',') AS quotes
             FROM {$wpdb->prefix}{$table_name} wrf 
             INNER JOIN {$wpdb->prefix}postmeta pst ON pst.post_id = wrf.order_id 
-            WHERE pst.meta_key = '_billing_cpf' AND pst.meta_value = %s
+            WHERE pst.meta_key = '_billing_cpf' AND (pst.meta_value = %s OR pst.meta_value = %s)
             AND wrf.order_item_id != ''
             {$sqlProduct}
             GROUP BY wrf.order_id
             ORDER BY wrf.generated_number ASC;
-        ", $cpf)
+        ", $cpf, $cpf_clean)
         );
     }
 
@@ -73,12 +75,12 @@ class SearchShortcode extends Template
         try {
             if (isset($_GET['cpf']) && strlen($_GET['cpf']) > 0) {
                 $cpf = sanitize_text_field($_GET['cpf'] ?? '');
-                $productId = sanitize_text_field($_GET['product_id'] ?? 0);
+                $productIds = sanitize_text_field($_GET['product_ids'] ?? 0);
                 //$cpf = preg_replace('/[^0-9]*([0-9]{3})[^0-9]*([0-9]{3})[^0-9]*([0-9]{3})[^0-9]*([0-9]{2})[^0-9]*/', '$1$2$3$4', $cpf);
-                $dbItems = $this->getResults($cpf, $productId);
+                $cpf = preg_replace("/(\d{3})(\d{3})(\d{3})(\d{2})/", "\$1.\$2.\$3-\$4", $cpf);
+                $dbItems = $this->getResults($cpf, $productIds);
                 $total = 0;
                 $data = [];
-                $globos = get_field("numero_globos", $productId);
 
                 foreach ($dbItems as $item) {
                     $generated_numbers = explode(',', $item->quotes);
@@ -89,6 +91,7 @@ class SearchShortcode extends Template
                             'order_id' => $item->order_id,
                             'product' => $product->get_name(),
                             'generated_numbers' => $generated_numbers,
+                            'globos' => (int)get_field("numero_globos", $product) ?? 3
                         ];
                     } else {
                         wp_send_json_error([ 'message' => 'CPF inválido.' ], 400);
@@ -100,7 +103,6 @@ class SearchShortcode extends Template
                 $this->getPart('search', 'content', [
                     'total' => $total,
                     'data' => $data,
-                    'str_pad_left' => $globos,
                 ]);
                 $content = ob_get_contents();
                 ob_end_clean();

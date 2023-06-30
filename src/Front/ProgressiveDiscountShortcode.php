@@ -60,10 +60,13 @@ class ProgressiveDiscountShortcode extends Base
                     
                     $row_index = get_row_index();
                     if($exibir == '' || in_array(($row_index), $exibir)):
-                    
-                    $saida = "números";
 
-                    if (get_sub_field('quantidade') == 1) $saida = "número";
+                    $saida =  "1 número";
+                    $quantidade = get_sub_field('quantidade');
+                    if ($quantidade > 1) $saida = $quantidade . " números";;
+
+                    if(get_sub_field('texto_numeros') !== '') $saida = get_sub_field('texto_numeros');
+
 
                     //$destacar_essa_opcao = get_sub_field('destacar_essa_opcao');
                     $classe_destaque = "";
@@ -79,7 +82,7 @@ class ProgressiveDiscountShortcode extends Base
                                         <input id="woo_raffles_discount_qty' . $a . '"  name="woo_raffles_discount_qty" type="radio" data-field="' . $row_index . '" value="' . get_sub_field('quantidade') . '" ' . ((int)$destacar == ($row_index) ? "checked=\"\"" : "") . '>
                                         <section>
                                             <div>
-                                                <h2>' . get_sub_field('quantidade') . ' ' . $saida . '</h2>
+                                                <h2>' . $saida . '</h2>
                                                 <h4>' . get_sub_field('titulo_opcao') . '</h4>
                                             </div>
                                             <div style="align-items: center;">

@@ -161,6 +161,22 @@ class ProgressiveDiscount extends Base
                             'step' => '',
                         ),
                         array(
+                            'key' => 'field_60a55434ae3z8',
+                            'label' => 'Texto números',
+                            'name' => 'texto_numeros',
+                            'type' => 'text',
+                            'instructions' => 'Se preenchido, irá substituir o texto padrão ex." 5 NÚMEROS "',
+                            'required' => 0,
+                            'conditional_logic' => 0,
+                            'wrapper' => array(
+                                'width' => '',
+                                'class' => '',
+                                'id' => '',
+                            ),
+                            'default_value' => '',
+                            'placeholder' => 'Exemplo: COMPRE 3 LEVE 6',
+                        ),
+                        array(
                             'key' => 'field_60a55434ae3a5',
                             'label' => 'Título dessa opção',
                             'name' => 'titulo_opcao',

@@ -6,7 +6,7 @@
         $.get('/wp-admin/admin-ajax.php', {
             action: 'getProductNumbersByCPF',
             cpf: $('#search-cpf-val').val(),
-            product_id: $('#product_id').val()
+            product_ids: $('#product_ids').val()
         }, function (res) {
             $('#cpf-numbers-search-result').html(res.data.html);
             loading.hide();

@@ -32,24 +32,9 @@ class ExportExcel extends Base
                 $xlsx->downloadAs('woo-raffles-v1.xlsx');
             }
             if ($file_type === 'pdf') {
-                ob_end_clean(); 
-                $pdf = new ExportPdf();
-                $pdf->SetFont('Arial', '', 10);
-                $pdf->AddPage('P', 'A4', 0);
-                $rows = self::generatePdfRows($numbers, $product_id);
-                foreach ($rows as $row) {
-                    if(count($row) == 2)
-                    {
-                        $pdf->Cell(100, 10, $row[0]);
-                        $pdf->Cell(40, 10, $row[1]);
-                        $pdf->Ln();
-                    } else {
-                        $pdf->Cell(140, 10, $row[0]);
-                        $pdf->Ln();
-                    }
-                }
-                $pdf->Output('D', 'woo-raffles-v1.pdf', true);
-                unset($pdf);
+                //$rows = self::generatePdfRows($numbers, $product_id);
+                //ExportPdf::generatePDF($rows);
+                print_r("Não foi possível gerar o PDF");die;
             }
         }
     }
@@ -100,17 +85,9 @@ class ExportExcel extends Base
     protected static function generatePdfRows($numbers, $product_id): array
     {
         $rows = [];
-        $warningText = "TESTE";
-
-        //$rows[1] = [$warningText,null];
-
-        $rows[2] = [
-            'PARTICIPANTES',
-            'NÚMERO DA SORTE',
-        ];
 
         if ($numbers) {
-            $y = 3;
+            $y = 1;
 
             foreach ($numbers as $item) {
                 $fn = $item->first_name ?? '';

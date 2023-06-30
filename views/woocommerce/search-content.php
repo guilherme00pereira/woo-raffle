@@ -32,7 +32,7 @@ if (count($products) > 0) {
                         <div class="col-10 d-flex flex-row justify-content-start flex-wrap">
                             <?php foreach ($item['generated_numbers'] as $number): ?>
                                 <div class="orders-raffles-numbers">
-                                    <?php echo esc_html(str_pad($number, $str_pad_left, '0', STR_PAD_LEFT)); ?>
+                                    <?php echo esc_html(str_pad($number, $item['globos'], '0', STR_PAD_LEFT)); ?>
                                 </div>
                             <?php endforeach; ?>
                         </div>
