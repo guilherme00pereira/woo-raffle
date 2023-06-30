@@ -233,11 +233,11 @@ class WhatsappOrderStatus extends Base
         endif;
  
         if (!empty($vendor_phone)) :
-            //woo_whatsapp_send_message_admin($order_id, $name, $product_list, $address, $order_total, $shipping_total, $payment_method, $numbers_selected, $vendor_phone, $code_zip, $email, self::$message_admin, self::$image, self::$button_text, self::$button_url);
+            woo_whatsapp_send_message_admin($order_id, $name, $product_list, $address, $order_total, $shipping_total, $payment_method, $numbers_selected, $vendor_phone, $code_zip, $email, self::$message_admin, self::$image, self::$button_text, self::$button_url);
         endif;
  
         if (!empty(self::$message_admin) && !empty($phone_admin)) :
-            //woo_whatsapp_send_message_admin($order_id, $name, $product_list, $address, $order_total, $shipping_total, $payment_method, $numbers_selected, $phone_admin, $code_zip, $email, self::$message_admin, self::$image, self::$button_text, self::$button_url);
+            woo_whatsapp_send_message_admin($order_id, $name, $product_list, $address, $order_total, $shipping_total, $payment_method, $numbers_selected, $phone_admin, $code_zip, $email, self::$message_admin, self::$image, self::$button_text, self::$button_url);
         endif;
     }
 }

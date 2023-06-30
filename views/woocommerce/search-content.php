@@ -1,10 +1,10 @@
 <?php
 
-$data = $args['data'] ?? [];
+$products = $args['data'] ?? [];
 $total = $args['total'] ?? 0;
 $str_pad_left = $args['str_pad_left'] ?? 5;
 
-if (count($data) > 0) {
+if (count($products) > 0) {
     ?>
     <div class="bootstrap">
         <div class="grid grid-pad pt-4">
@@ -15,14 +15,15 @@ if (count($data) > 0) {
                     </div>
                 </div>
                 <?php
-                foreach ($data as $item):
-                    ?>
-                    <div class="row mb-3">
-                        <div class="col-12">
-                            <i class="fa-solid fa-clover"></i> &nbsp;
-                            <b><?php echo esc_html($item['product']); ?></b>
-                        </div>
+                foreach ($products as $product => $items): ?>
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <i class="fa-solid fa-clover"></i> &nbsp;
+                        <b><?php echo esc_html($items[0]['product']); ?></b>
                     </div>
+                </div>
+                    <?php foreach ($items as $item):?>
+
                     <div class="row mb-5">
                         <div class="col-2">
                             Pedido
@@ -37,6 +38,7 @@ if (count($data) > 0) {
                         </div>
                     </div>
                     <?php
+                    endforeach;
                 endforeach;
                 ?>
             </div>

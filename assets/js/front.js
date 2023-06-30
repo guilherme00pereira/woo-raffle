@@ -1,7 +1,9 @@
 jQuery(document).ready(function ($) {
     $('.input-cpf').mask('000.000.000-00', {reverse: true});
 
-
+    if(numbersSelected.length > 0) {
+        generateNumbersSelected();
+    }
 
     if ($('#woo-raffles-quotes-modal').length) {
         generateNumbersSelected();
@@ -44,13 +46,22 @@ jQuery(document).ready(function ($) {
 
     $('body').on('click', '.aposta__header__close', function (e) {
         const quotes = $('#open-quotes-tab-content button');
+
         quotes.each(function (index, element) {
             if ($.inArray(parseInt($(element).attr('data-number')), numbersSelected) !== -1) {
                 $(element).removeClass('selected');
             }
         });
+        numbersSelected = [];
         generateNumbersSelected();
         return false;
+    });
+
+
+
+    $('#woo-raffles-quotes-modal').on('click', function (e) {
+        const section = $("section.aposta__content");
+        section.hasClass("close") ? section.removeClass("close") : section.addClass("close");
     });
         
 
@@ -138,10 +149,8 @@ jQuery(document).ready(function ($) {
     });
 
     $('#quotes-selected-submit').click(function (e) {
-        e.preventDefault();
         const $msg = $('#woo_raffles_notice p');
         const product_id = $('#woo_raffles_product_id').val();
-        $(this).attr('disabled', 'disabled');
 
         removeClassNotices($msg);
 
@@ -162,8 +171,6 @@ jQuery(document).ready(function ($) {
                             .removeClass('hidden')
                             .html(response.data.msg);
                     } else {
-                        $(this).removeAttr('disabled');
-                        scrollToTop();
                         redirect(response.data.route);
                     }
                 },
@@ -202,30 +209,26 @@ jQuery(document).ready(function ($) {
 
     function generateNumbersSelected() {
         const modal = $(".widget-rifa-modelo-2.aposta");
-        if (numbersSelected.length > 0) {
-            modal.addClass("open")
-        } else {
+        if (numbersSelected.length === 0) {
             modal.removeClass("open")
-        }
-        numbersSelected.sort(function (a, b) {
-            return a - b;
-        });
-        const numbersContainer = $('#colunaUm');
+        } else {
+            modal.addClass("open")
+            $("section.aposta__content").removeClass("close");
+            numbersSelected.sort(function (a, b) {
+                return a - b;
+            });
+            const numbersContainer = $('#colunaUm');
 
-        let html = '<div class="row d-flex justify-content-center my-3">';
-        numbersSelected.forEach(function (index) {
-            html += `<div class="content"><span class="quote-pre-cart">${index.toString().padStart(str_pad_left, '0')}</span></div>
+            let html = '<div class="row d-flex justify-content-center my-3">';
+            numbersSelected.forEach(function (index) {
+                html += `<div class="content"><span class="quote-pre-cart">${index.toString().padStart(str_pad_left, '0')}</span></div>
             `;
-        });
-        html += '</div>';
-        numbersContainer.html(html);
-        $('#colunaDois').html(`<p>Total das ${numbersSelected.length} cotas: <b>R$ ${(numbersSelected.length * parseFloat(openQuoteItemPrice)).toFixed(2)}</b></p>`)
+            });
+            html += '</div>';
+            numbersContainer.html(html);
+            $('#colunaDois').html(`<p>Total das ${numbersSelected.length} cotas: <b>R$ ${(numbersSelected.length * parseFloat(openQuoteItemPrice)).toFixed(2)}</b></p>`)
+        }
     }
-
-    $('#woo-raffles-quotes-modal').on('click', function (e) {
-        const section = $("section.aposta__content");
-        section.hasClass("close") ? section.removeClass("close") : section.addClass("close");
-    });
 
     function redirect(url) {
         if (url !== '') {

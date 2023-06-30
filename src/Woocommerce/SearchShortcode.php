@@ -62,7 +62,7 @@ class SearchShortcode extends Template
             WHERE pst.meta_key = '_billing_cpf' AND pst.meta_value = %s
             AND wrf.order_item_id != ''
             {$sqlProduct}
-            GROUP BY product
+            GROUP BY wrf.order_id
             ORDER BY wrf.generated_number ASC;
         ", $cpf)
         );
@@ -85,7 +85,7 @@ class SearchShortcode extends Template
                     $total += count($generated_numbers);
                     $product = wc_get_product($item->product);
                     if ($product) {
-                        $data[$item->product] = [
+                        $data[$item->product][] = [
                             'order_id' => $item->order_id,
                             'product' => $product->get_name(),
                             'generated_numbers' => $generated_numbers,
