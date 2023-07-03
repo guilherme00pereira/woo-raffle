@@ -133,4 +133,3 @@ class SearchShortcode extends Template
         return $globos;
     }
 }
-?>

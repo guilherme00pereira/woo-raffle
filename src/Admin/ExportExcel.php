@@ -46,6 +46,7 @@ class ExportExcel extends Base
         $attId = get_option('raffle_logo_export_attachment_id');
         $image = wp_get_attachment_image_url($attId);
         $product = wc_get_product($product_id);
+        $globos = self::getPadLeft($product->get_id());
         $warningText = "TESTE";
 
 
@@ -71,7 +72,7 @@ class ExportExcel extends Base
                 $ln = $item->last_name ?? '';
                 //$key_list = "{$item->order_id}__$y";
                 $rows[$y]['nome'] = $fn . ' ' . $ln;
-                $rows[$y]['cotas_escolhidas'] = $item->quotes ?? '';
+                $rows[$y]['cotas_escolhidas'] = $item->quotes ? str_pad($item->quotes, $globos, '0', STR_PAD_LEFT) : '';
                 $y++;
             }
         }
@@ -155,5 +156,20 @@ class ExportExcel extends Base
             $xlsx = SimpleXLSXGen::fromArray($rows);
             $xlsx->downloadAs('woo-raffles-rapidinha.xlsx');
         }
+    }
+
+    private static function getPadLeft($product_id)
+    {
+        $globos = get_field("numero_globos", $product_id);
+
+        if( empty( $globos ) ) {
+            $globos = get_field('_woo_raffles_str_pad_left', $product_id);
+            if( empty( $globos ) ) {
+                return 5;
+            } else {
+                return $globos;
+            }
+        }
+        return $globos;
     }
 }

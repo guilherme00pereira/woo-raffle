@@ -19,7 +19,7 @@ class Page extends Template
         add_menu_page(
             __('Sorteio', 'woo-raffles'),
             __('Sorteio', 'woo-raffles'),
-            'manage_options',
+            'read',
             'woo-raffles',
             [$this, 'render'],
             'dashicons-tickets-alt',
