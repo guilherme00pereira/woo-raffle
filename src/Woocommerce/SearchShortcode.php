@@ -91,7 +91,7 @@ class SearchShortcode extends Template
                             'order_id' => $item->order_id,
                             'product' => $product->get_name(),
                             'generated_numbers' => $generated_numbers,
-                            'globos' => (int)get_field("numero_globos", $product) ?? 3
+                            'globos' => $this->getPadLeft($product->get_id()),
                         ];
                     } else {
                         wp_send_json_error([ 'message' => 'CPF inválido.' ], 400);
@@ -116,6 +116,21 @@ class SearchShortcode extends Template
             wp_send_json_error([ 'html' => $e->getMessage() ], 500);
             wp_die();
         }
+    }
+
+    private function getPadLeft($product_id)
+    {
+        $globos = get_field("numero_globos", $product_id);
+        
+        if( empty( $globos ) ) {
+            $globos = get_field('_woo_raffles_str_pad_left', $product_id);
+            if( empty( $globos ) ) {
+                return 5;
+            } else {
+                return $globos;
+            }
+        }
+        return $globos;
     }
 }
 ?>
