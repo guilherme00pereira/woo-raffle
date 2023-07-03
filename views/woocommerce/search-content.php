@@ -2,7 +2,6 @@
 
 $products = $args['data'] ?? [];
 $total = $args['total'] ?? 0;
-$str_pad_left = $args['str_pad_left'] ?? 5;
 
 if (count($products) > 0) {
     ?>

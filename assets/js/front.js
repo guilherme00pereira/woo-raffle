@@ -66,51 +66,13 @@ jQuery(document).ready(function ($) {
         e.preventDefault();
 
         const $button = $(this);
-        const $msg = $('#woo_raffles_discount_notice p');
-
-        const $input = $('input[name="woo_raffles_discount_qty"]:checked');
-        const qty = $input.val();
-        const key = $input.attr('data-field');
-        const product_id = $('#woo_raffles_product_id').val();
-
         $button.attr('disabled', 'disabled');
+        progressiveDiscountGoToCheckout($button);
+        return false;
+    });
 
-        removeClassNotices($msg);
-
-        if (parseInt(qty) > 0 && parseInt(product_id) > 0) {
-            $.ajax({
-                type: 'POST',
-                url: '/wp-admin/admin-ajax.php',
-                dataType: 'json',
-                data: {
-                    action: 'woo_discount_progressive',
-                    key: key,
-                    qty: qty,
-                    product_id: product_id,
-                },
-                success: function (response) {
-
-                    if (response.data.error) {
-                        $msg.addClass('woocommerce-error');
-                        $msg
-                            .removeClass('hidden')
-                            .html(response.data.msg);
-                    } else {
-                        $button.removeAttr('disabled');
-                        scrollToTop();
-                        redirect(response.data.redirect);
-                    }
-                },
-                error: function (err) {
-                    $msg.addClass('woocommerce-error');
-                    $msg.removeClass('hidden').html(response.data.msg);
-                    $button.removeAttr('disabled');
-
-                    scrollToTop();
-                }
-            });
-        }
-
+    $('.itens__container__grid__item').dblclick(function (e) {
+        progressiveDiscountGoToCheckout($('#woo_raffles_discount_submit'));
         return false;
     });
 
@@ -203,6 +165,49 @@ jQuery(document).ready(function ($) {
                 break;
         }
     });
+
+    function progressiveDiscountGoToCheckout($button) {
+        const $msg = $('#woo_raffles_discount_notice p');
+        const $input = $('input[name="woo_raffles_discount_qty"]:checked');
+        const qty = $input.val();
+        const key = $input.attr('data-field');
+        const product_id = $('#woo_raffles_product_id').val();
+        removeClassNotices($msg);
+
+        if (parseInt(qty) > 0 && parseInt(product_id) > 0) {
+            $.ajax({
+                type: 'POST',
+                url: '/wp-admin/admin-ajax.php',
+                dataType: 'json',
+                data: {
+                    action: 'woo_discount_progressive',
+                    key: key,
+                    qty: qty,
+                    product_id: product_id,
+                },
+                success: function (response) {
+
+                    if (response.data.error) {
+                        $msg.addClass('woocommerce-error');
+                        $msg
+                            .removeClass('hidden')
+                            .html(response.data.msg);
+                    } else {
+                        $button.removeAttr('disabled');
+                        scrollToTop();
+                        redirect(response.data.redirect);
+                    }
+                },
+                error: function (err) {
+                    $msg.addClass('woocommerce-error');
+                    $msg.removeClass('hidden').html(response.data.msg);
+                    $button.removeAttr('disabled');
+
+                    scrollToTop();
+                }
+            });
+        }
+    }
 
     function generateNumbersSelected() {
         const modal = $(".widget-rifa-modelo-2.aposta");
