@@ -14,6 +14,7 @@ class Stock extends Base
     public function __construct()
     {
         add_action('woocommerce_product_set_stock', [self::class, 'change']);
+        add_action('save_post_product', [self::class, 'updateStock'], 10, 3);
         add_filter('woocommerce_ajax_add_order_item_validation', [self::class, 'checkAdminOutOfStockOrderAttempt'], 10, 4);
         add_action( 'woocommerce_order_status_processing_to_cancelled', array( $this, 'restoreOrderStock'), 10, 1 );
         add_action( 'woocommerce_order_status_completed_to_cancelled', array( $this, 'restoreOrderStock'), 10, 1 );
@@ -22,6 +23,18 @@ class Stock extends Base
         add_action( 'woocommerce_order_status_completed_to_refunded', array( $this, 'restoreOrderStock'), 10, 1 );
         add_action( 'woocommerce_order_status_on-hold_to_refunded', array( $this, 'restoreOrderStock'), 10, 1 );
 
+    }
+
+    public static function updateStock($post_id, $post, $update)
+    {
+        $product = wc_get_product($post_id);
+        if($product)
+        {
+            $max_stock = get_post_meta($post_id, 'numero_de_cotas', true);
+            update_post_meta($post_id, '_woo_raffles_max_stock', $max_stock);
+            $product->set_stock_quantity($max_stock);
+            $product->save();
+        }
     }
 
     public static function change($product)

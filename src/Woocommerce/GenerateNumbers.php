@@ -21,19 +21,6 @@ class GenerateNumbers extends Base
         add_action( 'wp_trash_post', [self::class, 'removeOrdersNumbers'], 10, 1 );
     }
 
-    public static function delete($order_id)
-    {
-        global $wpdb;
-
-        $table_name = Database::$table_name;
-
-        $order = wc_get_order($order_id);
-
-        if ($order) {
-            $wpdb->delete("{$wpdb->base_prefix}{$table_name}", ['order_id' => $order_id]);
-        }
-    }
-
     public static function getNumbers($item_id, $product_id, $columns = '*')
     {
         global $wpdb;
@@ -74,6 +61,44 @@ class GenerateNumbers extends Base
         );
     }
 
+    public static function delete($order_id)
+    {
+        global $wpdb;
+
+        $table_name = Database::$table_name;
+
+        $order = wc_get_order($order_id);
+
+        if ($order) {
+            $wpdb->delete("{$wpdb->base_prefix}{$table_name}", ['order_id' => $order_id]);
+        }
+    }
+
+    public static function insert($order_id)
+    {
+        global $wpdb;
+
+        $table_name = Database::$table_name;
+
+        $order = wc_get_order($order_id);
+
+        if ($order) {
+            if (self::checkExistsInOrder($order_id)) {
+                foreach ($order->get_items() as $item_id => $item) {
+                    $product_id = $item->get_product_id();
+                    $wpdb->update("{$wpdb->base_prefix}{$table_name}", ['order_item_id' => $item_id], ['order_id' => $order_id, 'product_id' => $product_id]);
+                }
+                return;
+            }
+
+            foreach ($order->get_items() as $item_id => $item) {
+                self::insertValuesQuery($order_id, $item, $item_id);
+            }
+        }
+
+        do_action('woo_raffles_after_numbers_generated', $order_id);
+    }
+
     protected static function checkExistsInOrder($order_id): ?string
     {
         global $wpdb;
@@ -87,6 +112,31 @@ class GenerateNumbers extends Base
             )
         );
 
+    }
+
+    protected static function insertValuesQuery($order_id, $item, $item_id)
+    {
+        global $wpdb;
+
+        $table_name = Database::$table_name;
+
+        $product_id = $item->get_product_id();
+
+        if (get_post_meta($product_id, '_woo_raffle', true) !== 'yes') {
+            return;
+        }
+
+        $wpdb->query('SET session cte_max_recursion_depth=500000;');
+        $random_numbers = get_post_meta($product_id, '_woo_raffles_numbers_random', true);
+
+        if ($random_numbers === 'yes') {
+            self::generateValuesRandomInsert($order_id, $item_id, $product_id, $item->get_quantity());
+        } else {
+            $numbers_query = "INSERT INTO {$wpdb->base_prefix}{$table_name} (generated_number, order_id, order_item_id, product_id) VALUES ";
+            $numbers_query .= self::generateValuesInsert($order_id, $item_id, $product_id, $item->get_quantity());
+
+            $wpdb->query(rtrim($numbers_query, ',') . ';');
+        }
     }
 
     protected static function generateValuesRandomInsert($order_id, $item_id, $product_id, $quantity = 1)
@@ -143,56 +193,5 @@ class GenerateNumbers extends Base
         }
 
         return $query;
-    }
-
-    public static function insert($order_id)
-    {
-        global $wpdb;
-
-        $table_name = Database::$table_name;
-
-        $order = wc_get_order($order_id);
-
-        if ($order) {
-            if (self::checkExistsInOrder($order_id)) {
-                foreach ($order->get_items() as $item_id => $item) {
-                    $product_id = $item->get_product_id();
-                    $wpdb->update("{$wpdb->base_prefix}{$table_name}", ['order_item_id' => $item_id], ['order_id' => $order_id, 'product_id' => $product_id]);
-                }
-
-                return;
-            }
-
-            foreach ($order->get_items() as $item_id => $item) {
-                self::insertValuesQuery($order_id, $item, $item_id);
-            }
-        }
-
-        do_action('woo_raffles_after_numbers_generated', $order_id);
-    }
-
-    protected static function insertValuesQuery($order_id, $item, $item_id)
-    {
-        global $wpdb;
-
-        $table_name = Database::$table_name;
-
-        $product_id = $item->get_product_id();
-
-        if (get_post_meta($product_id, '_woo_raffle', true) !== 'yes') {
-            return;
-        }
-
-        $wpdb->query('SET session cte_max_recursion_depth=500000;');
-        $random_numbers = get_post_meta($product_id, '_woo_raffles_numbers_random', true);
-
-        if ($random_numbers === 'yes') {
-            self::generateValuesRandomInsert($order_id, $item_id, $product_id, $item->get_quantity());
-        } else {
-            $numbers_query = "INSERT INTO {$wpdb->base_prefix}{$table_name} (generated_number, order_id, order_item_id, product_id) VALUES ";
-            $numbers_query .= self::generateValuesInsert($order_id, $item_id, $product_id, $item->get_quantity());
-
-            $wpdb->query(rtrim($numbers_query, ',') . ';');
-        }
     }
 }
