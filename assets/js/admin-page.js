@@ -9,7 +9,7 @@
     });
 
     $('#raffle-tabs a').click(function(event){
-        if( typeof $(this).attr('no-tab') === 'undefined' ) 
+        if( typeof $(this).attr('no-tab') === 'undefined' )
         {
             event.preventDefault();
             $('#raffle-tabs a').removeClass('nav-tab-active');
@@ -17,7 +17,7 @@
             $('.tabs-content>div').hide();
             $('#' + $(this).data('tab') ).show();
         }
-        
+
     });
     $('#searchRaffle').click(function (e) {
         const loading = $('#loading');
@@ -65,7 +65,7 @@
             button: {
                 text: 'Use this image',
             },
-            multiple: false 
+            multiple: false
         });
         file_frame.on( 'select', function() {
             attachment = file_frame.state().get('selection').first().toJSON();

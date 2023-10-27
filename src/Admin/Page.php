@@ -70,7 +70,7 @@ class Page extends Template
             if (count($raffleData) == 0) {
                 $html = "<td colspan='5'>Nenhum dado retornado.</td>";
             } else {
-                foreach($raffleData as $key => $value) 
+                foreach($raffleData as $key => $value)
                 {
                     $status = $this->highlightStatus($value['status']);
                     $html .= "
@@ -128,7 +128,7 @@ class Page extends Template
             if($delete) {
                 wp_send_json_success('Logo removido com sucesso!', 200);
             } else {
-                wp_send_json_error('Não foi possível remove a logo', 500);    
+                wp_send_json_error('Não foi possível remove a logo', 500);
             }
         } catch (\Exception $e) {
             wp_send_json_error($e->getMessage(), 500);
