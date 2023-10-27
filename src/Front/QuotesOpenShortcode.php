@@ -17,7 +17,6 @@ class QuotesOpenShortcode extends Template
         parent::__construct();
 
         add_shortcode('woo-raffles-cotas_abertas', [$this, 'content']);
-        add_shortcode('woo-raffles-cotas_abertas_v2', [$this, 'content_v2']);
         add_action('wp_ajax_ajaxApiRifaInfos', [$this, 'ajaxApiRifaInfos']);
         add_action('wp_ajax_nopriv_ajaxApiRifaInfos', [$this, 'ajaxApiRifaInfos']);
     }

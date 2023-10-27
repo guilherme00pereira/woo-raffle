@@ -276,7 +276,8 @@ class Database extends Base
                         WHERE wrf.product_id = %d
                         $query_group_by;",
                 $product_id,
-            )
+            ),
+            ARRAY_A
         );
     }
 
