@@ -249,7 +249,7 @@ class Database extends Base
         return $wpdb->get_var($wpdb->prepare($sql, $product_id));
     }
 
-    public static function getNumbersByProductId($product_id, $concat = true)
+    public static function getUserAndNumbersInfoByProductId($product_id, $concat = true)
     {
         global $wpdb;
 

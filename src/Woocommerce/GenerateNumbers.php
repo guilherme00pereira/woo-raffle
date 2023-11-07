@@ -18,7 +18,7 @@ class GenerateNumbers extends Base
         add_action('woocommerce_order_status_on-hold', [self::class, 'delete']);
         add_action('woocommerce_order_status_refunded', [self::class, 'delete']);
         add_action('woocommerce_order_status_processing', [self::class, 'insert']);
-        add_action( 'wp_trash_post', [self::class, 'removeOrdersNumbers'], 10, 1 );
+        add_action('wp_trash_post', [self::class, 'removeOrdersNumbers'], 10, 1);
     }
 
     public static function getNumbers($item_id, $product_id, $columns = '*')
@@ -83,23 +83,20 @@ class GenerateNumbers extends Base
         $order = wc_get_order($order_id);
 
         if ($order) {
-            if (self::checkExistsInOrder($order_id)) {
-                foreach ($order->get_items() as $item_id => $item) {
+            foreach ($order->get_items() as $item_id => $item) {
+                if (self::checkExistsInOrder($item_id)) {
                     $product_id = $item->get_product_id();
                     $wpdb->update("{$wpdb->base_prefix}{$table_name}", ['order_item_id' => $item_id], ['order_id' => $order_id, 'product_id' => $product_id]);
+                } else {
+                    self::insertValuesQuery($order_id, $item, $item_id);
                 }
-                return;
-            }
-
-            foreach ($order->get_items() as $item_id => $item) {
-                self::insertValuesQuery($order_id, $item, $item_id);
             }
         }
 
         do_action('woo_raffles_after_numbers_generated', $order_id);
     }
 
-    protected static function checkExistsInOrder($order_id): ?string
+    protected static function checkExistsInOrder($order_item_id): ?string
     {
         global $wpdb;
 
@@ -107,8 +104,8 @@ class GenerateNumbers extends Base
 
         return $wpdb->get_var(
             $wpdb->prepare(
-                "SELECT COUNT(*) FROM {$wpdb->base_prefix}{$table_name} WHERE order_id = %d",
-                $order_id
+                "SELECT COUNT(*) FROM {$wpdb->base_prefix}{$table_name} WHERE order_item_id = %s",
+                $order_item_id
             )
         );
 
@@ -126,16 +123,32 @@ class GenerateNumbers extends Base
             return;
         }
 
-        $wpdb->query('SET session cte_max_recursion_depth=500000;');
+        //$wpdb->query('SET session cte_max_recursion_depth=500000;');
         $random_numbers = get_post_meta($product_id, '_woo_raffles_numbers_random', true);
 
         if ($random_numbers === 'yes') {
             self::generateValuesRandomInsert($order_id, $item_id, $product_id, $item->get_quantity());
         } else {
-            $numbers_query = "INSERT INTO {$wpdb->base_prefix}{$table_name} (generated_number, order_id, order_item_id, product_id) VALUES ";
-            $numbers_query .= self::generateValuesInsert($order_id, $item_id, $product_id, $item->get_quantity());
-
-            $wpdb->query(rtrim($numbers_query, ',') . ';');
+            try {
+                $numbers = wc_get_order_item_meta($item_id, 'Números Escolhidos', true);
+            } catch (\Exception $e) {
+                $numbers = null;
+            }
+            if (!is_null($numbers)) {
+                $numbers = explode(',', $numbers);
+                $numbers = array_map('trim', $numbers);
+                foreach ($numbers as $number) {
+                    $numbers_query = $wpdb->prepare("INSERT INTO {$wpdb->base_prefix}{$table_name} 
+                    (generated_number, order_id, order_item_id, product_id) VALUES 
+                    (%s, %s, %s, %s);",
+                        $number,
+                        $order_id,
+                        $item_id,
+                        $product_id
+                    );
+                    $wpdb->query($numbers_query);
+                }
+            }
         }
     }
 
@@ -176,22 +189,5 @@ class GenerateNumbers extends Base
         }
     }
 
-    protected static function generateValuesInsert($order_id, $item_id, $product_id, $quantity = 1): string
-    {
-        global $wpdb;
 
-        $query = '';
-
-        for ($x = 1; $x <= $quantity; $x++) {
-            $query .= $wpdb->prepare(
-                "(autoInc(%d), %d, %d, %d),",
-                $product_id,
-                $order_id,
-                $item_id,
-                $product_id
-            );
-        }
-
-        return $query;
-    }
 }

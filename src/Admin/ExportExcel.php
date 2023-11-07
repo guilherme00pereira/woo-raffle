@@ -20,7 +20,7 @@ class ExportExcel extends Base
     public static function createFile($product_id, $file_type)
     {
         if ($product_id > 0) {
-            $numbers = Database::getNumbersByProductId($product_id, false);
+            $numbers = Database::getUserAndNumbersInfoByProductId($product_id, false);
             if ($file_type === 'csv') {
                 $rows = self::generateExcelRows($numbers, $product_id);
                 $end = count($rows);
